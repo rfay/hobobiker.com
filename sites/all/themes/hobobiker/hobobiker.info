@@ -1,0 +1,6 @@
+name = Hobobiker
+description = Subtheme of Wabi
+version = VERSION
+core = 6.x
+base theme = wabi
+stylesheets[all][] = hobobiker.css

@@ -1,0 +1,21 @@
+; $Id:  $
+
+name = Hobo Golden
+description = Hobobiker subtheme of golden_hour
+base theme = golden_hour
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = hobo.css
+regions[sidebar_left] = left sidebar
+regions[content_top] = content top
+regions[content_bottom] = content bottom
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = mission
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = search
+features[] = favicon
+features[] = primary_links
+

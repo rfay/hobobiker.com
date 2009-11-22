@@ -1,0 +1,11 @@
+Logo
+Sitename
+Site Slogan
+Mission Stmt
+User pictures in posts
+User pictures in comments
+Search Box
+Shortcut Icon
+Logo selection
+Shortcut icon selection
+

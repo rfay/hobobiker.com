@@ -1,0 +1,671 @@
+<?php
+// $Id: subscriptions_mail.module,v 1.29 2009/09/28 11:01:59 salvis Exp $
+
+/**
+ * @file
+ * Subscriptions module mail gateway.
+ */
+
+/**
+ * Implementation of hook_menu().
+ *
+ * Registers a callback to purge the queue.
+ */
+function subscriptions_mail_menu() {
+  $items['admin/settings/subscriptions/purge-queue'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_subscriptions_mail_purge_queue_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_cron().
+ *
+ * Takes items from {subscriptions_queue} and generates notification emails.
+ */
+function subscriptions_mail_cron() {
+
+  // set_time_limit(3600);  drupal_set_message('DON\'T FORGET TO REMOVE THE TIME LIMIT EXTENSION!!!');
+
+  global $user, $language;
+  drupal_init_language();
+  include_once drupal_get_path('module', 'subscriptions_mail') .'/subscriptions_mail.templates.inc';
+
+  $mails_allowed = variable_get('subscriptions_number_of_mails', 0);
+  $from = _subscriptions_mail_site_mail();
+  $old_uid = 0;
+  $single_count = 0;
+  $digest_count = 0;
+  $loaded_objects = array();
+  $users = array();
+  $fields = array();
+
+  // Strategy for cron:
+  // Use a defined percentage of the total cron time (default: 50%), but leave at least 5s.
+  $total_seconds = ini_get('max_execution_time');
+  if (empty($total_seconds)) {
+    // Work-around for D6.14, which broke this in #193383-106 with http://cvs.drupal.org/viewvc.py/drupal/drupal/includes/common.inc?r1=1.756.2.65&r2=1.756.2.66&pathrev=DRUPAL-6
+    // D6.15 will revert this to a hard-coded 240 in http://cvs.drupal.org/viewvc.py/drupal/drupal/includes/common.inc?r1=1.756.2.70&r2=1.756.2.71&pathrev=DRUPAL-6
+    $total_seconds = 240;
+  }
+  $lost_seconds = timer_read('page')/1000;
+  $available_seconds = $total_seconds - $lost_seconds;
+  $usable_seconds = min(array($available_seconds - 5, $total_seconds*subscriptions_mail_get_cron_percentage()/100));
+  //TEST: watchdog('cron', "Subscriptions has $available_seconds of $total_seconds seconds available.");
+  if ($usable_seconds <= 0) {
+    $variables = array(
+      '!Module' => 'Subscriptions',
+      '@link'   => url('admin/settings/subscriptions', array('fragment' => 'edit-subscriptions-cron-percent')),
+    );
+    $watchdog = 'watchdog';  // keep potx from translating 'cron'
+    if ($usable_seconds == 0) {
+      $watchdog('cron', t('!Module cannot send any notifications because its <a href="@link">cron job time</a> is 0!', $variables), NULL, WATCHDOG_WARNING);
+    }
+    else {
+      $watchdog('cron', t('!Module cannot send any notifications because the cron run has less than 5 available seconds left!', $variables), NULL, WATCHDOG_WARNING);
+    }
+  }
+
+  while (($mails_allowed <= 0 || $single_count + $digest_count < $mails_allowed)
+          && timer_read('page')/1000 < $lost_seconds + $usable_seconds) {
+    $result = db_query_range('SELECT * FROM {subscriptions_queue} WHERE last_sent + send_interval < %d ORDER BY sqid', time(), 0, 1);
+    if (!($s = db_fetch_array($result))) {
+      break;  // No more ready queue items, terminate loop.
+    }
+    
+    if (!isset($users[$s['uid']])) {
+      $users[$s['uid']] = user_load(array('uid' => $s['uid']));
+    }
+    $saved_user = $user;
+    $saved_language = $language;
+    session_save_session(FALSE);
+    $user = $users[$s['uid']];
+    drupal_init_language();
+    $langcode = $language->language;
+    $user_mails = array();
+    
+    do {  // once and repeat while adding to a digest
+      if ($user->status && $user->access) {
+        $cids = array();
+        $load_function = $s['load_function'];
+        $index = $load_args = $s['load_args'];
+        if (!isset($loaded_objects[$user->uid][$load_function][$load_args])) {
+          if (is_numeric($load_args)) {
+            $object = $load_function($load_args, $s['sqid'], $s['is_new']);
+          }
+          else {
+            $load_args = unserialize($load_args);
+            $load_args[] = $s['is_new'];
+            $object = call_user_func_array($load_function, $load_args);
+          }
+          if (!empty($object)) {
+            $access = module_invoke_all('subscriptions', 'access', $load_function, $load_args, $object);
+            // One FALSE vote is enough to deny. Also, we need a non-empty array.
+            $allow = !empty($access) && array_search(FALSE, $access) === FALSE;
+            $loaded_objects[$user->uid][$load_function][$index] = $allow ? $object : FALSE;
+          }
+        }
+        if ($object = $loaded_objects[$user->uid][$load_function][$index]) {
+          if (!isset($users[$object->uid])) {
+            $users[$object->uid] = user_load(array('uid' => $object->uid));
+          }
+          $sender = $users[$object->uid];
+          $module = $s['module'];
+          $ori_field = $field = $s['field'];
+          $ori_value = $value = $s['value'];
+          if (!isset($fields[$langcode][$module])) {
+            $fields[$langcode][$module] = module_invoke_all('subscriptions', 'fields', $module);
+          }
+          if ($module == 'node' && $field == 'nid' && (!empty($object->_subscriptions_is_updated) || !empty($object->_subscriptions_is_new)) && user_access('subscribe to content types', $user)) {
+            $unlisteds = variable_get('subscriptions_unlisted_content_types', array());
+            if (isset($object->type) && !in_array($object->type, $unlisteds)) {
+              // Convert node-nid to node-type because that can give more specific information.
+              $field = 'type';
+              $value = $object->type;
+            }
+          }
+          $mailvars_function = $fields[$langcode][$module][$field]['mailvars_function'];
+          $mailkey = $fields[$langcode][$module][$field]['mailkey'];
+          if (!is_numeric($value)) {
+            $mailkey .= '-'. $value;
+          }
+          $digest = $s['digest'] > 0 || $s['digest'] == -1 && _subscriptions_get_setting('digest', 0) > 0;
+          if ($digest) {
+            $body_template = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+item', $langcode, 'body', 'DITEM');
+          }
+          else {
+            $body_template = subscriptions_mail_template_load($mailkey, $langcode, 'body', 'BODY');
+            $subject_template = subscriptions_mail_template_load($mailkey, $langcode, 'subject', 'SUBJ');
+          }
+          init_theme();
+          $show_node_info = (isset($object->type) ? theme_get_setting('toggle_node_info_'. $object->type) : TRUE);
+          $base = 'user/'. $s['uid'];
+          $mailvars = array(
+            '!site' => variable_get('site_name', 'drupal'),
+            '!recipient_name' => $s['name'],
+            '!recipient_page' => url($base, array('absolute' => TRUE)),
+            '!sender_name' => ($show_node_info ? ($sender->uid ? $sender->name : variable_get('anonymous', '!sender_name')) : '!sender_name'),
+            '!sender_page' => ($show_node_info && $sender->uid ? url("user/$sender->uid", array('absolute' => TRUE)) : '!sender_page'),
+            '!sender_contact_page' => ($show_node_info ? (empty($sender->contact) ? t('(disabled)') : url("user/$sender->uid/contact", array('absolute' => TRUE))) : '!sender_contact_page'),
+            '!sender_has_contact_page' => ($show_node_info ? (empty($sender->contact) ? 0 : 1) : 0),
+            '!manage_url' => url($base .'/subscriptions', array('absolute' => TRUE)),
+            '!name' => $s['name'],
+            '!subs_type' => $fields[$langcode][$module][$field]['!subs_type'],
+            '!unsubscribe_url' => url("s/del/$module/$ori_field/$ori_value/". $s['author_uid'] .'/'. $s['uid'] .'/'. md5(drupal_get_private_key() . $module . $ori_field . $ori_value . $s['author_uid'] . $s['uid']), array('absolute' => TRUE)),
+          );
+          $mailvars_function($mailvars, $object, $field, $s);
+          $mailvars += module_invoke_all('subscriptions_get_mailvars', $object);
+          if ($digest && !empty($object->_subscriptions_comments) && module_exists('subscriptions_content')) {
+            $digest_comment_template = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+comment', $langcode, 'body', 'DITEMCMT');
+            $mailvars['!comments'] = _subscriptions_content_format_comments($object, $digest_comment_template, '');
+          }
+          $body = strtr(subscriptions_mail_template_preprocess($body_template, $mailvars), $mailvars);
+          if (variable_get('subscriptions_showmailkeys', 0)) {
+            $body .= t('| Mailkey: @mailkey/@langcode', array('@mailkey' => $mailkey, '@langcode' => $langcode)) ."\n";
+          }
+          if ($digest) {
+            $user_mails['bodies'][] = $body;
+            $user_mails['send'] = array(
+              'name' => $s['name'],
+              'mail' => $s['mail'],
+              'from' => $from,
+              '!name' => $mailvars['!name'],
+              '!manage_url' => $mailvars['!manage_url'],
+            );
+            $user_mails['send_intervals'][$s['send_interval']] = $s['send_interval'];
+          }
+          else {
+            $subject = strtr(subscriptions_mail_template_preprocess($subject_template, $mailvars), $mailvars);
+            _subscriptions_mail_send('passthru', $s['name'], $s['mail'], $subject, $body, $from, $s['uid'], array($s['send_interval']));
+            ++$single_count;
+          }
+        }
+      }
+      db_query("DELETE FROM {subscriptions_queue} WHERE load_function = '%s' AND load_args = '%s' AND uid = %d", $s['load_function'], $s['load_args'], $s['uid']);
+
+      if ($digest) {
+        // Get next ready queue item for this user.
+        $result = db_query_range('SELECT * FROM {subscriptions_queue} WHERE uid = %d AND last_sent + send_interval < %d ORDER BY sqid', $user->uid, time(), 0, 1);
+        if (!($s = db_fetch_array($result))) {
+          // No more ready queue items for this user, finish off this digest.
+          $s = $user_mails['send'];
+          $subject_template = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY, $langcode, 'subject', 'DSUBJ');
+          $body_template = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY, $langcode, 'body', 'DBODY');
+          $separator = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+item', $langcode, 'subject', 'SEP');
+          $mailvars['!bodies'] = implode($separator, $user_mails['bodies']);
+          $mailvars['!name'] = $s['!name'];
+          $mailvars['!manage_url'] = $s['!manage_url'];
+          $subject = strtr(subscriptions_mail_template_preprocess($subject_template, $mailvars), $mailvars);
+          $body = strtr(subscriptions_mail_template_preprocess($body_template, $mailvars), $mailvars);
+          _subscriptions_mail_send(SUBSCRIPTIONS_DIGEST_MAILKEY, $s['name'], $s['mail'], $subject, $body, $s['from'], $user->uid, $user_mails['send_intervals']);
+          ++$digest_count;
+          $digest = false;
+        }
+      }
+    } while ( $digest );
+
+    $user = $saved_user;
+    $language = $saved_language;
+    session_save_session(TRUE);
+  }
+
+  if ($single_count + $digest_count > 0) {
+    $current_seconds = timer_read('page')/1000;
+    $watchdog = 'watchdog';  // keep potx from translating 'cron'
+    $watchdog('cron', '!Module sent !single_count single and !digest_count digest notifications in !used_seconds of !total_seconds seconds; !remaining_items queue item(s) and !remaining_seconds seconds left.', array(
+      '!Module'            => 'Subscriptions',
+      '!single_count'      => $single_count,
+      '!digest_count'      => $digest_count,
+      '!used_seconds'      => round($current_seconds - $lost_seconds),
+      '!total_seconds'     => $total_seconds,
+      '!remaining_items'   => db_result(db_query("SELECT COUNT(*) FROM {subscriptions_queue} WHERE last_sent + send_interval < %d", time())),
+      '!remaining_seconds' => round($total_seconds - $current_seconds),
+    ));
+  }
+}
+
+/**
+ * Implementation of hook_mail().
+ */
+function subscriptions_mail_mail($key, &$message, $params) {
+  global $base_url;
+  
+  $url = parse_url($base_url);
+  $list_id = variable_get('site_name', '') .' '. t('Subscriptions') .' <subscriptions.'. $url['host'] .'>'; 
+  
+  $message['subject'] = $params['context']['subject'];
+  $message['body'] = $params['context']['message'];
+  $message['headers']['List-Id'] = $list_id;
+}
+
+
+/**
+ * Send the notification by mail.
+ */
+function _subscriptions_mail_send($mailkey, $name, $to, $subject, $body, $from, $uid, $send_intervals) {
+  global $user;
+
+  $mail_success = drupal_mail('subscriptions_mail', $mailkey, $to, user_preferred_language($user), array(
+    'account' => $user,
+    'object' => NULL,
+    'context' => array(
+      'recipient' => $to,
+      'subject' => $subject,
+      'message' => $body,
+    ),
+  ), $from, TRUE);
+
+  $watchdog_params = array('@name' => $name, '@to' => "<$to>");
+  if (!empty($mail_success['result'])) {
+    if (variable_get('subscriptions_watchgood', 1)) {
+      watchdog('subscriptions', 'notification for @name at @to', $watchdog_params);
+    }
+    foreach ($send_intervals as $send_interval) {
+      db_query("UPDATE {subscriptions_last_sent} SET last_sent = %d WHERE uid = %d AND send_interval = %d", time(), $uid, $send_interval);
+      if (!db_affected_rows()) {
+        @db_query("INSERT INTO {subscriptions_last_sent} (uid, send_interval, last_sent) VALUES(%d, %d, %d)", $uid, $send_interval, time());
+      }
+    }
+  }
+  else {
+    watchdog('subscriptions', 'error mailing notification for @name at @to', $watchdog_params, WATCHDOG_ERROR);
+  }
+}
+
+/**
+ * Return the 'From:' address to use for sending e-mail.
+ */
+function _subscriptions_mail_site_mail($address_only = FALSE) {
+  $email = variable_get('subscriptions_site_mail', '');
+  if (empty($email)) {
+    $email = variable_get('site_mail', ini_get('sendmail_from'));
+  }
+  if (!$address_only && ($name = variable_get('subscriptions_site_mail_name', FALSE))) {
+    $email = '"'. $name .'" <'. $email .'>';
+  }
+  return $email;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Adds to the Mail templates form at admin/build/mail-edit if old D5 tables are found.
+ */
+function subscriptions_mail_form_mail_edit_list_form_alter(&$form, $form_state) {
+  if (db_table_exists('subscriptions_mail_edit') || 
+      db_table_exists('mail_edit_d5') && db_result(db_query("SELECT COUNT(*) FROM {mail_edit_d5} WHERE mailkey LIKE 'subscriptions-%'")) > 0) {
+    include_once drupal_get_path('module', 'subscriptions_mail') .'/subscriptions_mail.mail_edit_D5.inc';
+    _subscriptions_mail_form_mail_edit_list_form_alter($form, $form_state);
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Adds to the General Settings part at admin/settings/subscriptions.
+ */
+function subscriptions_mail_form_subscriptions_settings_form_alter(&$form, &$form_state) {
+  global $user;
+  $tr = 't';
+
+  // check the $base_url (#199039, #226335)
+  $url = url('', array('absolute' => TRUE));
+  if (empty($_POST) && preg_match('!//($|/|localhost/|([0-9]{1,3}\.){3}[0-9]{1,3}/)!', $url)) {
+    drupal_set_message(t('Your installation returns %url as the base URL of the site. This is probably not what you want, and it can usually be fixed by setting the %variable variable in your %file file.', array('%url' => $url, '%variable' => '$base_url', '%file' => 'settings.php')), 'error');
+  }
+
+  $variables = array('!Module' => 'Subscriptions');
+  $form['mail_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Mail settings'),
+      '#weight' => -3,
+  );
+  $form['mail_settings']['subscriptions_site_mail'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('E-mail address'),
+    '#default_value' => _subscriptions_mail_site_mail(TRUE),
+    '#description'   => t('A valid e-mail address to be used as the %From and %Reply_To address by the auto-mailer for !Module notifications.  To lessen the likelihood of e-mail being marked as spam, this e-mail address should use the same domain as the website.', $variables + array('%From' => 'From', '%Reply_To' => 'Reply-To')) .'<br />'. t('Clear this field to use the default site e-mail address.'),
+  );
+  $form['mail_settings']['subscriptions_site_mail_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('E-mail name'),
+    '#default_value' => variable_get('subscriptions_site_mail_name', ''),
+    '#description'   => t('An optional name to go with the e-mail address above, no "double-quotes".') .'<br />'. t('Clear this field to use the e-mail address only &mdash; some e-mail clients will display only the portion of the address to the left of the @ sign.'),
+  );
+  $form['mail_settings']['subscriptions_number_of_mails'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Maximum number of notifications to send per cron run'),
+    '#default_value' => variable_get('subscriptions_number_of_mails', 0),
+    '#description'   => t('If you need to limit the number of outgoing e-mails for some reason, then set that number here. The default is 0, which means unlimited.'),
+  );
+  $cron_percentage = subscriptions_mail_get_cron_percentage();
+  $form['mail_settings']['subscriptions_cron_percent'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Maximum percent of cron job time to use'),
+    '#default_value' => $cron_percentage,
+    '#description'   => t('Limit the percentage of cron job time that !Module may use. If you have modules with cron jobs that run after !Module, then be sure to leave enough time for them! The default is !value.<br />You can temporarily set this to 0 to suspend processing of the notifications queue.', $variables + array('!value' => 50)),
+  );
+  if (empty($_POST) && $cron_percentage <= 0) {
+    $message = t('!Module cannot send any notifications because its <a href="@link">cron job time</a> is 0!', $variables + array('@link' => '#edit-subscriptions-cron-percent'));
+    drupal_set_message(t('Warning: @message', array('@message' => $message)), 'error');
+    $form['mail_settings']['subscriptions_cron_percent']['#attributes'] = array('class' => 'error');
+  }
+  $form['mail_settings']['queue_length'] = array(
+    '#type'          => 'item',
+    '#title'         => t('Queue'),
+    '#value'         => t('There are %count item(s) in the queue.', array('%count' => db_result(db_query("SELECT COUNT(sqid) FROM {subscriptions_queue}")))) .' &nbsp; ',
+    '#description'   => t('Note: The number of generated e-mails is typically much lower than the number of queue items.'),
+  );
+  $form['mail_settings']['queue_length']['purge_queue'] = array(
+    '#type'          => 'submit',
+    '#name'          => 'op',
+    '#value'         => t('Purge the queue'),
+  );
+  $form['mail_settings']['subscriptions_watchgood'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Display watchdog entries for successful mailings'),
+    '#default_value' => variable_get('subscriptions_watchgood', 1),
+    '#description'   => t('Logs successful mailings to the watchdog log.  Default is ON, but with many subscribers this will generate a huge number of log entries.'),
+  );
+  $form['mail_settings']['subscriptions_watchstats'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Display summary watchdog entries per cron job'),
+    '#default_value' => variable_get('subscriptions_watchstats', 1),
+    '#description'   => t('Logs the mailing counts, time spent, and size of the remaining queue to the watchdog log.  This is valuable information for estimating the load on the cron job and on your mail server.  Default is ON.'),
+  );
+  $form['mail_settings']['subscriptions_showmailkeys'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Append the mailkey to every notification'),
+    '#default_value' => variable_get('subscriptions_showmailkeys', 0),
+    '#description'   => t('Appends the key of the !Mail_Editor_template that was used to create each e-mail, to assist with configuration and testing. Default is OFF.', array('!Mail_Editor_template' => l('Mail Editor template', (module_exists('mail_edit') ? 'admin/build/mail-edit' : 'http://drupal.org/project/mail_edit')))),
+  );
+  $handlers = array_reverse($form['#submit']);
+  $handlers[] = '_subscriptions_mail_submit_subscriptions_settings_form';
+  $form['#submit'] = array_reverse($handlers);   // put our handler in front
+}
+
+/**
+ * Submit handler for the Purge-the-queue button on the Subscriptions settings form.
+ */
+function _subscriptions_mail_submit_subscriptions_settings_form($form, &$form_state) {
+  if ($form_state['values']['op'] == $form_state['values']['purge_queue']) {
+    drupal_goto('admin/settings/subscriptions/purge-queue', drupal_get_destination());
+  }
+}
+
+/**
+ * Form builder for the purge Subscriptions queue confirmation form.
+ */
+function _subscriptions_mail_purge_queue_form(&$form_state) {
+  $form['#submit'][] = 'subscriptions_purge_queue';
+  return confirm_form($form, t('Are you sure you want to purge the !Module queue?', array('!Module' => 'Subscriptions')), array('path' => $_GET['destination'], 'fragment' => 'edit-purge-queue'), NULL, t('Purge the queue'));
+}
+
+/**
+ * Purge the Subscriptions queue.
+ */
+function subscriptions_purge_queue() {
+  db_query("DELETE FROM {subscriptions_queue}");
+  $variables = array('!Module' => 'Subscriptions', '%count' => db_affected_rows());
+  drupal_set_message(t('All %count items have been purged.', $variables));
+  $watchdog = 'watchdog';  // keep potx from translating 'cron'
+  $watchdog('cron', t('!Module: all %count items have been purged.', $variables), NULL, WATCHDOG_WARNING);
+}
+
+/**
+ * Implementation of hook_mailkeys().
+ *
+ * Provide mailkeys for mail_edit.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_mail_mailkeys() {
+  $mailkeys['digest'] = t('Digest subscriptions notifications');
+  return $mailkeys;
+}
+
+/**
+ * Implementation of hook_mail_edit_tokens_list().
+ *
+ * Provide replacable tokens for mail_edit.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_mail_mail_edit_tokens_list($mailkey, $options = array()) {
+  //$tokens = module_invoke('subscriptions_content', 'mail_edit_tokens_list', $mailkey, $options);
+  $tokens = subscriptions_mail_subscriptions_tokens_list($mailkey, $options);
+  $tokens += array(
+    '!bodies' => t('The digested items (separated by a separator), as defined below:'),
+  );
+  return $tokens;
+}
+
+/**
+ * Implementation of hook_subscriptions_tokens_list().
+ *
+ * Provide replacable tokens for mail_edit.
+ * mail_edit calls only the hook in the module that registered the mailkey,
+ * but we call this hook function from there to add some common tokens.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_mail_subscriptions_tokens_list($mailkey, $options = array()) {
+  $tokens = array();
+  switch ($mailkey) {
+    case 'digest':
+      break;
+    default:
+      $tokens += array(
+        '!site'           => t('The name of the site.'),
+        '!recipient_name' => t('Name of the recipient.'),
+        '!recipient_page' => t('The user page of the recipient.'),
+        '!manage_url'     => t('The URL where the user can manage her subscriptions.'),
+      );
+  }
+  if (isset($options['tokens'])) {
+    $tokens += $options['tokens'];
+  }
+  return $tokens;
+}
+
+/**
+ * Implementation of hook_mail_edit_text().
+ *
+ * Provide default templates for mail_edit.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_mail_mail_edit_text($mailkey, $language) {
+  include_once drupal_get_path('module', 'subscriptions_mail') .'/subscriptions_mail.templates.inc';
+  $return = array();
+  $return['subject'] = subscriptions_mail_template('DSUBJ', $language->language);
+  $return['body'] = subscriptions_mail_template('DBODY', $language->language);
+  return $return;
+}
+
+/**
+ * Implementation of hook_subscriptions_mail_text().
+ *
+ * Provide default templates for mail_edit.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_mail_subscriptions_mail_text($mailkey, $language) {
+  include_once drupal_get_path('module', 'subscriptions_mail') .'/subscriptions_mail.templates.inc';
+  $return = array();
+  $return['subject'] = subscriptions_mail_template('SUBJ', $language->language);
+  $return['body'] = subscriptions_mail_template('BODY', $language->language);
+  return $return;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Add the digest parts to the subscriptions_mail_digest mail_edit page.
+ *
+ * @ingroup hooks
+ * @ingroup form
+ */
+function subscriptions_mail_form_mail_edit_trans_alter(&$form, &$form_state) {
+  $mailkey = 'subscriptions_mail_digest';
+  if ($form['id']['#value'] == $mailkey) {
+    $tr = 't';
+    $langcode = $form['language']['#value'];
+
+    $form['mail']['subject']['#title'] = t('Digest subject');
+    $form['mail']['body']['#title'] = t('Digest body');
+    $form['mail']['body']['#rows'] = 8;
+    
+    $digest_item = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+item', $langcode, 'body', 'DITEM');
+    $digest_item_separator = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+item', $langcode, 'subject', 'SEP');
+    $digest_item_comment = subscriptions_mail_template_load(SUBSCRIPTIONS_DIGEST_MAILKEY .'+comment', $langcode, 'body', 'DITEMCMT');
+
+    $form['mail']['digest_item'] = array(
+      '#title'      => t('Digest item'),
+      '#type'       => 'textarea',
+      '#default_value'  => $digest_item,
+      '#rows' => 15,
+    );
+    if ($placeholders = module_invoke('subscriptions_content', 'mail_edit_tokens_list', 'digest')) {
+      $doc = "<dl>\n";
+      foreach ($placeholders as $name => $description) {
+        $doc .= '<dt>'. $name .'</dt>';
+        $doc .= '<dd>'. $description .'</dd>';
+      }
+      $doc .= "</dl>\n";
+      $form['mail']['digest_item_help'] = array(
+        '#title' => $tr('Replacement patterns'),
+        '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+      $form['mail']['digest_item_help']['help'] = array(
+        '#value' => $doc,
+      );
+    }
+    $form['mail']['digest_item_comment'] = array(
+      '#title'      => t('Digest item comment'),
+      '#type'       => 'textarea',
+      '#default_value'  => $digest_item_comment,
+      '#rows' => 4,
+      '#description' => t('The comments inside a digest item body.'),
+    );
+    if ($placeholders = module_invoke('subscriptions_content', 'mail_edit_tokens_list', 'comments')) {
+      $doc = "<dl>\n";
+      foreach ($placeholders as $name => $description) {
+        $doc .= '<dt>'. $name .'</dt>';
+        $doc .= '<dd>'. $description .'</dd>';
+      }
+      $doc .= "</dl>\n";
+      $form['mail']['comment_token_help'] = array(
+        '#title' => t('Replacement patterns'),
+        '#type' => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+      $form['mail']['comment_token_help']['help'] = array(
+        '#value' => $doc,
+      );
+    }
+    $form['mail']['digest_item_separator'] = array(
+      '#title'      => t('Digest item separator'),
+      '#type'       => 'textarea',
+      '#default_value' => $digest_item_separator,
+      '#rows' => 2,
+      '#description' => t('The separator between digest items (if needed).'),
+    );
+    
+    $form['op']['#submit'][] = 'subscriptions_mail_form_mail_edit_trans_save';
+    if (isset($form['delete'])) {
+      $form['delete']['#submit'][] = 'subscriptions_mail_form_mail_edit_trans_delete';
+    }
+  } 
+}
+
+/**
+ * Save handler for enhanced mail_edit page.
+ */
+function subscriptions_mail_form_mail_edit_trans_save($form, &$form_state) {
+  $id = $form_state['values']['id'];
+  $form_state['values']['description'] = '';
+  $form_state['values']['subject'] = $form_state['values']['digest_item_separator'];
+  $form_state['values']['body'] = $form_state['values']['digest_item'];
+  $form_state['values']['id'] = $id .'+item';
+  mail_edit_trans_save($form, $form_state);
+  $form_state['values']['subject'] = '';
+  $form_state['values']['body'] = $form_state['values']['digest_item_comment'];
+  $form_state['values']['id'] = $id .'+comment';
+  mail_edit_trans_save($form, $form_state);
+}
+
+/**
+ * Delete handler for enhanced mail_edit page.
+ */
+function subscriptions_mail_form_mail_edit_trans_delete($form, &$form_state) {
+  foreach (array('item', 'comment') as $key) {
+    db_query("DELETE FROM {mail_edit} WHERE id = '%s' AND language = '%s'", $form_state['values']['id'] ."+$key", $form_state['values']['language']);
+  }
+}
+
+/**
+ * Preprocess a mail template (subject or body), detecting conditional clauses
+ * that conform to a prescribed syntax
+ *
+ * @param string $template
+ *  the template for preprocessing
+ * @param array $mailvars
+ *  an associatvie array of currently existing variables that are to be
+ *  interpolated into the template later , and which can be used by this
+ *  function for preprocessing
+ *
+ * This function allows the administrator to specify ternary-type conditions
+ * to determine what text is used in a mail in a particular situation, using
+ * the variables that are currently available for that mail for reference.
+ * The syntax is standard PHP/C-style ternary syntax, but only allows the
+ * "==" and "!=":
+ * {{!variable_name==sometext?text for true condition:text for false condition}}
+ *
+ * sometext must not contain a question mark, and the true text no colon.
+ */
+function subscriptions_mail_template_preprocess($template, $mailvars) {
+  preg_match_all('/{{(?P<condition>[^?]+?)\?(?P<true>[^:]*?):(?P<false>[^\]]*?)}}/', $template, $conditions);
+
+  // locate the actual operators/operand for each
+  $replacement = '';
+  foreach ($conditions[0] as $k => $v) {
+    preg_match('/(?P<operand_1>!.+)\s*(?P<operator>==|!=)\s*(?P<operand_2>.+)/', $conditions['condition'][$k], $matches);
+    $operand1 = (isset($mailvars[$matches['operand_1']]) ? $mailvars[$matches['operand_1']] : $matches['operand_1']);
+    if ($matches['operator'] == '==') {
+      $replacement = ($operand1 == $matches['operand_2']) ? $conditions['true'][$k] : $conditions['false'][$k];
+    }
+    elseif ($matches['operator'] == '!=') {
+      $replacement = ($operand1 != $matches['operand_2']) ? $conditions['true'][$k] : $conditions['false'][$k];
+    }
+    else {
+      continue;
+    }
+    // replace the condition with the result of its evalutation
+    $template = str_replace($v, $replacement, $template);
+  }
+  return $template;
+}
+
+/**
+ * Implementation of hook_mail_alter().
+ *
+ * Remove any trailing spaces (must run after mail_edit_mail_alter()!).
+ */
+function subscriptions_mail_mail_alter(&$message) {
+  $message['body'] = preg_replace('/ +(\r?\n)/', '\\1', $message['body']);
+}
+
+/**
+ * Get the sanitized value of the 'subscriptions_cron_percent' variable.
+ */
+function subscriptions_mail_get_cron_percentage() {
+  return max(array(0, intval(variable_get('subscriptions_cron_percent', 50))));
+}
+

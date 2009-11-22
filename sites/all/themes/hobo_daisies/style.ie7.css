@@ -1,0 +1,119 @@
+/* begin Box, Sheet */
+.Sheet-tl
+{
+	clip: rect(auto 37px 37px auto);
+}
+
+.Sheet-tr
+{
+	clip: rect(auto auto 37px 37px);
+}
+
+.Sheet-bl
+{
+	clip: rect(37px 37px auto auto);
+}
+
+.Sheet-br
+{
+	clip: rect(37px auto auto 37px);
+}
+
+.Sheet-tc
+{
+	clip: rect(auto auto 37px auto);
+}
+
+.Sheet-bc
+{
+	clip: rect(37px auto auto auto);
+}
+
+.Sheet-cr
+{
+	clip: rect(auto auto auto 37px);
+}
+
+.Sheet-cl
+{
+	clip: rect(auto 37px auto auto);
+}
+/* end Box, Sheet */
+
+/* begin Menu */
+.nav .r
+{
+	clip: rect(auto auto auto 876px);
+}
+/* end Menu */
+
+/* begin MenuItem */
+.artmenu a .r
+{
+	clip: rect(auto auto auto 411px);
+}
+/* end MenuItem */
+
+/* begin BlockHeader */
+.BlockHeader .r
+{
+	clip: rect(auto auto auto 874px);
+}
+/* end BlockHeader */
+
+/* begin Box, BlockContent */
+.BlockContent-tl
+{
+	clip: rect(auto 16px 16px auto);
+}
+
+.BlockContent-tr
+{
+	clip: rect(auto auto 16px 16px);
+}
+
+.BlockContent-bl
+{
+	clip: rect(16px 16px auto auto);
+}
+
+.BlockContent-br
+{
+	clip: rect(16px auto auto 16px);
+}
+
+.BlockContent-tc
+{
+	clip: rect(auto auto 16px auto);
+}
+
+.BlockContent-bc
+{
+	clip: rect(16px auto auto auto);
+}
+
+.BlockContent-cr
+{
+	clip: rect(auto auto auto 16px);
+}
+
+.BlockContent-cl
+{
+	clip: rect(auto 16px auto auto);
+}
+/* end Box, BlockContent */
+
+/* begin PostContent */
+.PostContent
+{
+	height:1%;
+}
+/* end PostContent */
+
+/* begin Button */
+.Button .btn .r
+{
+	clip: rect(auto auto auto 399px);
+}
+/* end Button */
+

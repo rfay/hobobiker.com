@@ -1,0 +1,63 @@
+/* From the Sands theme - by Samat - http://www.samat.org/  */
+.icon-add-comment,
+.icon-comment,
+a.read-more,
+.icon-print,
+.icon-add-child-page,
+.book .prev a,
+.book .up a,
+.icon-delete,
+.icon-edit,
+.icon-reply,
+.icon-calendar,
+/*.form-text#edit-name,
+.form-password#edit-pass,
+.form-text#edit-pass,*/
+.form-text#edit-date,
+.submitted .user,
+.submitted .date
+/*.taxonomy*/
+{
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 18px;
+}
+
+.book .next a
+{
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-left: 0; padding-right: 18px;
+}
+
+.comment .title {
+  background-repeat: no-repeat;
+  background-position: 3px middle;
+  padding-left: 21px;
+}
+
+.icon-add-comment { background-image: url("icons/comment_add.png"); }
+.icon-comment { background-image: url("icons/comment.png"); }
+a.read-more { background-image: url("icons/page_white_go.png"); }
+.icon-print { background-image: url("icons/printer.png"); }
+.icon-add-child-page { background-image: url("icons/page_white_add.png"); }
+.icon-calendar { background-image: url("icons/calendar.png"); }
+
+.comment .icon-delete { background-image: url("icons/comment_delete.png"); }
+.comment .icon-edit { background-image: url("icons/comment_edit.png"); }
+.comment .icon-reply { background-image: url("icons/comment_add.png"); }
+
+.book .prev a { background-image: url("icons/resultset_previous.png"); }
+.book .next a { background-image: url("icons/resultset_next.png"); }
+.book .up a { background-image: url("icons/resultset_up.png"); }
+
+/*.comment .title { background-image: url("icons/comment.png"); }*/
+
+/*.form-text#edit-name { background-image: url("icons/user.png"); }
+.form-password#edit-pass, .form-text#edit-pass { background-image: url("icons/key.png"); }*/
+/*.form-text#edit-date { background-image: url("icons/calendar.png"); }*/
+
+.submitted .user { background-image: url("icons/user.png"); }
+.submitted .date { background-image: url("icons/calendar.png"); }
+/*
+.taxonomy { background-image: url("icons/tag_red.png"); }*/
