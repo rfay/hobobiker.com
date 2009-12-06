@@ -1,7 +1,7 @@
 <?php
-// $Id: getid3.module,v 1.10.2.1 2009/02/11 04:31:59 robloach Exp $
+// $Id: getid3.module,v 1.10.2.3 2009/11/26 01:21:40 drewish Exp $
 
-define('GETID3_RECOMMEND_VERSION', '1.7.7');
+define('GETID3_RECOMMEND_VERSION', '1.7.9');
 
 /**
  * Implementation of hook_help
@@ -100,7 +100,7 @@ function getid3_admin_settings_form() {
     '#description' => t('The location where getID3() is installed. Relative paths are from the Drupal root directory.'),
     '#after_build' => array('_getid3_admin_settings_check_path'),
   );
-  if ($version = getid3_get_version(FALSE)) {
+  if ($version = getid3_get_version()) {
     $form['getid3_version'] = array(
       '#type' => 'item',
       '#title' => t('Version'),
@@ -113,7 +113,7 @@ function getid3_admin_settings_form() {
     // so we recommend that the user delete it.
     $getid3_demos_path = getid3_get_path() .'/../demos';
     if (file_exists($getid3_demos_path)) {
-      drupal_set_message(t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneth Drupal's directory.", array('%path' => realpath($getid3_demos_path))), 'error');
+      drupal_set_message(t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneath Drupal's directory.", array('%path' => realpath($getid3_demos_path))), 'error');
     }
   }
   $form['getid3_show_warnings'] = array(
@@ -146,7 +146,7 @@ function _getid3_admin_settings_check_path($form_element) {
  * Returns the path where getID3() is installed.
  */
 function getid3_get_path() {
-  return variable_get('getid3_path', drupal_get_path('module', 'getid3') .'/getid3/getid3');
+  return variable_get('getid3_path', 'sites/all/libraries/getid3/getid3');
 }
 
 /**

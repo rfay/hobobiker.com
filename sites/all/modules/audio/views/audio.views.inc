@@ -1,5 +1,5 @@
 <?php
-// $Id: audio.views.inc,v 1.1 2009/05/10 18:12:31 drewish Exp $
+// $Id: audio.views.inc,v 1.2 2009/11/25 19:27:24 drewish Exp $
 
 
 /**
@@ -194,6 +194,24 @@ function audio_views_data() {
 */
   }
 
+  $data['audio']['format'] = array(
+    'title' => t('Format'),
+    'help' => t('The file format of the audio.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+     ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_string',
+    ),
+  );
+  
   return $data;
 }
 

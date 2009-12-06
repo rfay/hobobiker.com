@@ -1,5 +1,5 @@
 <?php
-// $Id: ed_readmore.install,v 1.1.4.2.2.9.2.2 2009/09/15 19:20:33 toddnienkerk Exp $
+// $Id: ed_readmore.install,v 1.1.4.2.2.9.2.3 2009/11/24 06:23:19 toddnienkerk Exp $
 
 /**
  * @file
@@ -43,6 +43,7 @@ function ed_readmore_uninstall() {
   variable_del('ed_readmore_placement');
   variable_del('ed_readmore_text');
   variable_del('ed_readmore_title');
+  variable_del('ed_readmore_tokens');
   variable_del('ed_readmore_nofollow');
   variable_del('ed_readmore_separator');
 }

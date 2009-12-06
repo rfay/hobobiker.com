@@ -1,5 +1,5 @@
 <?php
-// $Id: audio.admin.inc,v 1.3 2009/05/14 19:27:41 drewish Exp $
+// $Id: audio.admin.inc,v 1.4 2009/11/25 19:29:47 drewish Exp $
 
 /**
  * Settings form.
@@ -218,29 +218,34 @@ function theme_audio_admin_settings_metadata_table($form_element) {
  * Form for player settings.
  */
 function audio_admin_settings_players() {
-  $form['players']['#theme'] = 'audio_admin_settings_players';
+  $form['player_settings']['#theme'] = 'audio_admin_settings_players';
 
   $options = array();
   foreach (audio_get_players('formats') as $format => $players) {
     foreach ($players as $id => $player) {
-      $options[$id] = $player['title'];
-      $form['players'][$format][$id]['description'] = array(
+      $options[$id] = ''; // Put no label on options.
+      $form['player_settings']['players'][$format][$id]['title'] = array(
+        '#type' => 'item',
+        '#title' => t('Title'),
+        '#value' => $player['title'],
+      );
+      $form['player_settings']['players'][$format][$id]['description'] = array(
         '#type' => 'item',
         '#title' => t('Description'),
         '#value' => $player['description'],
       );
-      $form['players'][$format][$id]['url'] = array(
+      $form['player_settings']['players'][$format][$id]['url'] = array(
         '#type' => 'item',
         '#title' => t('URL'),
         '#value' => $player['url'],
       );
-      $form['players'][$format][$id]['preview'] = array(
+      $form['player_settings']['players'][$format][$id]['preview'] = array(
         '#type' => 'item',
         '#title' => t('URL'),
         '#value' => drupal_get_path('module', $player['module']) .'/'. $player['preview'],
       );
     }
-    $form['audio_player_'. $format] = array(
+    $form['player_settings']['audio_player_'. $format] = array(
       '#type' => 'radios',
       '#title' => t('Player'),
       '#default_value' => variable_get('audio_player_'. $format, '1pixelout'),
@@ -252,22 +257,23 @@ function audio_admin_settings_players() {
 
 function theme_audio_admin_settings_players($form_element) {
   $output = '';
-  $header = array(t('Player'), t('Description'), t('Homepage'));
-  foreach (element_children($form_element) as $format) {
+  $header = array(t('Selection'), t('Player'), t('Description'), t('Homepage'));
+  foreach (element_children($form_element['players']) as $format) {
     $output .= '<h2>'. t('%format files', array('%format' => $format)) .'</h2>';
     $rows = array();
-    foreach (element_children($form_element[$format]) as $name) {
+    foreach (element_children($form_element['players'][$format]) as $name) {
       $rows[] = array(
-        drupal_render($form['audio_player_'. $format][$name])
-          . theme('image', $form_element[$format][$name]['preview']['#value'], 'preview', 'preview'),
-        check_plain($form_element[$format][$name]['description']['#value']),
-        l(t('Link'), $form_element[$format][$name]['url']['#value']),
+        array('data' => drupal_render($form_element['audio_player_'. $format][$name]), 'align' => 'center'),
+        check_plain($form_element['players'][$format][$name]['title']['#value']) .'<br />'.
+          theme('image', $form_element['players'][$format][$name]['preview']['#value'], 'preview', 'preview'),
+        check_plain($form_element['players'][$format][$name]['description']['#value']),
+        l(t('Link'), $form_element['players'][$format][$name]['url']['#value']),
       );
-      unset($form_element[$format][$name]['description']);
-      unset($form_element[$format][$name]['url']);
-      unset($form_element[$format][$name]['preview']);
+      unset($form_element['players'][$format][$name]['title']);
+      unset($form_element['players'][$format][$name]['description']);
+      unset($form_element['players'][$format][$name]['url']);
+      unset($form_element['players'][$format][$name]['preview']);
     }
-    unset($form['audio_player_'. $format]);
     $output .= theme('table', $header, $rows);
   }
   return $output . drupal_render($form);

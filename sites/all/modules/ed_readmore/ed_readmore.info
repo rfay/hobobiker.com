@@ -3,9 +3,9 @@ name = Read More link
 description = Customize the "Read more" link shown in node teasers.
 core = 6.x
 
-; Information added by drupal.org packaging script on 2009-11-19
-version = "6.x-5.0-rc5"
+; Information added by drupal.org packaging script on 2009-11-24
+version = "6.x-5.0-rc7"
 core = "6.x"
 project = "ed_readmore"
-datestamp = "1258659952"
+datestamp = "1259045716"
 

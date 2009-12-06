@@ -1,5 +1,5 @@
 <?php
-// $Id: ed_readmore.module,v 1.5.8.2.2.11.2.11 2009/11/19 19:43:33 toddnienkerk Exp $
+// $Id: ed_readmore.module,v 1.5.8.2.2.11.2.13 2009/11/24 06:51:46 toddnienkerk Exp $
 
 /**
  * @file
@@ -116,7 +116,7 @@ function ed_readmore_admin_settings() {
       '#type' => 'textfield',
       '#title' =>  t('Link text'),
       '#default_value' => variable_get('ed_readmore_text', ED_READMORE_TEXT_DEFAULT),
-      '#description' => t('Enter the text you wish to display in the Read More link. May contain HTML. Special characters should be encoded (like %raquo or %amp). Spaces will be changed to non-breaking spaces (%nbsp).', array('%raquo' => '&raquo;', '%amp' => '&amp;', '%nbsp' => '&nbsp;')),
+      '#description' => t('Enter the text you wish to display in the Read More link. The following HTML is allowed: <code>em</code>, <code>i</code>, <code>strong</code>, <code>b</code>, <code>cite</code>, <code>code</code>, <code>span</code>, <code>font</code>. Special characters should be encoded (like %raquo or %amp). Spaces will be changed to non-breaking spaces (%nbsp).', array('%raquo' => '&raquo;', '%amp' => '&amp;', '%nbsp' => '&nbsp;')),
       '#required' => TRUE,
     );
     $form['ed_readmore_formatting']['ed_readmore_title'] = array(
@@ -127,18 +127,24 @@ function ed_readmore_admin_settings() {
       '#required' => FALSE,
     );
     if (module_exists('token')) {
-      $form['ed_readmore_formatting']['help'] = array(
+      $form['ed_readmore_formatting']['tokens'] = array(
         '#type' => 'fieldset',
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#title' => t('Placeholder tokens'),
-        '#description' => t('The following placeholder tokens can be used in the Read More text and title. They will be replaced with the appropriate values.'),
+        '#description' => t('The following placeholder tokens can be used in the Read More link text and title. They will be replaced with the appropriate values.'),
       );
-      $form['ed_readmore_formatting']['help']['tokens'] = array(
+      $form['ed_readmore_formatting']['tokens']['ed_readmore_tokens'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Enable placeholder tokens'),
+        '#default_value' => variable_get('ed_readmore_tokens', TRUE),
+        '#description' => t('This option will allow you to use the placeholder tokens listed below.'),
+      );
+      $form['ed_readmore_formatting']['tokens']['help'] = array(
         '#value' => theme('token_help', 'node'),
       );
       // Add Token-specific help text
-      $token_description = t('<a href="@tokens">Tokens</a> are supported.', array('@tokens' => url('http://drupal.org/project/token')));
+      $token_description = t('<a href="@tokens">Tokens</a> are supported if you enable them below.', array('@tokens' => url('http://drupal.org/project/token')));
       $form['ed_readmore_formatting']['ed_readmore_text']['#description'] .= ' ' . $token_description;
       $form['ed_readmore_formatting']['ed_readmore_title']['#description'] .= ' ' . $token_description;
     }
@@ -231,13 +237,14 @@ function ed_readmore_link_place($teaser, $node, $display) {
 function ed_readmore_link_render($node, $display = 'inline') {
   // Filter link text for cross-site scripting (XSS)
   // Replace spaces with non-breaking entities to prevent a wrapping in the link
-  $link_text = t(filter_xss(variable_get('ed_readmore_text', ED_READMORE_TEXT_DEFAULT)));
+  $allowed_tags = array('em', 'i', 'strong', 'b', 'cite', 'code', 'span', 'font');
+  $link_text = t(filter_xss(variable_get('ed_readmore_text', ED_READMORE_TEXT_DEFAULT), $allowed_tags));
 
   // Make sure the text is plain
   $link_title = t(check_plain(variable_get('ed_readmore_title', ED_READMORE_TITLE_DEFAULT)));
 
-  // Replace tokens with values if the Token module is enabled
-  if (module_exists('token')) {
+  // Replace tokens with values if the Token module and the token options are enabled
+  if (module_exists('token') && variable_get('ed_readmore_tokens', TRUE)) {
     $link_text = token_replace($link_text, 'node', $node);
     $link_title = token_replace($link_title, 'node', $node);
   }

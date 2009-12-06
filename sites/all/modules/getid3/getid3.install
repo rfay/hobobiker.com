@@ -1,5 +1,5 @@
 <?php
-// $Id: getid3.install,v 1.6 2008/09/25 23:19:55 drewish Exp $
+// $Id: getid3.install,v 1.6.2.1 2009/11/26 01:21:39 drewish Exp $
 
 /**
  * Implementation of hook_requirements()
@@ -16,13 +16,13 @@ function getid3_requirements($phase) {
       $requirements['getid3']['value'] = check_plain(getid3_get_version());
       $getid3_demos_path = getid3_get_path() .'/../demos';
       if (file_exists($getid3_demos_path)) {
-        $requirements['getid3']['description'] = $t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneth Drupal's directory.", array('%path' => realpath($getid3_demos_path)));
+        $requirements['getid3']['description'] = $t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneath Drupal's directory.", array('%path' => realpath($getid3_demos_path)));
         $requirements['getid3']['severity'] = REQUIREMENT_ERROR; 
       }
     }
     else {
       $requirements['getid3']['value'] = $t('Not found or wrong version');
-      $requirements['getid3']['description'] = $t('You must install <a href="@getid3">getID3()</a> to %getid3dir, or <a href="@getid3settings">configure its installation path</a>.', array('@getid3' => 'http://www.getid3.org', '%getid3dir' => drupal_get_path('module', 'getid3') .'/getid3', '@getid3settings' => url('admin/settings/getid3')));
+      $requirements['getid3']['description'] = $t('You must install <a href="@getid3">getID3()</a> to %getid3dir, or <a href="@getid3settings">configure its installation path</a>.', array('@getid3' => 'http://www.getid3.org', '%getid3dir' => 'sites/all/libraries/getid3', '@getid3settings' => url('admin/settings/getid3')));
       $requirements['getid3']['severity'] = REQUIREMENT_ERROR; 
     }
   }

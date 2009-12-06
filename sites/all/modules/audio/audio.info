@@ -7,9 +7,9 @@ dependencies[] = token
 dependencies[] = views
 #dependencies[] = views_rss
 
-; Information added by drupal.org packaging script on 2009-09-14
-version = "6.x-1.0-unstable5"
+; Information added by drupal.org packaging script on 2009-11-25
+version = "6.x-1.0-unstable6"
 core = "6.x"
 project = "audio"
-datestamp = "1252903803"
+datestamp = "1259178304"
 
