@@ -1,11 +1,9 @@
 <?php
-// $Id: audio_attach.module,v 1.10 2008/11/25 23:39:32 drewish Exp $
+// $Id: audio_attach.module,v 1.11 2009/11/25 19:30:45 drewish Exp $
 
 /**
  * @file audio_attach.module
  */
-
-define("AUDIO_ATTACH_PATH", drupal_get_path('module', 'audio_attach'));
 
 /**
  * Implementation of hook_help().

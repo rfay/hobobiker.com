@@ -1,5 +1,5 @@
 <?php
-// $Id: audio_feeds.module,v 1.7 2009/09/14 04:40:57 drewish Exp $
+// $Id: audio_feeds.module,v 1.8 2009/11/25 19:35:37 drewish Exp $
 
 /**
  * @file
@@ -48,7 +48,7 @@ function audio_feeds_link($type, $node = NULL, $teaser = FALSE) {
 
   if (variable_get('audio_feeds_attach_'. $node->type, 0)) {
     // Add audio playlist feed links.
-    $feed_links = variable_get('audio_feeds_feed_links', array('m3u', 'pls', 'xspf', 'popup'));
+    $feed_links = variable_get('audio_feeds_feed_links', array('m3u', 'pls', 'xspf'));
     foreach ($feed_links as $key => $type) {
       switch ((string)$type) {
         case 'm3u':
@@ -111,6 +111,14 @@ function audio_feeds_menu() {
     'access arguments' => array(1),
     'file' => 'audio_feeds.feeds.inc',
     'type' => MENU_CALLBACK,
+  );
+  $items['admin/settings/audio/feeds'] = array(
+    'title' => 'Feeds',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('audio_feeds_admin'),
+    'access arguments' => array('administer audio'),
+    'file' => 'audio_feeds.admin.inc',
+    'type' => MENU_LOCAL_TASK,
   );
 
   return $items;

@@ -1,5 +1,5 @@
 <?php
-// $Id: audio_feeds.feeds.inc,v 1.2 2009/09/14 04:40:57 drewish Exp $
+// $Id: audio_feeds.feeds.inc,v 1.4 2009/11/25 19:33:13 drewish Exp $
 
 /**
  * @file
@@ -19,7 +19,7 @@ function audio_feeds_m3u($node) {
   $children = audio_feeds_children($node);
   foreach ($children as $audio) {
     $items[] = array(
-      'title' => $audio->audio_tags['title'],
+      'title' => $audio->audio_tags['title'] ? $audio->audio_tags['title'] : $audio->title,
       'author' => $audio->audio_tags['artist'],
       'duration' => $audio->audio_file['playtime'],
       'enclosure' => array('url' => $audio->url_play),
@@ -60,7 +60,7 @@ function audio_feeds_pls($node) {
   $children = audio_feeds_children($node);
   foreach ($children as $audio) {
     $items[] = array(
-      'title' => $audio->audio_tags['title'],
+      'title' => $audio->audio_tags['title'] ? $audio->audio_tags['title'] : $audio->title,
       'author' => $audio->audio_tags['artist'],
       'duration' => $audio->audio_file['playtime'],
       'enclosure' => array('url' => $audio->url_play),
@@ -115,7 +115,7 @@ function audio_feeds_xspf($node) {
     // use the first image uploaded as the included image
     $image = is_array($audio->audio_images) ? current($audio->audio_images) : '';
     $items[] = array(
-      'title' => $audio->audio_tags['title'],
+      'title' => $audio->audio_tags['title'] ? $audio->audio_tags['title'] : $audio->title,
       'author' => $audio->audio_tags['artist'],
       'album' => $audio->audio_tags['album'],
       'duration' => $audio->audio_file['playtime'],
@@ -183,7 +183,7 @@ function audio_feeds_children($node) {
       foreach ($node->{$field_name} as $item) {
         // Keep only those references that are actually accessible and
         // downloadable audio nodes.
-        if (($child = node_load($item['nid'])) && node_access('view', $child) && _audio_allow_download($child)) {
+        if (($child = node_load($item['nid'])) && node_access('view', $child) && _audio_allow_play($child)) {
           $children[] = $child;
         }
       }

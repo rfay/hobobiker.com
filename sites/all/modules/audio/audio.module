@@ -1,5 +1,5 @@
 <?php
-// $Id: audio.module,v 1.156 2009/07/31 23:20:53 drewish Exp $
+// $Id: audio.module,v 1.158 2009/11/25 19:30:45 drewish Exp $
 
 /**
  * Implementation of hook_help().
@@ -175,10 +175,17 @@ function audio_theme() {
   foreach (audio_get_players('names') as $name => $player) {
     if ($player['module'] == 'audio') {
       $theme[$player['theme_node']] = array(
-        'arguments' => array('node'),
-        'file' => $name .'.inc',
+        'arguments' => array('node', 'options'),
+        'file' => $player['file'],
         'path' => $player_path,
       );
+      if (!empty($player['theme_xspf'])) {
+        $theme[$player['theme_xspf']] = array(
+          'arguments' => array('path', 'options'),
+          'file' => $player['file'],
+          'path' => $player_path,
+        );
+      }
     }
   }
   return $theme;
@@ -734,7 +741,7 @@ function audio_form(&$node, &$form_state) {
   $form['audio']['downloadable'] = array(
     '#type' => 'checkbox',
     '#title' => t('Allow file downloads.'),
-    '#default_value' => !empty($node->audio['downloadable']) ? $node->audio['downloadable'] : variable_get('audio_default_downloadable', 1),
+    '#default_value' => isset($node->audio['downloadable']) ? $node->audio['downloadable'] : variable_get('audio_default_downloadable', 1),
     '#description' => t('If checked, a link will be displayed allowing visitors to download this audio file on to their own computer.') .'<br />'
       . t('<strong>WARNING:</strong> even if you leave this unchecked, clever users will be able to find a way to download the file. This just makes them work a little harder to find the link.'),
   );
@@ -1034,6 +1041,10 @@ function _audio_player_build_list() {
     if (function_exists($function)) {
       $result = $function();
       if (isset($result) && is_array($result)) {
+        foreach (array_keys($result) as $player) {
+          // Keep track of the file where this player was found.
+          $result[$player]['file'] = $file->basename; 
+        }
         $players_name = array_merge($players_name, $result);
       }
     }
@@ -1107,7 +1118,7 @@ function audio_get_node_player($node, $playername = NULL) {
     }
     $player = audio_get_players('name', $playername);
     // Try to use the requested player, if that doesn't work out, use the generic one.
-    return theme(array($player['theme_node'], 'audio_default_node_player'), $node);
+    return theme(array($player['theme_node'], 'audio_default_node_player'), $node, isset($player['options']) ? $player['options'] : array());
   }
 }
 
