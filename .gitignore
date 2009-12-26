@@ -1,4 +1,8 @@
 backup
 .htaccess
+.buildpath
+.project
+.settings
 sites/default/settings.php
 files
+cache

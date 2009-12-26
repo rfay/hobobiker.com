@@ -28,6 +28,7 @@ Disallow: /scripts/
 Disallow: /sites/
 Disallow: /themes/
 # Files
+Disallow: /boost_stats.php
 Disallow: /CHANGELOG.txt
 Disallow: /cron.php
 Disallow: /INSTALL.mysql.txt
