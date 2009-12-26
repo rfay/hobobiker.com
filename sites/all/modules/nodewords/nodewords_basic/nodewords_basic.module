@@ -1,5 +1,5 @@
 <?php
-// $Id: nodewords_basic.module,v 1.1.2.45 2009/12/03 16:59:57 kiam Exp $
+// $Id: nodewords_basic.module,v 1.1.2.51 2009/12/20 21:35:31 kiam Exp $
 
 /**
  * @file
@@ -39,7 +39,6 @@ function nodewords_basic_nodewords_api() {
 function nodewords_basic_nodewords_tags_info() {
   $tags = array(
     'abstract' => array(
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_basic_abstract',
       'tag:template' => array('abstract' => NODEWORDS_META),
       'widget:label' => t('Abstract'),
@@ -52,14 +51,13 @@ function nodewords_basic_nodewords_tags_info() {
         NODEWORDS_TYPE_PAGE,
         NODEWORDS_TYPE_PAGER,
         NODEWORDS_TYPE_TERM,
-        NODEWORDS_TYPE_USER,NODEWORDS_TYPE_VOCABULARY
+        NODEWORDS_TYPE_USER,NODEWORDS_TYPE_VOCABULARY,
       ),
       'tag:context:denied' => array(
         NODEWORDS_TYPE_DEFAULT,
         NODEWORDS_TYPE_ERRORPAGE,
-        NODEWORDS_TYPE_TRACKER
+        NODEWORDS_TYPE_TRACKER,
       ),
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_basic_canonical',
       'tag:template' => array('canonical' => NODEWORDS_LINK_REL),
       'tag:weight' => array('canonical' => -10),
@@ -67,7 +65,6 @@ function nodewords_basic_nodewords_tags_info() {
       'widget:permission' => 'edit canonical URL meta tag',
     ),
     'copyright' => array(
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_basic_copyright',
       'tag:template' => array('copyright' => NODEWORDS_META),
       'tag:template:index' => array('copyright' => '<h3>%content</h3>'),
@@ -76,7 +73,6 @@ function nodewords_basic_nodewords_tags_info() {
       'widget:permission' => 'edit meta tag COPYRIGHT',
     ),
     'description' => array(
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_basic_description',
       'tag:template' => array('description' => NODEWORDS_META),
       'tag:template:index' => array('description' => '<h3>%content</h3>'),
@@ -85,7 +81,6 @@ function nodewords_basic_nodewords_tags_info() {
       'widget:permission' => 'edit meta tag DESCRIPTION',
     ),
     'keywords' => array(
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_basic_keywords',
       'tag:template' => array('keywords' => NODEWORDS_META),
       'tag:template:index' => array('keywords' => '<h2>%content</h2>'),
@@ -101,6 +96,18 @@ function nodewords_basic_nodewords_tags_info() {
       'widget:permission' => 'edit meta tag REVISIT-AFTER',
     ),
     'robots' => array(
+      'tag:context:allowed' => array(
+        NODEWORDS_TYPE_DEFAULT,
+        NODEWORDS_TYPE_ERRORPAGE,
+        NODEWORDS_TYPE_FRONTPAGE,
+        NODEWORDS_TYPE_NODE,
+        NODEWORDS_TYPE_PAGE,
+        NODEWORDS_TYPE_PAGER,
+        NODEWORDS_TYPE_TERM,
+        NODEWORDS_TYPE_TRACKER,
+        NODEWORDS_TYPE_USER,
+        NODEWORDS_TYPE_VOCABULARY,
+      ),
       'tag:db:type' => 'array',
       'tag:function:prefix' => 'nodewords_basic_robots',
       'tag:template' => array('robots' => NODEWORDS_META),
@@ -175,6 +182,16 @@ function nodewords_basic_canonical_form(&$form, $content, $options) {
   );
 }
 
+function nodewords_basic_canonical_form_validate($element, &$form_state) {
+  if (!empty($element['#value'])) {
+    $canonical_url = trim($element['#value'], '/');
+
+    if (!empty($canonical_url) && !valid_url(drupal_urlencode($canonical_url))) {
+      form_error($element, t('Canonical URL must be a relative URL.'));
+    }
+  }
+}
+
 /**
  * Set the meta tag content.
  */
@@ -235,18 +252,10 @@ function nodewords_basic_canonical_prepare(&$tags, $content, $options) {
   $base_url = rtrim(variable_get('nodewords_base_url', ''), '/');
   $options = array(
     'absolute' => TRUE,
-    'base_url' => $base_url,
+    'base_url' => empty($base_url) ? NULL : $base_url,
   );
 
-  $tags['canonical'] = !empty($content['value']) ? check_url(url(drupal_get_path_alias($content['value']), $options)) : '';
-}
-
-function nodewords_basic_canonical_form_validate($element, &$form_state) {
-  $canonical_url = trim($element['#value'], '/');
-
-  if (!empty($canonical_url) && !valid_url($canonical_url)) {
-    form_error($element, t('Canonical URL must be a relative URL.'));
-  }
+  $tags['canonical'] = !empty($content['value']) ? check_url(url($content['value'], $options)) : '';
 }
 
 function nodewords_basic_canonical_settings_form(&$form, $form_id, $options) {
@@ -263,9 +272,10 @@ function nodewords_basic_canonical_settings_form(&$form, $form_id, $options) {
 }
 
 function nodewords_basic_canonical_settings_form_validate($element, &$form_state) {
-  $base_url = rtrim($element['#value'], '/');
-
-  if (!empty($base_url) && !valid_url($base_url, TRUE)) {
+  if (!empty($element['#value']) && !($base_url = rtrim($element['#value'], '/'))) {
+    form_error($element, t('Invalid base URL.'));
+  }
+  elseif (!empty($base_url) && !valid_url($base_url, TRUE)) {
     form_error($element, t('Invalid base URL.'));
   }
 }
@@ -402,6 +412,15 @@ function nodewords_basic_keywords_form(&$form, $content, $options) {
 }
 
 /**
+ * Validate the values passed as keywords.
+ */
+function nodewords_basic_keywords_form_validate($element, &$form_state) {
+  if (trim($element['#value']) == ',') {
+    form_error($element, t('The meta tag KEYWORDS value must be a comma separated list of words.'));
+  }
+}
+
+/**
  * Set the meta tag content.
  */
 function nodewords_basic_keywords_prepare(&$tags, $content, $options) {
@@ -438,15 +457,6 @@ function nodewords_basic_keywords_prepare(&$tags, $content, $options) {
   }
 
   $tags['keywords'] = nodewords_unique($value);
-}
-
-/**
- * Validate the values passed as keywords.
- */
-function nodewords_basic_keywords_form_validate($element, &$form_state) {
-  if (trim($element['#value']) == ',') {
-    form_error($element, t('The meta tag KEYWORDS value must be a comma separated list of words.'));
-  }
 }
 
 function nodewords_basic_keywords_settings_form(&$form, $form_id, $options) {
@@ -609,13 +619,11 @@ function nodewords_basic_robots_prepare(&$tags, $content, $options) {
   if ($options['type'] == NODEWORDS_TYPE_PAGER) {
     $value = variable_get('nodewords_list_robots', array());
   }
+  elseif (empty($content['use_default'])) {
+    $value = !empty($content['value']) ? $content['value'] : array();
+  }
   else {
-    if (empty($content['use_default'])) {
-      $value = !empty($content['value']) ? $content['value'] : array();
-    }
-    else {
-      $value = !empty($options['default']['robots']['value']) ? $options['default']['robots']['value'] : array();
-    }
+    $value = !empty($options['default']['robots']['value']) ? $options['default']['robots']['value'] : array();
   }
 
   if (!empty($value)) {

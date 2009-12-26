@@ -1,5 +1,48 @@
-; $Id: CHANGELOG.txt,v 1.1.2.173 2009/12/03 16:59:53 kiam Exp $
+; $Id: CHANGELOG.txt,v 1.1.2.186 2009/12/20 21:35:27 kiam Exp $
 ; All the dates reported here are referred to UTC.
+
+Nodewords 6.x-1 2009-12-20
+--------------------------
+#660136 by beeradb: Canonical URL does not allow to use äöü.
+
+Nodewords 6.x-1 2009-12-14
+--------------------------
+#659814 by kiamlaluno: The table shown in the other pages settings doesn't have the rows draggable anymore.
+#651898 by kiamlaluno: {nodewords_custom}.path is copied in {nodewords}.id.
+
+Nodewords 6.x-1 2009-12-13
+--------------------------
+#658630 by kiamlaluno: Generated canonical URL is not correct.
+
+Nodewords 6.x-1 2009-12-12
+--------------------------
+#650362 by ao2: Canonical URL doesn't use the path alias (and URL is relative when base_url is empty).
+
+Nodewords 6.x-1 2009-12-09
+--------------------------
+#655012 by Dave Reid: Update vertical_tabs integration.
+
+Nodewords 6.x-1 2009-12-08
+--------------------------
+#653696 by kiamlaluno: Users with administration permissions should always be able to edit the meta tags content.
+
+Nodewords 6.x-1 2009-12-07
+--------------------------
+#653812 by kiamamluno: Change the way the meta tags content is saved in the database.
+
+Nodewords 6.x-1 2009-12-06
+--------------------------
+#651896 by kiamlaluno: Meta tag ROBOTS for lists is not used.
+
+Nodewords 6.x-1 2009-12-05
+--------------------------
+#652210 by kiamlaluno: Meta tag SCHEMA.DC is always output.
+#651208 by kiamlaluno: Error while updating.
+#650790 by kiamlaluno: Prepopulation of nodewords on translated nodes.
+
+Nodewords 6.x-1 2009-12-04
+--------------------------
+#650718 by fenstrat: Auto meta description generation: third-party modules filter regex is broken.
 
 Nodewords 6.x-1 2009-12-03
 --------------------------

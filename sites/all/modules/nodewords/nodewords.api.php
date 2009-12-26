@@ -1,6 +1,6 @@
 <?php
 
-// $Id: nodewords.api.php,v 1.1.2.4 2009/11/30 11:17:03 kiam Exp $
+// $Id: nodewords.api.php,v 1.1.2.7 2009/12/05 22:28:46 kiam Exp $
 
 /**
  * @file.
@@ -101,6 +101,26 @@ function hook_nodewords_tags_info() {
 
   return $tags;
 }
+
+/**
+ * The hook is used to alter the metatags content.
+ *
+ * @param &$output
+ *  The array of meta tags values.
+ * @param $parameters
+ *  An array of parameters. The currently defined are:
+ *   * type - the type of object for the page to which the meta
+ *     tags are associated.
+ *   * ids - the array of IDs for the object associated with the page.
+ *   * output - where the meta tags are being output; the parameter value can
+ *     'head' or 'update index'.
+ */
+function hook_nodewords_tags_alter(&$output, $parameters) {
+  if (empty($output['abstract']) && $parameters['type'] == NODEWORDS_TYPE_PAGE) {
+    $output['abstract'] = t('Node content');
+  }
+}
+
 /**
  * The hook is used to alter the string containing the metatags output.
  *
@@ -115,10 +135,10 @@ function hook_nodewords_tags_info() {
  *     'head' or 'update index'.
  */
 function hook_nodewords_tags_output_alter(&$output, $parameters) {
-  $bool = array(
+  $bool = (
     variable_get('nodewords_add_dc_schema', FALSE) &&
     isset($parameters['output']) &&
-    $parameters['ouput'] == 'head'
+    $parameters['output'] == 'head'
   );
 
   if ($bool) {

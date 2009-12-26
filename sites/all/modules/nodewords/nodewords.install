@@ -1,5 +1,5 @@
 <?php
-// $Id: nodewords.install,v 1.10.2.134 2009/11/30 14:44:04 kiam Exp $
+// $Id: nodewords.install,v 1.10.2.144 2009/12/14 23:29:33 kiam Exp $
 
 /**
  * @file
@@ -50,17 +50,18 @@ function nodewords_schema() {
       ),
       'type' => array(
         'description' => 'The type of object to which the meta tag refers (node, user, page, etc...).',
-        'type' => 'varchar',
-        'length' => 16,
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'id' => array(
         'description' => 'The object ID.',
-        'type' => 'varchar',
-        'length' => 255,
+        'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'name' => array(
         'description' => 'The meta tag name.',
@@ -78,17 +79,10 @@ function nodewords_schema() {
     ),
     'indexes' => array(
       'nodewords_name' => array(array('name', 6)),
-      'nodewords_type_id' => array(
-        array('type', 6),
-        array('id', 6),
-      ),
+      'nodewords_type_id' => array('type', 'id'),
     ),
     'unique keys' => array(
-      'nodewords_type_id_name' => array(
-        'type',
-        'id',
-        'name',
-      ),
+      'nodewords_type_id_name' => array('type', 'id', 'name'),
     ),
     'primary key' => array('mtid'),
   );
@@ -230,7 +224,7 @@ function nodewords_update_6100() {
 
   $ret[] = array(
     'success' => TRUE,
-    'query' => 'CREATE NEW SETTING VARIABLES',
+    'query' => 'Created new setting variables.',
   );
 
   return $ret;
@@ -244,6 +238,7 @@ function nodewords_update_6102() {
   $ret = array();
   $settings = variable_get('nodewords_global', array());
 
+  drupal_load('module', 'nodewords');
   if (empty($settings['geourl'])) {
     $coordinates = array(0, 0);
   }
@@ -256,7 +251,7 @@ function nodewords_update_6102() {
 
   $metatags['copyright'] = empty($settings['copyright']) ? '' : $settings['copyright'];
   $metatags['geourl'] = $coordinates[0] . ',' . $coordinates[1];
-  $metatags['keywords'] = empty($settings['keywords']) ? '' : _nodewords_get_unique_values($settings['keywords']);
+  $metatags['keywords'] = empty($settings['keywords']) ? '' : nodewords_unique($settings['keywords']);
   $metatags['robots'] = empty($settings['robots']) ? '' : $settings['robots'];
 
   foreach ($metatags as $name => $content) {
@@ -285,7 +280,10 @@ function nodewords_update_6102() {
 
   variable_del('nodewords_global');
 
-  drupal_set_message('The default meta tags values have been updated; verify they have the correct values in the <a href="'. url('admin/content/nodewords/meta-tags/default') . '">module settings page</a>.');
+  $ret[] = array(
+    'success' => TRUE,
+    'query' => check_plain('The default meta tags values have been updated; verify they have the correct values at ' . url('admin/content/nodewords/meta-tags/default', array('absolute' => TRUE))),
+  );
 
   return $ret;
 }
@@ -329,7 +327,7 @@ function nodewords_update_6104() {
 
   $ret[] = array(
     'success' => TRUE,
-    'query' => 'UPDATE MODULE SETTINGS',
+    'query' => 'Updated the module settings.',
   );
 
   return $ret;
@@ -357,7 +355,6 @@ function nodewords_update_6113(&$sandbox) {
       db_drop_table($ret, 'nodewords_tmp');
     }
 
-    db_drop_unique_key($ret, 'nodewords', 'tin');
     db_rename_table($ret, 'nodewords', 'nodewords_tmp');
 
     $sandbox['progress'] = 0;
@@ -492,15 +489,7 @@ function nodewords_update_6115() {
     db_drop_field($ret, 'nodewords', 'weight');
   }
 
-  if (db_table_exists('nodewords_page_weight')) {
-    if (!db_table_exists('nodewords_custom')) {
-      db_rename_table($ret, 'nodewords_page_weight', 'nodewords_custom');
-    }
-    else {
-      db_drop_table($ret, 'nodewords_page_weight');
-    }
-  }
-  elseif (!db_table_exists('nodewords_custom')) {
+  if (!db_table_exists('nodewords_custom')) {
     db_create_table($ret, 'nodewords_custom',
       array(
         'fields' => array(
@@ -545,7 +534,10 @@ function nodewords_update_6117() {
   $ret[] = update_sql("DELETE FROM {nodewords} WHERE type IN ('views', 'panels')");
 
   if (db_affected_rows()) {
-    drupal_set_message('The support for Views, and Panels have been changed; visit the <a href="'. url('admin/content/nodewords/meta-tags/other') . '">administration page</a> to edit the meta tags for those pages.');
+    $ret[] = array(
+      'success' => TRUE,
+      'query' => check_plain('The support for Views, and Panels have been changed; visit '. url('admin/content/nodewords/meta-tags/other', array('absolute' => TRUE)) . ' to edit the meta tags for those pages.'),
+    );
   }
 
   return $ret;
@@ -669,7 +661,7 @@ function nodewords_update_6131() {
 
   $ret[] = array(
     'success' => TRUE,
-    'query' => 'UPDATE MODULE VARIABLES',
+    'query' => 'Updated the module settings.',
   );
 
   return $ret;
@@ -763,15 +755,6 @@ function nodewords_update_6137() {
 /**
  * Implementation of hook_update_N().
  */
-function nodewords_update_6139() {
-  variable_set('nodewords_update_6139', TRUE);
-
-  return array();
-}
-
-/**
- * Implementation of hook_update_N().
- */
 function nodewords_update_6140() {
   $node_types = array_keys(node_get_types('names'));
   $ret = array();
@@ -785,7 +768,7 @@ function nodewords_update_6140() {
 
   $ret[] = array(
     'success' => TRUE,
-    'query' => 'UPDATE MODULE SETTINGS',
+    'query' => 'Updated the module settings.',
   );
 
   return $ret;
@@ -822,7 +805,10 @@ function nodewords_update_6143() {
       'query' => "UPDATE {variable} SET value = 350 WHERE name = 'nodewords_max_size'",
     );
 
-    drupal_set_message('The default maximum meta tags length has been extended to 350 characters to improve Google results pages. See <a href="http://googleblog.blogspot.com/2009/03/two-new-improvements-to-google-results.html">Two new improvements to Google results pages</a> in the official Google blog for more information.');
+    $ret[] = array(
+      'success' => TRUE,
+      'query' => check_plain('The default maximum meta tags length has been extended to 350 characters to improve Google results pages. See http://googleblog.blogspot.com/2009/03/two-new-improvements-to-google-results.html for more information.'),
+    );
   }
 
   return $ret;
@@ -839,7 +825,7 @@ function nodewords_update_6144() {
 
     $ret[] = array(
       'success' => TRUE,
-      'query' => 'UPDATE MENUS',
+      'query' => 'Updated the menu callback definitions.',
     );
   }
 
@@ -883,8 +869,6 @@ function nodewords_update_6145() {
     )
   );
 
-  variable_set('nodewords_update_6145', TRUE);
-
   return $ret;
 }
 
@@ -908,10 +892,8 @@ function nodewords_update_6146() {
 
     $ret[] = array(
       'success' => TRUE,
-      'query' => 'RESTORE MODULE SETTINGS',
+      'query' => 'The previous value for the meta tag ROBOTS used in list pages has been restored. Check it is the desired value.',
     );
-
-    drupal_set_message('The previous value for the meta tag ROBOTS used in list pages has been restored. Check it is the desired value.');
   }
 
   $ret[] = update_sql("DELETE FROM {nodewords} WHERE type = '" . NODEWORDS_TYPE_PAGER . "'");
@@ -940,8 +922,6 @@ function nodewords_update_6147() {
     )
   );
 
-  variable_set('nodewords_update_6147', TRUE);
-
   return $ret;
 }
 
@@ -958,7 +938,7 @@ function nodewords_update_6149() {
 
     $ret[] = array(
       'success' => TRUE,
-      'query' => 'UPDATE MODULE SETTINGS',
+      'query' => 'Updated the module settings.',
     );
   }
 
@@ -970,7 +950,7 @@ function nodewords_update_6149() {
     if (empty($ret)) {
       $ret[] = array(
         'success' => TRUE,
-        'query' => 'UPDATE MODULE SETTINGS',
+        'query' => 'Updated the module settings.',
       );
     }
   }
@@ -1031,6 +1011,7 @@ function nodewords_update_6151(&$sandbox) {
  */
 function nodewords_update_6153() {
   $ret = array();
+
   $schema['nodewords_custom'] = array(
     'fields' => array(
       'pid' => array(
@@ -1102,6 +1083,223 @@ function nodewords_update_6154() {
 }
 
 /**
+ * Implementation of hook_update_N().
+ */
+function nodewords_update_6158(&$sandbox) {
+  $names = array('dc.date', 'location', 'robots');
+  $ret = array();
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['max'] = (int) db_result(db_query("SELECT COUNT(*) FROM {nodewords}"));
+    $sandbox['current_mtid'] = 0;
+  }
+
+  if ($sandbox['max']) {
+    $metatags = db_query_range("SELECT * FROM {nodewords} WHERE mtid > %d ORDER BY mtid ASC", $sandbox['current_mtid'], 0, 20);
+
+    while ($metatag = db_fetch_object($metatags)) {
+      if (!in_array($metatag->name, $names)) {
+        // Verify if the meta tag content has been already serialized, and
+        // serialize it if it is not.
+        // The error is being suppressed because if unserialize() returns an error,
+        // then the passed value has not been serialiazed.
+        if (@unserialize($metatag->content) === FALSE) {
+          $content = serialize(array('value' => $metatag->content));
+
+          db_query(
+            "UPDATE {nodewords} SET content = '%s' WHERE mtid = %d",
+            $content, $metatag->mtid
+          );
+        }
+      }
+
+      $sandbox['current_mtid'] = $metatag->mtid;
+      $sandbox['progress']++;
+    }
+  }
+
+  $ret['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['progress'] / $sandbox['max']);
+
+  if ($ret['#finished'] == 1) {
+    variable_set('nodewords_update_6156', TRUE);
+  }
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function nodewords_update_6159(&$sandbox) {
+  $ret = array();
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['max'] = (int) db_result(db_query("SELECT COUNT(*) FROM {nodewords} WHERE name = 'robots'"));
+    $sandbox['current_mtid'] = 0;
+  }
+
+  if ($sandbox['max']) {
+    $metatags = db_query_range("SELECT * FROM {nodewords} WHERE name = 'robots' AND mtid > %d ORDER BY mtid ASC", $sandbox['current_mtid'], 0, 20);
+
+    while ($metatag = db_fetch_object($metatags)) {
+      // The errors are suppressed to allow the update function to fix as
+      // much rows as possible; if the call to unserialize returns an error,
+      // then the content of that row is possibly corrupted.
+      if (($content = @unserialize($metatag->content)) !== FALSE) {
+        if (isset($content['value'])) {
+          if (($value = @unserialize($content['value'])) !== FALSE) {
+            db_query(
+              "UPDATE {nodewords} SET content = '%s' WHERE mtid = %d",
+              serialize($value), $metatag->mtid
+            );
+          }
+        }
+      }
+
+      $sandbox['current_mtid'] = $metatag->mtid;
+      $sandbox['progress']++;
+    }
+  }
+
+  $ret['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['progress'] / $sandbox['max']);
+
+  if ($ret['#finished'] == 1) {
+    variable_set('nodewords_update_6159', TRUE);
+  }
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function nodewords_update_6160(&$sandbox) {
+  $ret = array();
+
+  drupal_load('module', 'nodewords');
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+  }
+
+  $old_types = array(
+    'default',
+    'errorpage',
+    'frontpage',
+    'node',
+    'page',
+    'pager',
+    'term',
+    'tracker',
+    'user',
+    'vocabulary',
+  );
+
+  $new_types = array(
+    NODEWORDS_TYPE_DEFAULT,
+    NODEWORDS_TYPE_ERRORPAGE,
+    NODEWORDS_TYPE_FRONTPAGE,
+    NODEWORDS_TYPE_NODE,
+    NODEWORDS_TYPE_PAGE,
+    NODEWORDS_TYPE_PAGER,
+    NODEWORDS_TYPE_TERM,
+    NODEWORDS_TYPE_TRACKER,
+    NODEWORDS_TYPE_USER,
+    NODEWORDS_TYPE_VOCABULARY,
+  );
+
+  $ret[] = update_sql(
+    "UPDATE {nodewords} SET type = " . $new_types[$sandbox['progress']] . " WHERE type = '" . $old_types[$sandbox['progress']++] . "'"
+  );
+
+  $ret['#finished'] = ($sandbox['progress'] / 10);
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function nodewords_update_6161(&$sandbox) {
+  $ret = array();
+
+  drupal_load('module', 'nodewords');
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['max'] = db_result(
+      db_query("SELECT COUNT(*) FROM {nodewords_custom}", NODEWORDS_TYPE_PAGE)
+    );
+    $sandbox['current_pid'] = 0;
+  }
+
+  if ($sandbox['max']) {
+    $metatags = db_query_range(
+      "SELECT * FROM {nodewords_custom} WHERE pid > %d",
+      $sandbox['current_pid'], 0, 10
+    );
+
+    while ($metatag = db_fetch_object($metatags)) {
+      $ret[] = update_sql("UPDATE {nodewords} SET id = " . $metatag->pid . " WHERE id = '" . db_escape_string(drupal_truncate_bytes($metatag->path, 255)) . "'");
+      $sandbox['current_pid'] = $metatag->pid;
+      $sandbox['progress']++;
+    }
+  }
+
+  $ret['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['progress'] / $sandbox['max']);
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function nodewords_update_6162() {
+  $ret = array();
+
+  db_drop_index($ret, 'nodewords', 'nodewords_type_id');
+  db_drop_unique_key($ret, 'nodewords', 'nodewords_type_id_name');
+
+  db_change_field($ret, 'nodewords', 'type', 'type',
+    array(
+      'type' => 'int',
+      'size' => 'small',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+    )
+  );
+
+  db_change_field($ret, 'nodewords', 'id', 'id',
+    array(
+      'type' => 'int',
+      'size' => 'small',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+    )
+  );
+
+  db_add_index($ret, 'nodewords', 'nodewords_type_id',
+    array('type', 'id')
+  );
+  db_add_unique_key($ret, 'nodewords', 'nodewords_type_id_name',
+    array('type', 'id', 'name')
+  );
+
+  variable_del('nodewords_update_6139');
+  variable_del('nodewords_update_6145');
+  variable_del('nodewords_update_6147');
+  variable_del('nodewords_update_6156');
+  variable_del('nodewords_update_6159');
+  variable_set('nodewords_update_6162', TRUE);
+
+  return $ret;
+}
+
+/**
  * Implementation of hook_uninstall().
  */
 function nodewords_uninstall() {
@@ -1124,9 +1322,7 @@ function nodewords_uninstall() {
   variable_del('nodewords_list_robots');
   variable_del('nodewords_max_size');
   variable_del('nodewords_update_6113');
-  variable_del('nodewords_update_6139');
-  variable_del('nodewords_update_6145');
-  variable_del('nodewords_update_6147');
+  variable_del('nodewords_update_6162');
   variable_del('nodewords_use_alt_attribute');
   variable_del('nodewords_use_frontpage_tags');
 
@@ -1136,34 +1332,4 @@ function nodewords_uninstall() {
     variable_del('nodewords_edit_metatags_' . $node_type);
     variable_del('nodewords_basic_use_teaser_' . $node_type);
   }
-}
-
-/*****************************************************************************
- * Private functions.
- ****************************************************************************/
-
-/*
- * Remove the duplicates from a list of items separated from the separator,
- * preserving the order in which they appear.
- * @param $text
- *   The string containing the list of items.
- *
- * @return
- *   A string containing only unique items present in the string of concatenated
- *   items.
- */
-function _nodewords_get_unique_values($text) {
-  $lc_values = array();
-  $unique_values = array();
-
-  foreach (array_filter(array_map('trim', explode(',', $text))) as $item) {
-    $lowercase = drupal_strtolower($item);
-
-    if (!in_array($lowercase, $lc_values)) {
-      $lc_values[] = $lowercase;
-      $unique_values[] = $item;
-    }
-  }
-
-  return implode(', ', $unique_values);
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: user.inc,v 1.1.4.3 2009/11/19 10:17:11 kiam Exp $
+// $Id: user.inc,v 1.1.4.4 2009/12/05 22:44:28 kiam Exp $
 
 /**
  * @file
@@ -23,7 +23,7 @@ function user_nodewords_type_id($arg) {
     // User page paths: user/$uid.
     if (isset($arg[1]) && is_numeric($arg[1])) {
       if (isset($arg[2]) && $arg[2] == 'track') {
-        return array(NODEWORDS_TYPE_TRACKER, array($arg[1]));
+        return array(NODEWORDS_TYPE_TRACKER, array(''));
       }
       
       return array(NODEWORDS_TYPE_USER, array($arg[1]));

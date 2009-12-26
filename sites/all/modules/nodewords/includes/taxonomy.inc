@@ -1,5 +1,5 @@
 <?php
-// $Id: taxonomy.inc,v 1.1.4.3 2009/11/19 10:17:11 kiam Exp $
+// $Id: taxonomy.inc,v 1.1.4.4 2009/12/05 22:30:22 kiam Exp $
 
 /**
  * @file
@@ -28,7 +28,7 @@ function taxonomy_nodewords_type_id($arg) {
         // Verify that $ids contains all numeric values.
         foreach ($ids as $id) {
           if (!is_numeric($id)) {
-            return array(NODEWORDS_TYPE_NONE, array());
+            return array(NODEWORDS_TYPE_NONE, '');
           }
         }
 

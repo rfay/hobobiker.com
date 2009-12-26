@@ -1,5 +1,5 @@
 <?php
-// $Id: node.inc,v 1.1.4.4 2009/12/03 13:30:26 kiam Exp $
+// $Id: node.inc,v 1.1.4.5 2009/12/05 22:30:22 kiam Exp $
 
 /**
  * @file
@@ -23,12 +23,12 @@ function node_nodewords_type_id($arg) {
     // Node paths: node/$nid
     if (isset($arg[1]) && is_numeric($arg[1])) {
       if (!($node = menu_get_object())) {
-        return array(NODEWORDS_TYPE_NONE, array());
+        return array(NODEWORDS_TYPE_NONE, '');
       }
 
       // If the meta tags for the content type are disabled, don't show them.
       if (!variable_get('nodewords_edit_metatags_' . $node->type, TRUE)) {
-        return array(NODEWORDS_TYPE_NONE, array());
+        return array(NODEWORDS_TYPE_NONE, '');
       }
 
       $bool = (

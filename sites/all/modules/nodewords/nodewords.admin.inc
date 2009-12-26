@@ -1,5 +1,5 @@
 <?php
-// $Id: nodewords.admin.inc,v 1.1.2.118 2009/12/02 01:17:08 kiam Exp $
+// $Id: nodewords.admin.inc,v 1.1.2.126 2009/12/14 23:17:10 kiam Exp $
 
 /**
  * @file
@@ -68,7 +68,7 @@ function nodewords_pages_overview() {
     );
 
     $form['path'][$pid] = array(
-      '#type' => 'hidden',
+      '#type' => 'value',
       '#value' => $page->path,
     );
 
@@ -158,14 +158,7 @@ function nodewords_pages_edit($form_state, $page = NULL) {
   );
 
   if (empty($nodewords_form)) {
-    if (!count(array_filter(variable_get('nodewords_edit', array())))) {
-      drupal_set_message(
-        t(
-          'No meta tags have been enabled for editing; enable them on the <a href="@settings_page">settings page</a>.',
-          array('@settings_page' => url('admin/content/nodewords/settings'))
-        )
-      );
-    }
+    drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
 
     return $form;
   }
@@ -198,8 +191,8 @@ function nodewords_pages_edit($form_state, $page = NULL) {
     );
 
     $form['enabled'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enabled'),
+      '#type' => 'radios',
+      '#options' => array(t('Disabled'), t('Enabled')),
       '#default_value' => $page->enabled,
     );
 
@@ -279,8 +272,9 @@ function nodewords_settings_form() {
   $form['edit'] = array(
     '#type' => 'fieldset',
     '#title' => t('Meta tags to show on edit forms'),
-    '#description' => t('Select the meta tags you want to be able to edit.'),
+    '#description' => t('Select the meta tags that appear in the edit forms. Users with administration permissions can edit all the meta tags, even when they are not enabled to appear in the edit forms.'),
     '#collapsible' => TRUE,
+    '#group' => 'nodewords',
   );
 
   if (!empty($tags_info)) {
@@ -303,6 +297,7 @@ function nodewords_settings_form() {
     '#title' => t('Meta tags to output in HTML'),
     '#description' => t('Select the meta tags you want to appear in the HEAD section of the HTML pages.'),
     '#collapsible' => TRUE,
+    '#group' => 'nodewords',
   );
 
   if (!empty($tags_info)) {
@@ -325,6 +320,7 @@ function nodewords_settings_form() {
     '#title' => t('Meta tags creation options'),
     '#description' => t('These options change the way the meta tags are generated.'),
     '#collapsible' => TRUE,
+    '#group' => 'nodewords',
   );
 
   $form['metatags_creation']['nodewords_enable_user_metatags'] = array(
@@ -412,6 +408,7 @@ function nodewords_settings_form() {
     }
   }
 
+  $form['#pre_render'][] = 'vertical_tabs_form_pre_render';
   $form = system_settings_form($form);
   $form['buttons']['#weight'] = 100;
 
@@ -465,16 +462,7 @@ function nodewords_tags_form(&$form_state, $type = NODEWORDS_TYPE_DEFAULT, $id =
   );
 
   if (empty($form['nodewords'])) {
-    if (!count(array_filter(variable_get('nodewords_edit', array())))) {
-      drupal_set_message(
-        t(
-          'No meta tags have been enabled for editing; enable them on the <a href="@settings_page">settings page</a>.',
-          array('@settings_page' => url('admin/content/nodewords/settings'))
-        )
-      );
-    }
-
-    return array();
+    drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
   }
   else {
     $form['nodewords']['#tree'] = TRUE;
@@ -565,10 +553,9 @@ function theme_nodewords_pages_overview($form) {
     'colspan' => '2',
   );
 
-  drupal_add_tabledrag('nodewords-pages-overview', 'order', 'sibling', 'page-weight');
+  drupal_add_tabledrag('nodewords', 'order', 'sibling', 'page-weight');
 
-  return theme('table', $header, $rows, array('id' => 'nodewords-pages-overview')) .
-    drupal_render($form);
+  return theme('table', $header, $rows, array('id' => 'nodewords')) . drupal_render($form);
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: nodewords_verification_tags.module,v 1.1.2.5 2009/11/18 14:21:55 kiam Exp $
+// $Id: nodewords_verification_tags.module,v 1.1.2.6 2009/12/07 22:35:07 kiam Exp $
 
 /**
  * @file
@@ -31,7 +31,6 @@ function nodewords_verification_tags_nodewords_tags_info() {
   $tags = array(
     'bing_webmaster_center' => array(
       'tag:context:allowed' => array(NODEWORDS_TYPE_FRONTPAGE),
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_verification_tags_bing_webmaster_center',
       'tag:template' => array(
         'msvalidate.01' => NODEWORDS_META,
@@ -41,7 +40,6 @@ function nodewords_verification_tags_nodewords_tags_info() {
     ),
     'google_webmaster_tools' => array(
       'tag:context:allowed' => array(NODEWORDS_TYPE_FRONTPAGE),
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_verification_tags_google_webmaster_tools',
       'tag:template' => array(
         'google-site-verification' => NODEWORDS_META,
@@ -51,7 +49,6 @@ function nodewords_verification_tags_nodewords_tags_info() {
     ),
     'yahoo_site_explorer' => array(
       'tag:context:allowed' => array(NODEWORDS_TYPE_FRONTPAGE),
-      'tag:db:type' => 'string',
       'tag:function:prefix' => 'nodewords_verification_tags_yahoo_site_explorer',
       'tag:template' => array(
         'y_key' => NODEWORDS_META,

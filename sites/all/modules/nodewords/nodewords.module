@@ -1,5 +1,5 @@
 <?php
-// $Id: nodewords.module,v 1.57.2.259 2009/12/03 15:08:45 kiam Exp $
+// $Id: nodewords.module,v 1.57.2.270 2009/12/14 22:50:47 kiam Exp $
 
 /**
  * @file
@@ -18,17 +18,17 @@
 /**
  * The type of objects to which the meta tags are associated.
  */
-define('NODEWORDS_TYPE_DEFAULT',    'default');
-define('NODEWORDS_TYPE_ERRORPAGE',  'errorpage');
-define('NODEWORDS_TYPE_FRONTPAGE',  'frontpage');
-define('NODEWORDS_TYPE_NODE',       'node');
-define('NODEWORDS_TYPE_NONE',       'none');
-define('NODEWORDS_TYPE_PAGE',       'page');
-define('NODEWORDS_TYPE_PAGER',      'pager');
-define('NODEWORDS_TYPE_TERM',       'term');
-define('NODEWORDS_TYPE_TRACKER',    'tracker');
-define('NODEWORDS_TYPE_USER',       'user');
-define('NODEWORDS_TYPE_VOCABULARY', 'vocabulary');
+define('NODEWORDS_TYPE_DEFAULT',    1);
+define('NODEWORDS_TYPE_ERRORPAGE',  2);
+define('NODEWORDS_TYPE_FRONTPAGE',  3);
+define('NODEWORDS_TYPE_NONE',       0);
+define('NODEWORDS_TYPE_NODE',       5);
+define('NODEWORDS_TYPE_PAGE',      10);
+define('NODEWORDS_TYPE_PAGER',      4);
+define('NODEWORDS_TYPE_TERM',       6);
+define('NODEWORDS_TYPE_TRACKER',    7);
+define('NODEWORDS_TYPE_USER',       8);
+define('NODEWORDS_TYPE_VOCABULARY', 9);
 
 /**
  * The types of meta tags the module is able to handle.
@@ -46,7 +46,7 @@ define('NODEWORDS_MINIMUM_API_VERSION', '1.1');
 /**
  * The current API version implemented.
  */
-define('NODEWORDS_API_VERSION', '1.7');
+define('NODEWORDS_API_VERSION', '1.8');
 
 /*****************************************************************************
  * Drupal hooks.
@@ -73,16 +73,6 @@ function nodewords_content_extra_fields() {
  */
 function nodewords_form_alter(&$form, &$form_state, $form_id) {
   $bool = (
-    module_exists('vertical_tabs') &&
-    function_exists('vertical_tabs_add_vertical_tabs') &&
-    $form_id == 'nodewords_settings_form'
-  );
-
-  if ($bool) {
-    vertical_tabs_add_vertical_tabs($form);
-  }
-
-  $bool = (
     isset($form['type']) &&
     isset($form['type']['#value']) &&
     $form_id == $form['type']['#value'] . '_node_form' &&
@@ -98,10 +88,13 @@ function nodewords_form_alter(&$form, &$form_state, $form_id) {
       NODEWORDS_TYPE_NODE,
       !empty($node->nodewords) ? $node->nodewords : array(),
       array(
-        'page:permissions:additional' => 'administer nodes',
         'tag_options' => array('node_type' => $form['type']['#value']),
       )
     );
+
+    if (empty($form['nodewords']) && user_access('administer nodes')) {
+      drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
+    }
   }
 }
 
@@ -116,6 +109,7 @@ function nodewords_form_node_type_form_alter(&$form, &$form_state) {
       '#title' => t('Meta tags settings'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
+      '#group' => 'additional_settings',
     );
 
     $form['nodewords']['nodewords_edit_metatags'] = array(
@@ -162,9 +156,12 @@ function nodewords_form_taxonomy_form_term_alter(&$form, &$form_state) {
 
     $form['nodewords'] = nodewords_form(
       NODEWORDS_TYPE_TERM,
-      $tags,
-      array()
+      $tags
     );
+
+    if (empty($form['nodewords'])) {
+      drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
+    }
 
     $form['submit']['#weight'] = 45;
     $form['delete']['#weight'] = 50;
@@ -190,9 +187,12 @@ function nodewords_form_taxonomy_form_vocabulary_alter(&$form, &$form_state) {
 
     $form['nodewords'] = nodewords_form(
       NODEWORDS_TYPE_VOCABULARY,
-      $tags,
-      array()
+      $tags
     );
+
+    if (empty($form['nodewords'])) {
+      drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
+    }
 
     $form['submit']['#weight'] = 45;
     $form['delete']['#weight'] = 50;
@@ -400,6 +400,12 @@ function nodewords_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
         'nodewords' => nodewords_load_tags(NODEWORDS_TYPE_NODE, $node->nid),
       );
 
+    case 'prepare translation':
+      if (isset($node->translation_source->nodewords)) {
+        $node->nodewords = $node->translation_source->nodewords;
+      }
+      break;
+
     case 'update index':
       $output_tags = array();
       $tag_options = array(
@@ -534,11 +540,12 @@ function nodewords_user($op, &$edit, &$account, $category = NULL) {
           $tags = nodewords_load_tags(NODEWORDS_TYPE_USER, $account->uid);
           $form['nodewords'] = nodewords_form(
             NODEWORDS_TYPE_USER,
-            $tags,
-            array(
-              'page:permissions:additional' => 'administer users',
-            )
+            $tags
           );
+
+          if (empty($form['nodewords']) && user_access('administer users')) {
+            drupal_set_message(t('There are no modules that implement meta tags.'), 'error');
+          }
 
           return $form;
         }
@@ -570,10 +577,10 @@ function nodewords_user_operations() {
  * Delete tags from table.
  */
 function nodewords_delete_tags($type, $id) {
-  db_query("DELETE FROM {nodewords} WHERE type = '%s' AND id = '%s'", $type, $id);
+  db_query("DELETE FROM {nodewords} WHERE type = %d AND id = %d", $type, $id);
 
   if ($type == NODEWORDS_TYPE_PAGE) {
-    db_query("DELETE FROM {nodewords_custom} WHERE path = '%s'", $id);
+    db_query("DELETE FROM {nodewords_custom} WHERE pid = %d", $id);
   }
 }
 
@@ -594,60 +601,69 @@ function nodewords_form($type, $tags, $options = array()) {
     'fieldset' => TRUE,
     'fieldset:title' => t('Meta tags'),
     'fieldset:weight' => 20,
+    'page:permissions:see_all_tags' => 'administer meta tags',
   );
-  $edit_tags = variable_get('nodewords_edit', array());
-  $form = array();
-  $head_tags = variable_get('nodewords_head', array());
-  $options += $default_options;
-  $tag_options = array(
+  $default_tag_options = array(
     'default' => nodewords_load_tags(),
     'type' => $type,
   );
+  $edit_tags = variable_get('nodewords_edit', array());
+  $form = array();
+  $options += $default_options;
 
-  if (isset($options['tag_options'])) {
-    $tag_options = array_merge($options['tag_options'], $tag_options);
+  if (isset($options['tag_options']) && is_array($options['tag_options'])) {
+    $tag_options = $options['tag_options'] + $default_tag_options;
+  }
+  else {
+    $tag_options = $default_tag_options;
   }
 
   $tags_info = nodewords_get_possible_tags();
 
   foreach ($tags_info as $name => $info) {
-    if ($type != NODEWORDS_TYPE_DEFAULT && empty($edit_tags[$name])) {
-      continue;
-    }
-
     $bool = (
       (
-        !empty($info['tag:context:allowed']) &&
-        is_array($info['tag:context:allowed']) &&
-        !in_array($type, $info['tag:context:allowed'])
+        $options['page:permissions:see_all_tags'] &&
+        user_access($options['page:permissions:see_all_tags'])
       ) ||
-      (
-        !empty($info['tag:context:denied']) &&
-        is_array($info['tag:context:denied']) &&
-        in_array($type, $info['tag:context:denied'])
-      )
+      !empty($edit_tags[$name])
     );
 
     if ($bool) {
-      continue;
-    }
+      $bool = (
+        (
+          !empty($info['tag:context:allowed']) &&
+          is_array($info['tag:context:allowed']) &&
+          !in_array($type, $info['tag:context:allowed'])
+        ) ||
+        (
+          !empty($info['tag:context:denied']) &&
+          is_array($info['tag:context:denied']) &&
+          in_array($type, $info['tag:context:denied'])
+        )
+      );
 
-    $bool = (
-      (
-        !empty($options['page:permissions:additional']) &&
-        user_access($options['page:permissions:additional'])
-      ) ||
-      (
-        !empty($info['widget:permission']) &&
-        user_access($info['widget:permission'])
-      )
-    );
+      if ($bool) {
+        continue;
+      }
 
-    if ($bool) {
-      if (function_exists($function = $info['tag:function:prefix'] . '_form')) {
-        $tag_options['parameters'] = !empty($info['tag:function:parameters']) ? $info['tag:function:parameters'] : array();
+      $bool = (
+        (
+          $options['page:permissions:see_all_tags'] &&
+          user_access($options['page:permissions:see_all_tags'])
+        ) ||
+        (
+          !empty($info['widget:permission']) &&
+          user_access($info['widget:permission'])
+        )
+      );
 
-        $function($form, isset($tags[$name]) ? $tags[$name] : array(), $tag_options);
+      if ($bool) {
+        if (function_exists($function = $info['tag:function:prefix'] . '_form')) {
+          $tag_options['parameters'] = !empty($info['tag:function:parameters']) ? $info['tag:function:parameters'] : array();
+
+          $function($form, isset($tags[$name]) ? $tags[$name] : array(), $tag_options);
+        }
       }
     }
   }
@@ -659,6 +675,7 @@ function nodewords_form($type, $tags, $options = array()) {
     $form['#collapsible'] = TRUE;
     $form['#collapsed'] = TRUE;
     $form['#weight'] = $options['fieldset:weight'];
+    $form['#group'] = 'additional_settings';
   }
 
   return $form;
@@ -844,13 +861,13 @@ function nodewords_get_term($tid) {
  * Load tags from table.
  */
 function nodewords_load_tags($type = NODEWORDS_TYPE_DEFAULT, $id = '') {
-  $result = db_query("SELECT * FROM {nodewords} WHERE type = '%s' AND id = '%s'", $type, $id);
+  $result = db_query("SELECT * FROM {nodewords} WHERE type = %d AND id = %d", $type, $id);
   $tags = array();
   $tags_info = nodewords_get_possible_tags();
 
   while ($row = db_fetch_object($result)) {
     if (isset($tags_info[$row->name])) {
-      $tags[$row->name] = $tags_info[$row->name]['tag:db:type'] != 'string' ? unserialize($row->content) : array('value' => $row->content);
+      $tags[$row->name] = unserialize($row->content);
     }
   }
 
@@ -871,15 +888,9 @@ function nodewords_load_tags($type = NODEWORDS_TYPE_DEFAULT, $id = '') {
  *  NODEWORDS_TYPE_PAGER, NODEWORDS_TYPE_PAGE, ...).
  */
 function nodewords_mass_delete_tags($ids, $type) {
-  db_query("DELETE FROM {nodewords} WHERE id IN (" . db_placeholders($ids, 'varchar') . ") AND type = '%s'",
+  db_query("DELETE FROM {nodewords} WHERE id IN (" . db_placeholders($ids, 'int') . ") AND type = %d",
     array_merge($ids, array($type))
   );
-
-  if ($type == NODEWORDS_TYPE_PAGE) {
-    db_query("DELETE FROM {nodewords_custom} WHERE path IN (" . db_placeholders($ids, 'varchar') . ")",
-      $ids
-    );
-  }
 
   drupal_set_message(t('The update has been performed.'));
 }
@@ -925,11 +936,12 @@ function nodewords_metatag_from_teaser($text, $format, $options = array()) {
 
   // Remove the strings added from third-party modules.
   $modules = array_filter(variable_get('nodewords_filter_modules_output', array()));
+
   if (isset($modules['imagebrowser'])) {
-    $text = preg_replace('/\[ibimage[^[\]*\]/i', '', $text);
+    $text = preg_replace('/\[ibimage[^\]]*\]/i', '', $text);
   }
   if (isset($modules['img_assist'])) {
-    $text = preg_replace('/\[img_assist[^[\]*\]/i', '', $text);
+    $text = preg_replace('/\[img_assist[^\]]*\]/i', '', $text);
   }
 
   // Remove the text matching the regular expression.
@@ -1055,24 +1067,14 @@ function nodewords_page_load($pid) {
  */
 function nodewords_save_tags($type, $id, $tags, $log_message = FALSE) {
   global $user;
-  static $tags_info;
-
-  if (!isset($tags_info)) {
-    $tags_info = nodewords_get_possible_tags();
-  }
 
   $done = FALSE;
+  $tags_info = nodewords_get_possible_tags();
 
   foreach ($tags as $name => $content) {
     if (isset($tags_info[$name])) {
-      if ($tags_info[$name]['tag:db:type'] != 'string') {
-        $content = serialize($content);
-      }
-      else {
-        $content = $content['value'];
-      }
-
-      $result = db_fetch_object(db_query("SELECT * FROM {nodewords} WHERE type = '%s' AND id = '%s' AND name = '%s'", $type, $id, $name));
+      $content = serialize($content);
+      $result = db_fetch_object(db_query("SELECT * FROM {nodewords} WHERE type = %d AND id = %d AND name = '%s'", $type, $id, $name));
 
       if ($result === FALSE) {
         $row = new stdClass();
@@ -1148,17 +1150,17 @@ function _nodewords_detect_type_and_ids() {
   $arg = arg();
 
   if (variable_get('site_offline', 0) && !user_access('administer site configuration')) {
-    return array(NODEWORDS_TYPE_NONE, array());
+    return array(NODEWORDS_TYPE_NONE, '');
   }
 
   $headers = drupal_get_headers();
 
   if (preg_match('@HTTP/1\.[01]\x20+403@', $headers)) {
-    return array(NODEWORDS_TYPE_ERRORPAGE, 403);
+    return array(NODEWORDS_TYPE_ERRORPAGE, '403');
   }
 
   if (preg_match('@HTTP/1\.[01]\x20+404@', $headers)) {
-    return array(NODEWORDS_TYPE_ERRORPAGE, 404);
+    return array(NODEWORDS_TYPE_ERRORPAGE, '404');
   }
 
   $bool = (
@@ -1168,7 +1170,7 @@ function _nodewords_detect_type_and_ids() {
   );
 
   if ($bool) {
-    return array(NODEWORDS_TYPE_PAGER, 0);
+    return array(NODEWORDS_TYPE_PAGER, '');
   }
 
   if (drupal_is_front_page() && variable_get('nodewords_use_frontpage_tags', TRUE)) {
@@ -1188,12 +1190,12 @@ function _nodewords_detect_type_and_ids() {
     );
 
     if ($bool) {
-      return array(NODEWORDS_TYPE_PAGE, $path);
+      return array(NODEWORDS_TYPE_PAGE, $page->pid);
     }
   }
 
   if (!isset($arg[0])) {
-    return array(NODEWORDS_TYPE_NONE, array());
+    return array(NODEWORDS_TYPE_NONE, '');
   }
 
   _nodewords_load_all_includes();
@@ -1206,7 +1208,7 @@ function _nodewords_detect_type_and_ids() {
     }
   }
 
-  return array(NODEWORDS_TYPE_NONE, array());
+  return array(NODEWORDS_TYPE_NONE, '');
 }
 
 /**
