@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_ui.module,v 1.16 2009/07/22 16:58:07 salvis Exp $
+// $Id: subscriptions_ui.module,v 1.18 2010/02/03 21:29:08 salvis Exp $
 
 /**
  * @file
@@ -78,15 +78,16 @@ function subscriptions_ui_link($type, $node = NULL, $teaser = NULL) {
   if ($type == 'node' && subscriptions_ui_can_subscribe() && empty($teaser)) {
     if (variable_get('subscriptions_form_link_only', 0) && arg(2) != 'subscribe' && (!variable_get('subscriptions_avoid_empty_subscribe_links', 0) || module_invoke_all('subscriptions', 'node_options', $user, $node))) {
       $blocked_types = variable_get('subscriptions_blocked_content_types', array());
-      if (!in_array($node->type, $blocked_types) || user_access('subscribe to all content types')) {
-        return array('subscriptions-subscribe' => array(
-          'href' => $_GET['q'] .'/subscribe',
-          'title' => t('Subscribe') . (in_array($node->type, $blocked_types) ? SUBSCRIPTIONS_UNAVAILABLE : ''),
-          'html' => TRUE,
-          'fragment' => 'subscribe',
-          'attributes' => array('title' => t('Receive notifications about changes and/or comments to this page (and possibly similar pages).')),
-        ));
+      if (in_array($node->type, $blocked_types) && !user_access('subscribe to all content types')) {
+        return;
       }
+      return array('subscriptions-subscribe' => array(
+        'href' => $_GET['q'] .'/subscribe',
+        'title' => t('Subscribe') . (in_array($node->type, $blocked_types) ? SUBSCRIPTIONS_UNAVAILABLE : ''),
+        'html' => TRUE,
+        'fragment' => 'subscribe',
+        'attributes' => array('title' => t('Receive notifications about changes and/or comments to this page (and possibly similar pages).')),
+      ));
     }
     elseif (variable_get('subscriptions_form_in_block', 0) && arg(2) == 'subscribe') {
       // Make sure the block is visible
@@ -128,13 +129,13 @@ function subscriptions_ui_node_form(&$form_state, $node, $account = NULL) {
   }
 
   if (subscriptions_node_is_blocked($node->nid)) {
-    return NULL;
+    return;
   }
 
   $blocked_types = variable_get('subscriptions_blocked_content_types', array());
   if (in_array($node->type, $blocked_types)) {
     if (!user_access('subscribe to all content types', $account)) {
-      return NULL;
+      return;
     }
     $is_blocked = TRUE;
   }
@@ -147,9 +148,13 @@ function subscriptions_ui_node_form(&$form_state, $node, $account = NULL) {
   }
   uasort($node_options, '_subscriptions_cmp_by_weight');
 
-  $result = db_query("SELECT sid, module, field, value, author_uid, send_interval, send_updates, send_comments FROM {subscriptions} WHERE module = 'node' AND recipient_uid = %d", $account->uid);
-  while ($s = db_fetch_array($result)) {
-    $subscriptions[$s['field']][$s['value']][$s['author_uid']] = $s;
+  foreach (array(
+    db_query("SELECT sid, module, field, value, author_uid, send_interval, send_updates, send_comments FROM {subscriptions} WHERE module = 'node' AND field = 'nid' AND value = '%s' AND recipient_uid = %d", $node->nid, $account->uid),
+    db_query("SELECT sid, module, field, value, author_uid, send_interval, send_updates, send_comments FROM {subscriptions} WHERE module = 'node' AND field <> 'nid' AND recipient_uid = %d", $account->uid),
+  ) as $result) {
+    while ($s = db_fetch_array($result)) {
+      $subscriptions[$s['field']][$s['value']][$s['author_uid']] = $s;
+    }
   }
   // Process all options building the array of indexed params for each
   $nonlabeled_options = $options = $params = $default_comments = $default_updates = $default_subscriptions = array();

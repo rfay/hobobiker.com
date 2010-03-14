@@ -1,4 +1,4 @@
-# $Id: it.po,v 1.5 2009/09/28 11:01:59 salvis Exp $
+# $Id: it.po,v 1.6 2009/11/03 22:35:11 salvis Exp $
 #
 # Italian translation of Drupal (general)
 # Generated from files:
@@ -722,7 +722,7 @@ msgid "(disabled)"
 msgstr "(disattivato)"
 
 #: subscriptions_mail.module:188
-msgid "!Module sent !single_count single and !digest_count digest notifications in !used_seconds of !available_seconds available seconds; !remaining_items queue items left."
+msgid "!Module sent !single_count single and !digest_count digest notifications in !used_seconds of !total_seconds seconds; !remaining_items queue items remaining, !remaining_seconds seconds left for other cron client modules."
 msgstr "!Module ha inviato !single_count avvisi singoli and !digest_count avvisi in riassunti in !used_seconds su !available_seconds secondi disponibili; sono rimasti !remaining_items elementi in attesa."
 
 #: subscriptions_mail.module:207

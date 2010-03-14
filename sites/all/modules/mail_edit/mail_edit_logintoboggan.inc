@@ -24,7 +24,13 @@ function logintoboggan_mail_edit_tokens_list($mailkey, $options = array()) {
 }
 
 function logintoboggan_mail_edit_tokens_value($mailkey, $mail, $options = array()) {
-  return user_mail_edit_tokens_value($mailkey, $mail, $options);
+  $tokens = user_mail_edit_tokens_value($mailkey, $mail, $options);
+  if (module_exists('logintoboggan')) {
+    if (variable_get('user_register', 1) == 1) {
+      $tokens['!login_url'] = logintoboggan_eml_validate_url($mail['params']['account']);
+    } 
+  }
+  return $tokens;
 }
 
 function logintoboggan_mail_edit_text($mailkey, $langcode) {

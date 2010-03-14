@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_taxonomy.module,v 1.13 2009/07/20 21:55:53 salvis Exp $
+// $Id: subscriptions_taxonomy.module,v 1.14 2010/02/03 21:29:08 salvis Exp $
 
 /**
  * @file
@@ -86,13 +86,14 @@ function _subscriptions_taxonomy_node_options($account, $node) {
     if (in_array($term->vid, $vids_to_omit)) {
       continue;
     }
+    $term_name = check_plain($term->name);
     $options['tid'][] = array(
-      'name' => t('To content in %term', array('%term' => $term->name)),
+      'name' => t('To content in %term', array('%term' => $term_name)),
       'params' => array('module' => 'node', 'field' => 'tid', 'value' => $tid),
       'link' => 'taxa/'. $tid,
     );
     $options['tid'][] = array(
-      'name' => t('To content in %term by %name', array('%term' => $term->name, '%name' => ($node->uid ? $node->name : variable_get('anonymous', '???')))),
+      'name' => t('To content in %term by %name', array('%term' => $term_name, '%name' => ($node->uid ? check_plain($node->name) : variable_get('anonymous', '???')))),
       'params' => array('module' => 'node', 'field' => 'tid', 'value' => $tid, 'author_uid' => $node->uid),
       'link' => 'taxa/'. $tid .'/'. $node->uid,
     );
@@ -149,7 +150,7 @@ function subscriptions_taxonomy_form_subscriptions_settings_form_alter(&$form, &
   $vocabularies = taxonomy_get_vocabularies();
   $select[0] = '<'. t('none') .'>';
   foreach ($vocabularies as $vocabulary) {
-    $select[$vocabulary->vid] = $vocabulary->name;
+    $select[$vocabulary->vid] = check_plain($vocabulary->name);
   }
 
   $form['taxonomy']['subscriptions_restricted_taxa'] = array(
@@ -227,7 +228,7 @@ function subscriptions_taxonomy_taxa_form(&$form_state, $vocabularies, $account,
     // display vocabulary name and group terms together
     $form[$vocab->vid] = array(
       '#type' => 'fieldset',
-      '#title' => $vocab->name,
+      '#title' => check_plain($vocab->name),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
@@ -262,7 +263,7 @@ function subscriptions_taxonomy_taxa_form(&$form_state, $vocabularies, $account,
         if (is_array($term)) {
           $term = (object)$term;
         }
-        $title = str_repeat('--&nbsp;', (empty($term->depth) ? 0 : $term->depth)) . l($term->name, 'taxonomy/term/'. $term->tid);
+        $title = str_repeat('--&nbsp;', (empty($term->depth) ? 0 : $term->depth)) . l(check_plain($term->name), 'taxonomy/term/'. $term->tid);
         if (!isset($subscriptions_vid[$term->tid][-1])) {
           // author-less item is missing -- add it here:
           $subscriptions_vid[$term->tid][-1] = array(

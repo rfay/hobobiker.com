@@ -5,9 +5,9 @@ recommends[] = nodereferrer
 package = Caching
 core = 6.x
 
-; Information added by drupal.org packaging script on 2009-11-28
-version = "6.x-1.17"
+; Information added by drupal.org packaging script on 2010-01-25
+version = "6.x-1.18"
 core = "6.x"
 project = "boost"
-datestamp = "1259396104"
+datestamp = "1264382702"
 

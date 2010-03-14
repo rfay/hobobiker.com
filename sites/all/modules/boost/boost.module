@@ -1,5 +1,5 @@
 <?php
-// $Id: boost.module,v 1.3.2.2.2.5.2.262 2009/11/28 07:59:34 mikeytown2 Exp $
+// $Id: boost.module,v 1.3.2.2.2.5.2.298 2010/01/24 18:37:55 mikeytown2 Exp $
 
 /**
  * @file
@@ -12,7 +12,7 @@
 define('BOOST_TIME',                 time());
 define('BOOST_MAX_TIMESTAMP',        variable_get('boost_max_timestamp', BOOST_TIME));
 define('BOOST_ENABLED',              variable_get('boost_enabled', CACHE_NORMAL));
-define('BOOST_GZIP',                 variable_get('page_compression', TRUE));
+define('BOOST_GZIP',                 function_exists('gzencode') ? variable_get('page_compression', TRUE) : FALSE);
 
 // This cookie is set for all authenticated users, so that they can be
 // excluded from caching (or in the future get a user-specific cached page):
@@ -60,9 +60,11 @@ define('BOOST_CHECK_BEFORE_CRON_EXPIRE', variable_get('boost_check_before_cron_e
 define('BOOST_PRE_PROCESS_FUNCTION', variable_get('boost_pre_process_function', ''));
 define('BOOST_FLUSH_ALL_MULTISITE',  variable_get('boost_flush_all_multisite', FALSE));
 define('BOOST_ONLY_ASCII_PATH',      variable_get('boost_only_ascii_path', TRUE));
+define('BOOST_AGGRESSIVE_COOKIE',     variable_get('boost_aggressive_cookie', TRUE));
 define('BOOST_ASYNCHRONOUS_OUTPUT',  variable_get('boost_asynchronous_output', TRUE));
 define('BOOST_FLUSH_DIR',            variable_get('boost_flush_dir', FALSE));
 define('BOOST_FLUSH_CCK_REFERENCES', variable_get('boost_flush_cck_references', TRUE));
+define('BOOST_FLUSH_FRONT',          variable_get('boost_flush_front', TRUE));
 define('BOOST_FLUSH_NODE_TERMS',     variable_get('boost_flush_node_terms', TRUE));
 define('BOOST_FLUSH_MENU_ITEMS',     variable_get('boost_flush_menu_items', 0));
 define('BOOST_FLUSH_VIEWS',          variable_get('boost_flush_views', TRUE));
@@ -79,6 +81,7 @@ define('BOOST_EXPIRE_NO_FLUSH',      variable_get('boost_expire_no_flush', FALSE
 define('BOOST_VERBOSE',              variable_get('boost_verbose', 5));
 define('BOOST_IGNORE_SAFE_WARNING',  variable_get('boost_ignore_safe_warning', FALSE));
 define('BOOST_IGNORE_SUBDIR_LIMIT',  variable_get('boost_ignore_subdir_limit', TRUE));
+define('BOOST_IGNORE_HTACCESS_WARNING',  variable_get('boost_ignore_htaccess_warning', FALSE));
 define('BOOST_NO_DATABASE',          variable_get('boost_no_database', FALSE));
 
 // Crawler Settings
@@ -150,10 +153,22 @@ function boost_help($path, $arg) {
 function boost_views_pre_render(&$view) {
   if (!is_null($view) && $GLOBALS['_boost_cache_this'] && !BOOST_NO_DATABASE) {
     foreach ($view->result as $item) {
-      $node = node_load($item->nid);
-      $GLOBALS['_boost_relationships'][] = array('child_page_callback' => 'node', 'child_page_type' => $node->type, 'child_page_id' => $item->nid);
+      if (is_numeric($item->nid)) {
+        $node = node_load($item->nid);
+        if (isset($node->type)) {
+          $GLOBALS['_boost_relationships'][] = array('child_page_callback' => 'node', 'child_page_type' => $node->type, 'child_page_id' => $item->nid);
+        }
+      }
     }
   }
+}
+
+/**
+ * Implementation of hook_views_pre_view().
+ *
+ * Hack due to this issue: http://drupal.org/node/619852
+ */
+function boost_views_pre_view(&$view) {
 }
 
 /**
@@ -162,10 +177,18 @@ function boost_views_pre_render(&$view) {
 function boost_init() {
   global $user, $base_path;
 
-  // remove cookie set at logout
   $uid = isset($user->uid) ? $user->uid : 0;
-  if (isset($_COOKIE[BOOST_COOKIE]) && $uid == 0) {
+  // Remove Boost cookie at logout if it still exists
+  if (BOOST_AGGRESSIVE_COOKIE && isset($_COOKIE[BOOST_COOKIE]) && $uid == 0) {
     boost_set_cookie($uid, BOOST_TIME - 86400);
+  }
+  // Remove Boost cookie if set to -1
+  elseif (isset($_COOKIE[BOOST_COOKIE]) && $_COOKIE[BOOST_COOKIE] == '-1') {
+    boost_set_cookie($uid, BOOST_TIME - 86400);
+  }
+  // Set Boost cookie if it doesn't exists and user is logged in
+  elseif (BOOST_AGGRESSIVE_COOKIE && !isset($_COOKIE[BOOST_COOKIE]) && $uid != 0) {
+    boost_set_cookie($uid);
   }
 
   // Disable all caches when nocache is set
@@ -198,9 +221,7 @@ function boost_init() {
   $query = array();
   foreach ($_GET as $key => $val) {
     if ($key != 'q' && $key != 'destination') {
-      if (!empty($val)) {
-        $query[$key] = $val;
-      }
+      $query[$key] = $val;
     }
   }
   $GLOBALS['_boost_query'] .= str_replace('&amp;', '&', urldecode(http_build_query($query)));
@@ -219,7 +240,7 @@ function boost_init() {
   // Make sure the page is/should be cached according to our current configuration
   if (   strpos($_SERVER['SCRIPT_FILENAME'], 'index.php') === FALSE
       || variable_get('site_offline', 0)
-      || $_SERVER['REQUEST_METHOD'] != 'GET'
+      || ($_SERVER['REQUEST_METHOD'] != 'GET' && $_SERVER['REQUEST_METHOD'] != 'HEAD')
       || $_SERVER['SERVER_SOFTWARE'] === 'PHP CLI'
       || !BOOST_ENABLED
       || !boost_is_cacheable($GLOBALS['_boost_path'])
@@ -273,6 +294,10 @@ function boost_exit($destination = NULL) {
       // Do what drupal_goto() would do if we were to return to it:
       exit(header('Location: ' . $destination));
     }
+  }
+  // Set watchdog error if headers already sent
+  if (BOOST_ASYNCHRONOUS_OUTPUT && $GLOBALS['_boost_cache_this'] && headers_sent($filename, $linenum) && !boost_headers_contain('Location: ') && BOOST_VERBOSE >= 7) {
+    watchdog('boost', 'boost_exit() Debug: Headers already sent in @filename on line @linenum. Asynchronous Operation will not be used.', array('@filename' => $filename, '@linenum' => $linenum));
   }
 }
 
@@ -472,6 +497,9 @@ function boost_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
     case 'insert':
       if (BOOST_FLUSH_VIEWS_INSERT && module_exists('views')) {
         $GLOBALS['_boost_nid'] = $node->nid;
+        // Can not reliability call require_once inside a shutdown function; see http://drupal.org/node/652508
+        views_include('view');
+        views_include('query');
         register_shutdown_function('_boost_view_insert');
       }
       boost_expire_node($node);
@@ -507,11 +535,29 @@ function boost_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
  * cached views for newly created node. Expires the outdated views from the cache.
  */
 function _boost_view_insert() {
-  $result = db_query("SELECT * FROM {boost_cache} WHERE base_dir = '%s' AND page_callback = 'view' AND expire > 0 AND expire <> 434966400", BOOST_FILE_PATH);
+  if (!isset($GLOBALS['_boost_nid'])) {
+    return FALSE;
+  }
+  // Ensure we're in the correct working directory, since some web servers (e.g. Apache) mess this up here.
+  chdir(dirname($_SERVER['SCRIPT_FILENAME']));
+
+  if (BOOST_FLUSH_ALL_MULTISITE) {
+    $result = db_query("SELECT * FROM {boost_cache} WHERE page_callback = 'view' AND expire > 0 AND expire <> 434966400");
+  }
+  else {
+    $result = db_query("SELECT * FROM {boost_cache} WHERE base_dir = '%s' AND page_callback = 'view' AND expire > 0 AND expire <> 434966400", BOOST_FILE_PATH);
+  }
+
   $data = array();
   $num_views = 0;
   $num_hits = 0;
+  $views = array();
   while ($boost = db_fetch_array($result)) {
+    $key = $boost['page_type'] . $boost['page_id'];
+    $views[$key]['page_type'] = $boost['page_type'];
+    $views[$key]['page_id'] = $boost['page_id'];
+  }
+  foreach ($views as $boost) {
     $view = views_get_view($boost['page_type']);
     $view->set_display($boost['page_id']);
     $view->pre_execute();
@@ -597,7 +643,7 @@ function boost_expire_node($node, $nid = 0) {
   }
 
   // If promoted to front page, expire front page
-  if ($node->promote == 1) {
+  if (BOOST_FLUSH_FRONT && $node->promote == 1) {
     $paths['front'] = '<front>';
   }
 
@@ -760,9 +806,14 @@ function boost_get_menu_structure($menu, $found = TRUE, $needle = '', $first = T
   $structure = array_unique($structure);
   $found_global = $found;
   if ($first) {
-    $menu_out = array_unique($menu_out);
-    sort($menu_out);
-    return $menu_out;
+    if (isset($menu_out) && is_array($menu_out)) {
+      $menu_out = array_unique($menu_out);
+      sort($menu_out);
+      return $menu_out;
+    }
+    else {
+      return array();
+    }
   }
   else {
     return $structure;
@@ -804,9 +855,11 @@ function boost_taxonomy($op, $type, $term = NULL) {
  * Implementation of hook_user(). Acts on user account actions.
  */
 function boost_user($op, &$edit, &$account, $category = NULL) {
-  if (!BOOST_ENABLED) return;
-
   global $user;
+
+  if (BOOST_VERBOSE >= 7) {
+    watchdog('boost', 'Debug: boost_user() <br />The %op operation was sent for user %user', array('%op' => $op, '%user' => $user->uid));
+  }
   switch ($op) {
     case 'login':
       // Set a special cookie to prevent authenticated users getting served
@@ -815,9 +868,12 @@ function boost_user($op, &$edit, &$account, $category = NULL) {
       break;
     case 'logout':
       // set the cookie to 0, then remove at the following request, this way browsers won't show a cached logged in page
-      boost_set_cookie(0);
+      boost_set_cookie(-1);
       break;
     case 'delete':
+      if (!BOOST_ENABLED) {
+        return;
+      }
       // Expire the relevant user page from the static page cache to prevent serving stale content:
       if (!empty($account->uid)) {
         if (BOOST_NO_DATABASE) {
@@ -943,7 +999,7 @@ function boost_block($op = 'list', $delta = 0, $edit = array()) {
 
           if (!( strpos($_SERVER['SCRIPT_FILENAME'], 'index.php') === FALSE
               || variable_get('site_offline', 0)
-              || $_SERVER['REQUEST_METHOD'] != 'GET'
+              || ($_SERVER['REQUEST_METHOD'] != 'GET' && $_SERVER['REQUEST_METHOD'] != 'HEAD')
               || $_SERVER['SERVER_SOFTWARE'] === 'PHP CLI'
               || !BOOST_ENABLED
               || isset($_GET['nocache'])
@@ -1252,7 +1308,7 @@ function boost_theme() {
 }
 
 function theme_boost_cache_status($ttl, $text) {
-  return '<span class="boost cache-status" content="' . $ttl . '"><small>' . $text . '</small></span>';
+  return '<div style="font-size: x-small;">' . $text . '</div>';
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1310,8 +1366,8 @@ function _boost_ob_handler() {
     $types = array_pop($types);
     if (stristr($types, 'text/javascript')) {
       if ($status == 200 & $GLOBALS['_boost_cache_this']) {
-        if (BOOST_ASYNCHRONOUS_OUTPUT) {
-          boost_async_opp($buffer, FALSE, 'text/javascript');
+        if (BOOST_ASYNCHRONOUS_OUTPUT && !headers_sent()) {
+          boost_async_opp($buffer, FALSE, 'text/javascript; charset=utf-8');
         }
         boost_cache_set($GLOBALS['_boost_path'], $decompressed_buffer, BOOST_JSON_EXTENSION);
       }
@@ -1321,8 +1377,8 @@ function _boost_ob_handler() {
     }
     elseif (stristr($types, 'application/rss') || stristr($types, 'text/xml') || stristr($types, 'application/rss+xml')) {
       if ($status == 200 && $GLOBALS['_boost_cache_this']) {
-        if (BOOST_ASYNCHRONOUS_OUTPUT) {
-          boost_async_opp($buffer, FALSE, 'text/xml');
+        if (BOOST_ASYNCHRONOUS_OUTPUT && !headers_sent()) {
+          boost_async_opp($buffer, FALSE, 'text/xml; charset=utf-8');
         }
         boost_cache_set($GLOBALS['_boost_path'], $decompressed_buffer, BOOST_XML_EXTENSION);
       }
@@ -1332,8 +1388,8 @@ function _boost_ob_handler() {
     }
     elseif (stristr($types, 'text/html')) {
       if ($status == 200 && $GLOBALS['_boost_cache_this']) {
-        if (BOOST_ASYNCHRONOUS_OUTPUT) {
-          boost_async_opp($buffer, FALSE, 'text/html');
+        if (BOOST_ASYNCHRONOUS_OUTPUT && !headers_sent()) {
+          boost_async_opp($buffer, FALSE, 'text/html; charset=utf-8');
         }
         boost_cache_set($GLOBALS['_boost_path'], $decompressed_buffer, BOOST_FILE_EXTENSION);
         boost_cache_css_js_files($decompressed_buffer);
@@ -1480,6 +1536,11 @@ function boost_is_cacheable($path) {
   // " * : < > |
   $chars = '"*:<>|';
   if (stristr(PHP_OS, 'WIN') && preg_match("/[" . $chars . "]/", $full)) {
+    return FALSE;
+  }
+
+  // Don't cache if path is in the source
+  if (variable_get('boost_cache_url_alais_src', FALSE) && (int)db_result(db_query("SELECT count(*) FROM {url_alias} WHERE src = '%s'", $path)) > 0) {
     return FALSE;
   }
 
@@ -1725,7 +1786,7 @@ function boost_cache_expire_by_db($paths) {
       $hashes[] = md5($json);
     }
   }
-  $result = boost_db_select_in_multi('boost_cache', 'hash', "'%s'", $hashes);
+  $result = boost_db_multi_select_in('boost_cache', 'hash', "'%s'", $hashes);
 
   // Eliminate duplicates with the key hash
   $data = array();
@@ -1958,10 +2019,10 @@ function boost_cache_kill($files, $force_flush = FALSE) {
     // Expire entries from Database
     if (count($hashes)) {
       if ($force_flush || !BOOST_EXPIRE_NO_FLUSH) {
-        boost_db_update_set_multi('boost_cache', 'expire', '%d', 0, 'hash', "'%s'", $hashes);
+        boost_db_multi_update_set('boost_cache', 'expire', '%d', 0, 'hash', "'%s'", $hashes);
       }
       else {
-        boost_db_update_set_multi('boost_cache', 'expire', '%d', 434966400, 'hash', "'%s'", $hashes);
+        boost_db_multi_update_set('boost_cache', 'expire', '%d', 434966400, 'hash', "'%s'", $hashes);
         $count = db_affected_rows();
       }
     }
@@ -2216,7 +2277,7 @@ function boost_cache_set($path, $data, $extension = BOOST_FILE_EXTENSION) {
     // Special handling of the front page for aggressive gzip test
     if ($path == '' && BOOST_AGGRESSIVE_GZIP && $extension == BOOST_FILE_EXTENSION) {
       _boost_generate_gzip_test_file();
-      boost_cache_write($filename, _boost_inject_code($data, '<iframe src="/boost-gzip-cookie-test.html" style="width:0px; height:0px; border:0px; position:absolute; top:-1000px; z-index:10;"></iframe>' . "\n"));
+      boost_cache_write($filename, _boost_inject_code($data, '<object classid="clsid:25336920-03F9-11CF-8FD0-00AA00686F13" type="text/html" data="/boost-gzip-cookie-test.html" style="width:0px; height:0px; border:0px; position:absolute; top:-1000px; z-index:10;"></object>' . "\n"));
     }
     else {
       boost_cache_write($filename, $data);
@@ -2263,13 +2324,34 @@ function boost_cache_set_node_relationships($relationships) {
   foreach ($relationships as $data) {
     // If one of the required items is not set, skip this entry
     if (!isset($data['child_page_callback']) || !isset($data['child_page_type']) || !isset($data['child_page_id'])) {
+      if (BOOST_VERBOSE >= 5) {
+        watchdog('boost', 'boost_cache_set_node_relationships() <br /> child_page_* was not set.<br /> !data<br /> !backtrace', array('!data' => boost_print_r($data, TRUE, TRUE), '!backtrace' => boost_backtrace(FALSE)));
+      }
       continue;
     }
+
     // Set the optional parameters
     $data['base_dir'] = isset($data['base_dir']) ? $data['base_dir'] : BOOST_FILE_PATH;
     $data['page_callback'] = isset($data['page_callback']) ? $data['page_callback'] : $router_item['page_callback'];
     $data['page_type'] = isset($data['page_type']) ? $data['page_type'] : $router_item['page_type'];
     $data['page_id'] = isset($data['page_id']) ? $data['page_id'] : $router_item['page_id'];
+
+    // Sanity Checks
+    foreach ($data as $key => $value) {
+      $loop = 0;
+      while (is_array($data[$key]) && $loop < 25) {
+        $data[$key] = array_pop($value);
+        $loop++;
+      }
+    }
+    foreach ($data as $key => $value) {
+      if (is_object($value) || is_array($value)) {
+        if (BOOST_VERBOSE >= 5) {
+          watchdog('boost', 'boost_cache_set_node_relationships() <br />"!key" has a value of "!value"; should be a string or int.', array('!key' => $key, '!value' => $value));
+        }
+        continue;
+      }
+    }
 
     // Skip if this is referencing its self.
     if ($data['page_callback'] == $data['child_page_callback'] && $data['page_type'] == $data['child_page_type'] && $data['page_id'] == $data['child_page_id']) {
@@ -2425,7 +2507,7 @@ function boost_put_db($filename, $expire, $lifetime, $push, $router_item, $timer
   $hash_url = md5($url);
   db_query("UPDATE {boost_cache} SET expire = %d, lifetime = %d, push = %d, page_callback = '%s', page_type = '%s', timer = %d, timer_average = %d, base_dir = '%s', page_id = '%s', extension = '%s', url = '%s', filename = '%s', hash_url = '%s' WHERE hash = '%s'", $expire, $lifetime, $push, $router_item['page_callback'], $router_item['page_type'], $timer, $timer_average, BOOST_FILE_PATH, $router_item['page_id'], $extension, $url, $filename, $hash_url, $hash);
   if (!db_affected_rows()) {
-    db_query("INSERT INTO {boost_cache} (hash, hash_url, filename, expire, lifetime, push, page_callback, page_type, timer, timer_average, base_dir, page_id, extension, url) VALUES ('%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s', '%s', '%s', '%s')", $hash, $hash_url, $filename, $expire, $lifetime, $push, $router_item['page_callback'], $router_item['page_type'], $timer, $timer_average, BOOST_FILE_PATH, $router_item['page_id'], $extension, $url);
+    @db_query("INSERT INTO {boost_cache} (hash, hash_url, filename, expire, lifetime, push, page_callback, page_type, timer, timer_average, base_dir, page_id, extension, url) VALUES ('%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s', '%s', '%s', '%s')", $hash, $hash_url, $filename, $expire, $lifetime, $push, $router_item['page_callback'], $router_item['page_type'], $timer, $timer_average, BOOST_FILE_PATH, $router_item['page_id'], $extension, $url);
   }
 }
 
@@ -2445,7 +2527,7 @@ function boost_remove_db($files) {
     $hashes[] = $file['hash'];
   }
   if ($hashes) {
-    boost_db_delete_in_multi('boost_cache', 'hash', "'%s'", $hashes);
+    boost_db_multi_delete_in('boost_cache', 'hash', "'%s'", $hashes);
   }
 }
 
@@ -2608,7 +2690,6 @@ function boost_has_site_changed($set_max = FALSE) {
   _boost_index_exists($ret, 'files', 'timestamp');
   _boost_index_exists($ret, 'comments', 'timestamp');
   _boost_index_exists($ret, 'node', 'changed');
-  _boost_index_exists($ret, 'files', 'timestamp');
   _boost_index_exists($ret, 'node_comment_statistics', 'last_comment_timestamp');
   _boost_index_exists($ret, 'votingapi_vote', 'timestamp');
 
@@ -2696,10 +2777,9 @@ function boost_get_time($table, $column) {
  */
 function boost_cache_write($filename, $buffer) {
   $filenames = boost_get_all_filenames($filename);
-  $compressed_buffer = gzencode($buffer, 9);
   foreach ($filenames as $key => $values) {
     if ($key == 'gzip') {
-      $data = $compressed_buffer;
+      $data = gzencode($buffer, 9);
     }
     else {
       $data = $buffer;
@@ -2746,23 +2826,39 @@ function boost_cache_write($filename, $buffer) {
  *   Host name. Example: example.com
  * @param $absolute
  *   Give path from system root if true. If false give path from web root.
+ * @param $root_dir
+ *   Cache directory
+ * @param $normal_dir
+ *   Normal directory
  */
-function boost_cache_directory($host = NULL, $absolute = TRUE) {
+function boost_cache_directory($host = NULL, $absolute = TRUE, $root_dir = NULL, $normal_dir = NULL) {
   global $base_url;
+  $root_dir = is_null($root_dir) ? BOOST_ROOT_CACHE_DIR : $root_dir;
+  $normal_dir = is_null($normal_dir) ? BOOST_NORMAL_DIR : $normal_dir;
   if ($base_url == "http://") {
+    if (!BOOST_MULTISITE_SINGLE_DB) {
+      $base_url = $base_url . str_replace($root_dir . '/', '', variable_get('boost_file_path', boost_cache_directory(NULL, FALSE)));
+    }
+    elseif (BOOST_NORMAL_DIR != '' && db_result(db_query("SELECT count(DISTINCT base_dir) FROM {boost_cache}")) == 1) {
+      $base_dir = db_result(db_query("SELECT DISTINCT base_dir FROM {boost_cache}"));
+      $base_url = $base_url . str_replace($root_dir . '/', '', $base_dir);
+      $base_url = $base_url . str_replace($normal_dir . '/', '', $base_dir);
+    }
+  }
+  if (@parse_url($base_url) === FALSE) {
+    //Error has been caught here
     if (BOOST_VERBOSE >= 1) {
       watchdog('boost', 'base_url is not set in your settings.php file. Please read Important Notes in boosts README.txt file.', array(), WATCHDOG_NOTICE);
     }
-    if (!BOOST_MULTISITE_SINGLE_DB) {
-      $base_url = $base_url . str_replace(BOOST_ROOT_CACHE_DIR . '/', '', variable_get('boost_file_path', boost_cache_directory(NULL, FALSE)));
-    }
+    return FALSE;
   }
+
   $parts = parse_url($base_url);
   $host = !empty($host) ? $host : $parts['host'];
   $parts['path'] = isset($parts['path']) ? $parts['path'] : '/';
   $subdir = implode('/', array_filter(explode('/', (!empty($base_path)) ? $base_path : $parts['path'])));
 
-  return implode('/', !$absolute ? array_filter(array(BOOST_ROOT_CACHE_DIR, BOOST_NORMAL_DIR, $host, $subdir)) : array_filter(array(getcwd(), BOOST_ROOT_CACHE_DIR, BOOST_NORMAL_DIR, $host, $subdir)));
+  return implode('/', !$absolute ? array_filter(array($root_dir, $normal_dir, $host, $subdir)) : array_filter(array(getcwd(), $root_dir, $normal_dir, $host, $subdir)));
 }
 
 /**
@@ -2866,6 +2962,9 @@ function boost_db_is_expired($filename) {
  */
 function boost_set_cookie($uid, $expires = NULL) {
   if (!$expires) {
+    // Let the old way still work, in case user object was passed
+    $uid = is_object($uid) ? $uid->uid : $uid;
+
     $expires = ini_get('session.cookie_lifetime');
     $expires = (!empty($expires) && is_numeric($expires)) ? BOOST_TIME + (int)$expires : 0;
     setcookie(BOOST_COOKIE, strval($uid), $expires, ini_get('session.cookie_path'), ini_get('session.cookie_domain'), ini_get('session.cookie_secure') == '1');
@@ -3044,10 +3143,8 @@ function boost_glue_url($parsed) {
  *   Array to which query results will be added.
  * @param $table
  *   The table to be altered.
- * @param $name
+ * @param $index
  *   The name of the index.
- * @param $fields
- *   An array of field names.
  */
 function _boost_index_exists(&$ret, $table, $index) {
   global $db_type;
@@ -3317,6 +3414,10 @@ function _boost_get_menu_router() {
     $router_item['page_callback'] = 'view';
     $router_item['page_type'] = array_shift($router_item['page_arguments']);
     $router_item['page_id'] = array_shift($router_item['page_arguments']);
+    // See http://drupal.org/node/651798 for the reason why this if is needed
+    if (is_array($router_item['page_id'])) {
+      $router_item['page_id'] = array_shift($router_item['page_id']);
+    }
     return $router_item;
   }
 
@@ -3365,7 +3466,7 @@ function _boost_get_menu_router() {
  *   The top-level directory that will be recursively created.
  * @param $recursive
  *   Operate in a recursive manner.
- * @param $recursive
+ * @param $depth
  *   How deep the recursion is.
  */
 function _boost_mkdir_p($pathname, $recursive = TRUE, $depth = 0) {
@@ -3489,7 +3590,7 @@ date.setTime(date.getTime() + (days * 24*60*60*1000));
 expires = '; expires=' + date.toUTCString();
 document.cookie = 'boost-gzip=true' + expires + '; path=/'
 </script>
-</head><body><h1>It works!</h1></body></html>
+</head><body style="border:0;overflow:visible"><h1>It works!</h1></body></html>
 ETO;
     _boost_write_file_chmod($filename, gzencode($string, 9));
   }
@@ -3566,14 +3667,13 @@ function _boost_set_time_limit($time_limit) {
 /**
  * Insert many records into the database.
  *
- * NOTE Be aware of the servers max_packet_size variable.
+ * NOTE Be aware of the MySQL's max_packet_size variable.
  *
  * @param $table
  *   The name of the table.
- * @param $fields
- *   array of field names to be updated
- * @param $placeholders
- *   array of db_query placeholders; like %d or '%s'
+ * @param $fields array
+ *     key: field name
+ *   value: db_query placeholders; like %d or '%s'
  * @param $values
  *   array of values you wish to be inserted. If you have 3 fields then the
  *   array should be structured like
@@ -3584,20 +3684,26 @@ function _boost_set_time_limit($time_limit) {
  * @return
  *   returns db_query() result.
  */
-function boost_db_insert_multi($table, $fields, $placeholders, $data, $suppress = FALSE) {
+function boost_db_multi_insert($table, $fields, $data, $suppress = FALSE) {
+  if (BOOST_VERBOSE >= 1 && (count($data) % count($fields)) != 0) {
+    watchdog('boost_db_multi_insert', 'Number of fields in the fields array do not match the number of fields in the data array', array(), WATCHDOG_ERROR);
+    return FALSE;
+  }
+  // Build the fields part of this query
+  $field_names = implode(', ', array_keys($fields));
+
   // Get the number of rows that will be inserted
   $rows = count($data)/count($fields);
   // Build the values placeholders string.
-  $values = '(' . implode(', ', $placeholders) . ')';
-  // Create what goes in the IN ()
-  $v = $values;
-  // Add the rest of the place holders
+  $values = '(' . implode(', ', $fields) . ')';
+  $placeholders = $values;
+  // Add the rest of the placeholders
   for ($i = 1; $i < $rows; $i++) {
-    $v .= ', ' . $values;
+    $placeholders .= ', ' . $values;
   }
-  // Build the fields part of this query
-  $fields = implode(', ', $fields);
-  $query = "INSERT INTO {" . $table . "} ($fields) VALUES $v";
+
+  // Glue query together
+  $query = "INSERT INTO {" . $table . "} ($field_names) VALUES $placeholders";
   // Run the query
   if ($suppress) {
     return @db_query($query, $data);
@@ -3615,7 +3721,7 @@ function boost_db_insert_multi($table, $fields, $placeholders, $data, $suppress 
  * @param $table
  *   The name of the table.
  * @param $field
- *  field names to be compared to
+ *  field name to be compared to
  * @param $placeholder
  *   db_query placeholders; like %d or '%s'
  * @param $data
@@ -3623,7 +3729,7 @@ function boost_db_insert_multi($table, $fields, $placeholders, $data, $suppress 
  * @return
  *   returns db_query() result.
  */
-function boost_db_delete_in_multi($table, $field, $placeholder, $data) {
+function boost_db_multi_delete_in($table, $field, $placeholder, $data) {
   // Get the number of rows that will be inserted
   $rows = count($data);
   // Create what goes in the IN ()
@@ -3663,7 +3769,7 @@ function boost_db_delete_in_multi($table, $field, $placeholder, $data) {
  * @return
  *   returns db_query() result.
  */
-function boost_db_update_set_multi($table, $set_field, $set_placeholders, $set_value, $where_field, $where_placeholder, $data) {
+function boost_db_multi_update_set($table, $set_field, $set_placeholders, $set_value, $where_field, $where_placeholder, $data) {
   // Get the number of rows that will be inserted
   $rows = count($data);
   // Create what goes in the IN ()
@@ -3689,7 +3795,7 @@ function boost_db_update_set_multi($table, $set_field, $set_placeholders, $set_v
  * @param $table
  *   The name of the table.
  * @param $field
- *  field names to be compared to
+ *  field name to be compared to
  * @param $placeholder
  *   db_query placeholders; like %d or '%s'
  * @param $data
@@ -3697,7 +3803,7 @@ function boost_db_update_set_multi($table, $set_field, $set_placeholders, $set_v
  * @return
  *   returns db_query() result.
  */
-function boost_db_select_in_multi($table, $field, $placeholder, $data) {
+function boost_db_multi_select_in($table, $field, $placeholder, $data) {
   // Get the number of rows that will be inserted
   $rows = count($data);
   // Create what goes in the IN ()
@@ -3710,6 +3816,37 @@ function boost_db_select_in_multi($table, $field, $placeholder, $data) {
   $query = "SELECT * FROM {" . $table . "} WHERE $field IN ($in)";
   // Run the query
   return db_query($query, $data);
+}
+
+/**
+ * Runs debug_backtrace() and returns string containing that info.
+ *
+ * @param $args bool
+ *  output function arguments?
+ *
+ * @return $output string
+ *  parced backtrace output
+ */
+function boost_backtrace($args = TRUE) {
+  $output = '';
+  foreach (debug_backtrace() as $key => $entry) {
+    $output .= "\n\nLevel $key \n";
+    if (array_key_exists('file', $entry)) {
+      $output .= "File: " . $entry['file'];
+      if (array_key_exists('line', $entry)) {
+        $output .= " (Line: " . $entry['line'] . ")";
+      }
+      $output .= "\n";
+    }
+    if (array_key_exists('function', $entry)) {
+      $output .= "Function: " . $entry['function'] . "\n";
+    }
+    if ($args && array_key_exists('args', $entry)) {
+      $output .= "Args: " . implode(", ", $entry['args']) . "\n";
+    }
+    $output .= '<br />';
+  }
+  return $output;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -4074,7 +4211,8 @@ function boost_crawler_run($expire = -1) {
  * @param $content_type
  *  string - Content type header.
  */
-function boost_async_opp($output, $wait = TRUE, $content_type = "text/html", $length = 0) {
+function boost_async_opp($output, $wait = TRUE, $content_type = "text/html; charset=utf-8", $length = 0) {
+  // Calculate Content Lenght
   if ($length == 0) {
     $output .= "\n";
     $length = (mb_strlen($output, '8bit')-1);
@@ -4088,7 +4226,7 @@ function boost_async_opp($output, $wait = TRUE, $content_type = "text/html", $le
   header("Connection: close");
   ignore_user_abort();
 
-  // Output text
+  // Output headers & data
   ob_start();
   header("Content-type: " . $content_type);
   header("Expires: Sun, 19 Nov 1978 05:00:00 GMT");
@@ -4230,13 +4368,29 @@ function boost_crawler_add_alias_to_table() {
     return TRUE;
   }
   $count = BOOST_CRAWL_DB_IMPORT_SIZE;
-  $chunks = 0;
-  $loop_counter = 0;
 
   // Get maximum packet size for mysql
-  $max_packet = db_result(db_query("SHOW VARIABLES WHERE Variable_name = 'max_allowed_packet'"));
-  $max_packet = $max_packet > 512 ? $max_packet : 524288;
+  if (stristr($db_type, 'pgsql')) {
+    // Set Max Packet size to 16MB if using postgreSQL.
+    $max_packet = 16777216;
+  }
+  else {
+    // Get maximum packet size for mysql
+    $max_packet = db_fetch_array(db_query("SHOW VARIABLES WHERE Variable_name = 'max_allowed_packet'"));
+    // default to 1/2 MB
+    $max_packet = (int)$max_packet['Value'] > 524288 ? (int)$max_packet['Value'] : 524288;
+
+    // Get bulk insert buffer size
+    $insert_buffer_size = db_fetch_array(db_query("SHOW VARIABLES WHERE Variable_name = 'bulk_insert_buffer_size'"));
+    // default to 1/2 MB
+    $insert_buffer_size = (int)$insert_buffer_size['Value'] > 524288 ? (int)$insert_buffer_size['Value'] : 524288;
+
+    // Set max
+    $max_packet = $max_packet > $insert_buffer_size ? $insert_buffer_size : $max_packet;
+  }
   $max_chunk = $max_packet/512;
+  $chunks = 0;
+  $loop_counter = 0;
 
   $total = db_result(db_query("SELECT COUNT(*) FROM {url_alias}"));
   $loaded = variable_get('boost_crawler_loaded_count_alias', 0);
@@ -4255,7 +4409,7 @@ function boost_crawler_add_alias_to_table() {
       }
     }
     foreach ($data as $values) {
-      boost_db_insert_multi('boost_crawler', array('url', 'hash'), array("'%s'", "'%s'"), $values, FALSE);
+      boost_db_multi_insert('boost_crawler', array('url' => "'%s'", 'hash' => "'%s'"), $values, FALSE);
     }
     variable_set('boost_crawler_loaded_count_alias', $loaded + $count);
     return FALSE;

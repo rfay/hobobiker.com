@@ -1,5 +1,5 @@
 <?php
-// $Id: boost.install,v 1.2.2.1.2.3.2.76 2009/11/26 06:41:02 mikeytown2 Exp $
+// $Id: boost.install,v 1.2.2.1.2.3.2.88 2010/01/24 18:25:46 mikeytown2 Exp $
 
 /**
  * @file
@@ -63,6 +63,7 @@ function boost_uninstall() {
  * Implementation of hook_requirements().
  */
 function boost_requirements($phase) {
+  global $base_root;
   $requirements = array();
   $t = get_t();
   switch ($phase) {
@@ -75,12 +76,14 @@ function boost_requirements($phase) {
       $cache_directories[] = BOOST_FILE_PATH;
       $cache_directories[] = BOOST_PERM_FILE_PATH;
       foreach (_boost_copy_file_get_domains(BOOST_PERM_FILE_PATH) as $dir) {
+        _boost_mkdir_p($dir);
         file_put_contents($dir . '/' . variable_get('boost_root_file', '.boost'), $dir);
       }
       if (BOOST_GZIP) {
         $cache_directories[] = BOOST_GZIP_FILE_PATH;
         $cache_directories[] = BOOST_PERM_GZIP_FILE_PATH;
         foreach (_boost_copy_file_get_domains(BOOST_PERM_GZIP_FILE_PATH) as $dir) {
+          _boost_mkdir_p($dir);
           file_put_contents($dir . '/' . variable_get('boost_root_file', '.boost'), $dir);
         }
       }
@@ -91,11 +94,18 @@ function boost_requirements($phase) {
         $crawler_response = drupal_http_request(BOOST_CRAWLER_SELF . '&test=1');
         $crawler_response = $crawler_response->code;
       }
-      $robots = file_exists('robots.txt') ? file_get_contents('robots.txt') : FALSE;
+      $robots = drupal_http_request('http://' . check_plain($_SERVER['HTTP_HOST']) . '/robots.txt');
+      if ($robots->code == 200) {
+        $robots = $robots->data;
+      }
+      else {
+        $robots = FALSE;
+      }
 
       foreach ($cache_directories as $cache_directory) {
-        _boost_mkdir_p($cache_directory);
-        $root_file = file_put_contents($cache_directory . '/' . variable_get('boost_root_file', '.boost'), $cache_directory);
+        if (_boost_mkdir_p($cache_directory)) {
+          $root_file = file_put_contents($cache_directory . '/' . variable_get('boost_root_file', '.boost'), $cache_directory);
+        }
         if (!is_dir($cache_directory)) {
           $requirements['boost_default'] = array(
             'title'       => $t('Boost'),
@@ -104,7 +114,7 @@ function boost_requirements($phase) {
             'value'       => $t('Cache path'),
           );
         }
-        if (!$root_file || !is_writable($cache_directory)) {
+        if (is_dir($cache_directory) && (!$root_file || !is_writable($cache_directory))) {
           $requirements['boost_permissions'] = array(
             'title'       => $t('Boost'),
             'description' => $t('Directory %dir credentials - Permissions: %fp. Owner %fo. Group %fg.<br /> Your credentials - Group ID: %gid. User ID: %uid. Current script owner: %user.', array('%dir' => getcwd() . '/' . $cache_directory, '%gid' => getmygid(), '%uid' => getmyuid(), '%user' => get_current_user(), '%fp' => substr(sprintf('%o', fileperms($cache_directory)), -4), '%fo' => fileowner($cache_directory), '%fg' => filegroup($cache_directory) )),
@@ -121,7 +131,7 @@ function boost_requirements($phase) {
           'value'       => $t('Cache path'),
         );
       }
-      if ($htaccess && !boost_chk_htaccess_doc($htaccess)) {
+      if ($htaccess && !BOOST_IGNORE_HTACCESS_WARNING && !boost_chk_htaccess_doc($htaccess)) {
         $requirements['boost_htaccess'] = array(
           'title'       => $t('Boost'),
           'description' => $t('.htaccess file does not contain or match the boost specific rewrite rules, or the rewrite rules have changed, due to new settings, and they need to be updated. Get the rules: <a href="@url">Boost Apache .htaccess settings generation</a>.', array('@url' => url('admin/settings/performance/boost-rules'))),
@@ -230,6 +240,35 @@ function boost_requirements($phase) {
           'severity'    => REQUIREMENT_WARNING,
           'value'       => $t('"Disallow: /boost_stats.php" entry missing in robots.txt'),
         );
+      }
+      // if the apache_get_modules function doesn't exist, skip this entirely
+      if (function_exists('apache_get_modules')) {
+        // Get all available Apache modules.
+        $modules = apache_get_modules();
+        if (!in_array('mod_headers', $modules)) {
+          $requirements['boost_apache_headers'] = array(
+            'title'       => $t('Boost'),
+            'description' => $t('The Apache module "mod_headers" is not available.  You must enable <a href="!link">mod_headers</a> for Apache.', array('!link' => 'http://httpd.apache.org/docs/trunk/mod/mod_headers.html')),
+            'severity'    => REQUIREMENT_WARNING,
+            'value'       => $t('Apache module "mod_headers" is not installed.'),
+          );
+        }
+        if (!in_array('mod_rewrite', $modules)) {
+          $requirements['boost_apache_rewrite'] = array(
+            'title'       => $t('Boost'),
+            'description' => $t('The Apache module "mod_rewrite" is not available.  You must enable <a href="!link">mod_rewrite</a> for Apache.', array('!link' => 'http://httpd.apache.org/docs/trunk/mod/mod_rewrite.html')),
+            'severity'    => REQUIREMENT_ERROR,
+            'value'       => $t('Apache module "mod_rewrite" is not installed.'),
+          );
+        }
+        if (!in_array('mod_mime', $modules)) {
+          $requirements['boost_apache_mime'] = array(
+            'title'       => $t('Boost'),
+            'description' => $t('The Apache module "mod_mime" is not available.  You must enable <a href="!link">mod_mime</a> for Apache.', array('!link' => 'http://httpd.apache.org/docs/trunk/mod/mod_mime.html')),
+            'severity'    => REQUIREMENT_WARNING,
+            'value'       => $t('Apache module "mod_mime" is not installed.'),
+          );
+        }
       }
       if (empty($requirements)) {
         $requirements['boost'] = array(
@@ -408,7 +447,6 @@ function boost_schema() {
         'type' => 'text',
         'size' => 'normal',
         'not null' => TRUE,
-        'default' => '',
       ),
       'base_dir' => array(
         'description' => 'Path of the cache root dir relative to Drupal webroot.',
@@ -490,7 +528,6 @@ function boost_schema() {
         'type' => 'text',
         'size' => 'normal',
         'not null' => TRUE,
-        'default' => '',
       ),
     ),
     'indexes' => array(
@@ -594,7 +631,6 @@ function boost_schema() {
         'type' => 'text',
         'size' => 'normal',
         'not null' => TRUE,
-        'default' => '',
       ),
     ),
     'primary key' => array('id'),
@@ -674,6 +710,17 @@ function boost_schema() {
         'not null' => TRUE,
         'default' => 0
       ),
+    ),
+    'indexes' => array(
+      'base_dir' => array('base_dir'),
+      'page_callback' => array('page_callback'),
+      'page_type' => array('page_type'),
+      'page_id' => array('page_id'),
+      'child_page_callback' => array('child_page_callback'),
+      'child_page_type' => array('child_page_type'),
+      'child_page_id' => array('child_page_id'),
+      'hash_url' => array('hash_url'),
+      'timestamp' => array('timestamp'),
     ),
     'primary key' => array('hash'),
   );
@@ -1332,11 +1379,88 @@ function boost_update_6121() {
   _boost_index_exists($ret, 'files', 'timestamp');
   _boost_index_exists($ret, 'comments', 'timestamp');
   _boost_index_exists($ret, 'node', 'changed');
-  _boost_index_exists($ret, 'files', 'timestamp');
   _boost_index_exists($ret, 'node_comment_statistics', 'last_comment_timestamp');
   _boost_index_exists($ret, 'votingapi_vote', 'timestamp');
 
   _boost_install_set_time_limit(0);
   ini_set('max_execution_time', $GLOBALS['_boost_max_execution_time']);
   return $ret;
+}
+
+/**
+ * Update 6122 - Remove default value for all text columns.
+ */
+function boost_update_6122() {
+  $ret = array();
+  db_change_field($ret, 'boost_cache', 'filename', 'filename', array(
+        'description' => 'URL of cached page',
+        'type' => 'text',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ));
+  db_change_field($ret, 'boost_cache', 'url', 'url', array(
+        'description' => 'URL of cached page',
+        'type' => 'text',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ));
+  db_change_field($ret, 'boost_crawler', 'url', 'url', array(
+        'description' => 'URL of page',
+        'type' => 'text',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ));
+  return $ret;
+}
+
+/**
+ * Update 6123 - Add indexes to boost_cache_relationships table
+ */
+function boost_update_6123() {
+  $ret = array();
+
+  // Add indexes
+  db_add_index($ret, 'boost_cache_relationships', 'base_dir', array('base_dir'));
+  db_add_index($ret, 'boost_cache_relationships', 'page_callback', array('page_callback'));
+  db_add_index($ret, 'boost_cache_relationships', 'page_id', array('page_id'));
+  db_add_index($ret, 'boost_cache_relationships', 'child_page_callback', array('child_page_callback'));
+  db_add_index($ret, 'boost_cache_relationships', 'child_page_type', array('child_page_type'));
+  db_add_index($ret, 'boost_cache_relationships', 'child_page_id', array('child_page_id'));
+  db_add_index($ret, 'boost_cache_relationships', 'hash_url', array('hash_url'));
+  db_add_index($ret, 'boost_cache_relationships', 'timestamp', array('timestamp'));
+
+  return $ret;
+}
+
+/**
+ * Update 6124 - Add missing page_type index to boost_cache_relationships table
+ */
+function boost_update_6124() {
+  $ret = array();
+  // Make sure we have boost.module file loaded
+  drupal_load('module', 'boost');
+  _boost_index_exists($ret, 'boost_cache_relationships', 'page_type');
+  return $ret;
+}
+
+/**
+ * Update 6125 - Reset boost-gzip-cookie-test.html.gz file
+ */
+function boost_update_6125() {
+  $ret = array();
+  // Make sure we have boost.module file loaded
+  drupal_load('module', 'boost');
+  $filename = BOOST_ROOT_CACHE_DIR . '/' . BOOST_PERM_GZ_DIR . '/boost-gzip-cookie-test.html.gz';
+  if (is_file($filename) || is_link($filename)) {
+    if (unlink($filename)) {
+      _boost_generate_gzip_test_file();
+      return array(array('success' => TRUE, 'query' => t('boost-gzip-cookie-test.html.gz file was reset')));
+    }
+    else {
+      return array(array('success' => FALSE, 'query' => t('boost-gzip-cookie-test.html.gz file was not deleted; please manually delete this file')));
+    }
+  }
+  else {
+    return array(array('success' => TRUE, 'query' => t('boost-gzip-cookie-test.html.gz did not need to be reset')));
+  }
 }

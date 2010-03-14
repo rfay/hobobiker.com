@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.install,v 1.18 2009/08/30 04:28:12 salvis Exp $
+// $Id: subscriptions.install,v 1.19 2009/09/30 00:36:39 salvis Exp $
 
 /**
  * @file
@@ -409,14 +409,27 @@ function subscriptions_update_6101() {
       'last_sent'     => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0)),
     'primary key'     => array('uid', 'send_interval'),
   );
-  
+
   db_create_table($ret, 'subscriptions_last_sent', $schema['subscriptions_last_sent']);
   db_add_index($ret, 'subscriptions_queue', 'uid', array('uid'));
-  
+
+  include_once drupal_get_path('module', 'subscriptions') .'/subscriptions.admin.inc';
   foreach (_subscriptions_send_intervals() as $send_interval => $text) {
     db_query("INSERT INTO {subscriptions_last_sent} (uid, send_interval, last_sent) SELECT uid, %d, last_sent FROM {subscriptions_user} WHERE uid > 0", $send_interval);
   }
-//  db_drop_field($ret, 'subscriptions_user', 'last_sent');  // not dropping this column allows going back to RC1
+  return $ret;
+}
+
+/**
+ * Database update function 6102: Remove the obsolete
+ * {subscriptions_user}.last_sent column if it's still there.
+ */
+function subscriptions_update_6102() {
+  $ret = array();
+
+  if (db_column_exists('subscriptions_user', 'last_sent')) {
+    db_drop_field($ret, 'subscriptions_user', 'last_sent');
+  }
   return $ret;
 }
 

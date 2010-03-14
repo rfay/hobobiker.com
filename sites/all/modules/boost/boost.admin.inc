@@ -1,5 +1,5 @@
 <?php
-// $Id: boost.admin.inc,v 1.1.2.1.2.3.2.117 2009/11/24 16:23:39 mikeytown2 Exp $
+// $Id: boost.admin.inc,v 1.1.2.1.2.3.2.130 2010/01/24 18:25:46 mikeytown2 Exp $
 
 /**
  * @file
@@ -97,6 +97,7 @@ function boost_admin_boost_performance_page() {
     '#default_value' => variable_get('page_compression', TRUE),
     '#options' => array(t('Disabled'), t('Enabled')),
     '#description' => t("By default, Drupal compresses the pages it caches in order to save bandwidth and improve download times. This option should be disabled when using a webserver that performs compression."),
+    '#disabled' => !function_exists('gzencode'),
   );
   $form['boost']['boost_cache_lifetime'] = array(
     '#type' => 'select',
@@ -180,6 +181,30 @@ function boost_admin_boost_performance_page() {
     '#default_value' => BOOST_CACHE_JS,
     '#description'   => t('Boost will cache javascript files.'),
   );
+  $form['cacheability']['boost_only_ascii_path'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Only allow ASCII characters in path'),
+    '#default_value' => BOOST_ONLY_ASCII_PATH,
+    '#description'   => t('Only allowing ACSII characters is a safe way to cache pages. It severely limits i18n support so this can be turned off. Fair warning, disabling this may cause "page not found" errors depending on your url structure (spaces are bad, ect...). If you follow RFC 3986 you should be ok.'),
+  );
+  $form['cacheability']['boost_halt_on_errors'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Do not cache if php error on page'),
+    '#default_value' => BOOST_HALT_ON_ERRORS,
+    '#description'   => t('Selected - Do not cache the page if there are PHP errors. Not Selected - Cache pages even if it might contain errors.'),
+  );
+  $form['cacheability']['boost_halt_on_messages'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Do not cache if a message is on the page'),
+    '#default_value' => BOOST_HALT_ON_MESSAGES,
+    '#description'   => t('Selected - Do not cache the page if there are Drupal messages. Not Selected - Cache pages even if it might contain a Drupal message.'),
+  );
+  $form['cacheability']['boost_cache_url_alais_src'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Do not cache if there is an alias for this URL.'),
+    '#default_value' => variable_get('boost_cache_url_alais_src', FALSE),
+    '#description'   => t('Enableing this will prevent Boost from cacheing node/8 if node/8 is also mapped to a path like /about-us. If using Global Redirect enableing this is a good idea.'),
+  );
   $form['cacheability']['boost_cacheability_option'] = array(
     '#type'          => 'radios',
     '#title'         => t('Statically cache specific pages'),
@@ -191,6 +216,105 @@ function boost_admin_boost_performance_page() {
     '#title'         => t('Pages'),
     '#default_value' => BOOST_CACHEABILITY_PAGES,
     '#description'   => $description,
+    '#wysiwyg'       => FALSE,
+  );
+
+  // Cache expiration settings
+  $form['expiration'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Boost cache expiration/flush settings'),
+  );
+  $form['expiration']['boost_expire_cron'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Clear expired pages on cron runs'),
+    '#default_value' => (int)variable_get('boost_expire_cron', TRUE),
+    '#options'       => array(
+      0 => t('Disabled'),
+      1 => t('Enabled'),
+      ),
+    '#description'   => t('Caution - If disabled you will need some other method of clearing cached pages. If Disabled, files have to be manually deleted from server or cleared using the administrative interface (<a href="@blocks">Enable</a> the <a href="@status">Boost: Pages cache status</a> block).', array('@blocks' => url('admin/build/block'), '@status' => url('admin/build/block/configure/boost/status'))),
+  );
+  $form['expiration']['boost_check_before_cron_expire'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Check database timestamps for any site changes. Only if there has been a change will boost flush the expired content on cron.'),
+    '#default_value' => BOOST_CHECK_BEFORE_CRON_EXPIRE,
+  );
+  $form['expiration']['boost_flush_dir'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear all empty folders from cache.'),
+    '#default_value' => BOOST_FLUSH_DIR,
+    '#description'   => t('Disable this if you have to set settings for each dir/subdir, due to the way your server operates (permissions, etc...).'),
+  );
+  $form['expiration']['boost_flush_front'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear the front page cache when promoted'),
+    '#default_value' => BOOST_FLUSH_FRONT,
+    '#description'   => t('Clear the front page cache when a node that is promoted to the from page is also changed.'),
+  );
+  $form['expiration']['boost_flush_cck_references'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear all cached pages referenced via CCK with a node on insert/update/delete'),
+    '#default_value' => BOOST_FLUSH_CCK_REFERENCES,
+    '#description'   => t('The <a href="@url">Node Referrer</a> module is recommended.', array('@url' => 'http://drupal.org/project/nodereferrer')),
+  );
+  $form['expiration']['boost_flush_node_terms'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear all cached terms pages associated with a node on insert/update/delete'),
+    '#default_value' => BOOST_FLUSH_NODE_TERMS,
+    '#description'   => t('Works with view\'s taxonomy/term/% path as well as core.'),
+  );
+  $form['expiration']['boost_flush_menu_items'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Clear all cached pages in a menu on an insert/update/delete operation'),
+    '#default_value' => BOOST_FLUSH_MENU_ITEMS,
+    '#description'   => t('This can flush a lot of pages depending on your menu structure.'),
+    '#options'       => array(
+      0 => t('Disabled'),
+      1 => t('Only Flush Menu Parents, Siblings & Children'),
+      2 => t('Flushes Entire Menu Tree'),
+    ),
+  );
+  $form['expiration']['boost_flush_views'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear all cached views pages associated with a node on update/delete'),
+    '#default_value' => BOOST_FLUSH_VIEWS,
+    '#description'   => t(''),
+  );
+  $form['expiration']['boost_flush_views_insert'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear all cached views pages associated with a node on insert'),
+    '#default_value' => BOOST_FLUSH_VIEWS_INSERT,
+    '#description'   => t('WARNING: This can be very slow, all views get run to find out where this node lives.'),
+  );
+  $form['expiration']['boost_clear_cache_offline'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Clear Boosts cache when site goes offline'),
+    '#default_value' => BOOST_CLEAR_CACHE_OFFLINE,
+    '#description'   => t('Under site maintenance when the status is set to offline, boost clears its cache. If you do not want this to happen, clear this checkbox. Pages that are not cached will still send out a Site off-line message, so be smart if turning this off.'),
+  );
+  $form['expiration']['boost_flush_all_multisite'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Flush all sites caches in this database (singe db, multisite).'),
+    '#default_value' => BOOST_FLUSH_ALL_MULTISITE,
+    '#description'   => t('This will flush/expire all cached files stored in this database, instead of only being specific to this site. Useful for i18n sites. You need to setup a separate cron call for each database (in your multisite install) either way though. This covers shared database usage; or place the boost tables into the a shared database, to have this setting work in a multiple database environment.'),
+  );
+  $form['expiration']['boost_expire_no_flush'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Expire content in DB, do not flush file.'),
+    '#default_value' => BOOST_EXPIRE_NO_FLUSH,
+    '#description'   => t('Instead of flushing the file ASAP this will set the database entry to expired. File will be flushed on next cron run. This is more on the extreme side of tweaks.'),
+  );
+  $form['expiration']['boost_ignore_flush'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Ignore cache flushing'),
+    '#default_value' => variable_get('boost_ignore_flush', 1),
+    '#options'       => array(
+      0 => t('Disabled'),
+      1 => t('Only Ignore Clear Entire Cache Commands (Recommended if caching css/js files)'),
+      2 => t('Ignore Clear Entire Cache Commands & Cron Expiration'),
+      3 => t('Ignore All Delete Commands (Not Recommended)'),
+    ),
+    '#description'   => t('Make a selection to put your site into a static cached state. Recommend turning on CSS & JS caching if enabled.'),
   );
 
   // Directories
@@ -355,21 +479,6 @@ function boost_admin_boost_performance_page() {
     '#type'          => 'fieldset',
     '#title'         => t('Boost advanced settings'),
   );
-  $form['advanced']['boost_expire_cron'] = array(
-    '#type'          => 'radios',
-    '#title'         => t('Clear expired pages on cron runs'),
-    '#default_value' => (int)variable_get('boost_expire_cron', TRUE),
-    '#options'       => array(
-      0 => t('Disabled'),
-      1 => t('Enabled'),
-      ),
-    '#description'   => t('Caution - If disabled you will need some other method of clearing cached pages. If Disabled, files have to be manually deleted from server or cleared using the administrative interface (<a href="@blocks">Enable</a> the <a href="@status">Boost: Pages cache status</a> block).', array('@blocks' => url('admin/build/block'), '@status' => url('admin/build/block/configure/boost/status'))),
-  );
-  $form['advanced']['boost_check_before_cron_expire'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Check database timestamps for any site changes. Only if there has been a change will boost flush the expired content on cron.'),
-    '#default_value' => BOOST_CHECK_BEFORE_CRON_EXPIRE,
-  );
   $form['advanced']['boost_pre_process_function'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Pre-process function'),
@@ -377,17 +486,11 @@ function boost_admin_boost_performance_page() {
     '#maxlength'     => 255,
     '#description'   => t('The name of a PHP function used to pre-process the contents of each page before writing them out to static files. The function is called with the contents of the page passed as a string argument, and its return value is used as the data written out to the disk.'),
   );
-  $form['advanced']['boost_only_ascii_path'] = array(
+  $form['advanced']['boost_aggressive_cookie'] = array(
     '#type'          => 'checkbox',
-    '#title'         => t('Only allow ASCII characters in path'),
-    '#default_value' => BOOST_ONLY_ASCII_PATH,
-    '#description'   => t('Only allowing ACSII characters is a safe way to cache pages. It severely limits i18n support so this can be turned off. Fair warning, disabling this may cause "page not found" errors depending on your url structure (spaces are bad, ect...). If you follow RFC 3986 you should be ok.'),
-  );
-  $form['advanced']['boost_flush_all_multisite'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Flush all sites caches in this database (singe db, multisite).'),
-    '#default_value' => BOOST_FLUSH_ALL_MULTISITE,
-    '#description'   => t('This will flush/expire all cached files stored in this database, instead of only being specific to this site. Useful for i18n sites. You need to setup a separate cron call for each database (in your multisite install) either way though. This covers shared database usage; or place the boost tables into the a shared database, to have this setting work in a multiple database environment.'),
+    '#title'         => t('Aggressive setting of the boost cookie'),
+    '#default_value' => BOOST_AGGRESSIVE_COOKIE,
+    '#description'   => t('Set/Remove the boost cookie in the boost_init function.'),
   );
   $form['advanced']['boost_asynchronous_output'] = array(
     '#type'          => 'checkbox',
@@ -395,70 +498,11 @@ function boost_admin_boost_performance_page() {
     '#default_value' => BOOST_ASYNCHRONOUS_OUTPUT,
     '#description'   => t('Run php in the background. When a cached page is generated, this will allow for faster page generation; downside is the headers are not the standard ones outputted by Drupal; sends "Connection: close" instead of "Connection: Keep-Alive".'),
   );
-  $form['advanced']['boost_flush_dir'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear all empty folders from cache.'),
-    '#default_value' => BOOST_FLUSH_DIR,
-    '#description'   => t('Disable this if you have to set settings for each dir/subdir, due to the way your server operates (permissions, etc...).'),
-  );
-  $form['advanced']['boost_flush_cck_references'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear all cached pages referenced via CCK with a node on insert/update/delete'),
-    '#default_value' => BOOST_FLUSH_CCK_REFERENCES,
-    '#description'   => t('The <a href="@url">Node Referrer</a> module is recommended.', array('@url' => 'http://drupal.org/project/nodereferrer')),
-  );
-  $form['advanced']['boost_flush_node_terms'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear all cached terms pages associated with a node on insert/update/delete'),
-    '#default_value' => BOOST_FLUSH_NODE_TERMS,
-    '#description'   => t('Works with view\'s taxonomy/term/% path as well as core.'),
-  );
-  $form['advanced']['boost_flush_menu_items'] = array(
-    '#type'          => 'radios',
-    '#title'         => t('Clear all cached pages in a menu on an insert/update/delete operation'),
-    '#default_value' => BOOST_FLUSH_MENU_ITEMS,
-    '#description'   => t('This can flush a lot of pages depending on your menu structure.'),
-    '#options'       => array(
-      0 => t('Disabled'),
-      1 => t('Only Flush Menu Parents, Siblings & Children'),
-      2 => t('Flushes Entire Menu Tree'),
-    ),
-  );
-  $form['advanced']['boost_flush_views'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear all cached views pages associated with a node on update/delete'),
-    '#default_value' => BOOST_FLUSH_VIEWS,
-    '#description'   => t(''),
-  );
-  $form['advanced']['boost_flush_views_insert'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear all cached views pages associated with a node on insert'),
-    '#default_value' => BOOST_FLUSH_VIEWS_INSERT,
-    '#description'   => t('WARNING: This can be very slow, all views get run to find out where this node lives.'),
-  );
-  $form['advanced']['boost_clear_cache_offline'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Clear Boosts cache when site goes offline'),
-    '#default_value' => BOOST_CLEAR_CACHE_OFFLINE,
-    '#description'   => t('Under site maintenance when the status is set to offline, boost clears its cache. If you do not want this to happen, clear this checkbox. Pages that are not cached will still send out a Site off-line message, so be smart if turning this off.'),
-  );
   $form['advanced']['boost_overwrite_file'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Overwrite the cached file if it already exits'),
     '#default_value' => BOOST_OVERWRITE_FILE,
     '#description'   => t('This is useful if crawling a site before it goes live.'),
-  );
-  $form['advanced']['boost_halt_on_errors'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Do not cache if php error on page'),
-    '#default_value' => BOOST_HALT_ON_ERRORS,
-    '#description'   => t('Selected - Do not cache the page if there are PHP errors. Not Selected - Cache pages even if it might contain errors.'),
-  );
-  $form['advanced']['boost_halt_on_messages'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Do not cache if a message is on the page'),
-    '#default_value' => BOOST_HALT_ON_MESSAGES,
-    '#description'   => t('Selected - Do not cache the page if there are Drupal messages. Not Selected - Cache pages even if it might contain a Drupal message.'),
   );
   $form['advanced']['boost_disable_clean_url'] = array(
     '#type'          => 'checkbox',
@@ -485,24 +529,6 @@ function boost_admin_boost_performance_page() {
     '#title'         => t('Directories: Enter in a 4 digit number (octal) that will be used by !link. Example 0775', array('!link' => l(t('chmod()'), 'http://php.net/chmod'))),
     '#default_value' => BOOST_PERMISSIONS_DIR,
     '#description'   => t('Sometimes because of funky servers you need it use a different file mode then the default.'),
-  );
-  $form['advanced']['boost_expire_no_flush'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Expire content in DB, do not flush file.'),
-    '#default_value' => BOOST_EXPIRE_NO_FLUSH,
-    '#description'   => t('Instead of flushing the file ASAP this will set the database entry to expired. File will be flushed on next cron run. This is more on the extreme side of tweaks.'),
-  );
-  $form['advanced']['boost_ignore_flush'] = array(
-    '#type'          => 'radios',
-    '#title'         => t('Ignore cache flushing'),
-    '#default_value' => variable_get('boost_ignore_flush', 1),
-    '#options'       => array(
-      0 => t('Disabled'),
-      1 => t('Only Ignore Clear Entire Cache Commands (Recommended if caching css/js files)'),
-      2 => t('Ignore Clear Entire Cache Commands & Cron Expiration'),
-      3 => t('Ignore All Delete Commands (Not Recommended)'),
-    ),
-    '#description'   => t('Make a selection to put your site into a static cached state. Recommend turning on CSS & JS caching if enabled.'),
   );
   $form['advanced']['boost_verbose'] = array(
     '#type'          => 'select',
@@ -773,6 +799,18 @@ function boost_admin_boost_performance_page() {
     ),
     '#description'   => t('In order to identify that the page is being served from the cache Boost can: Set a comment at the bottom of the page, indicating that this page is cached by boost; It can also send out a header that will identify any files served from the boost cache; Or it can do both.'),
   );
+  $form['htaccess']['boost_apache_rfc2616'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Follow RFC2616 14.9.4'),
+    '#default_value' => variable_get('boost_apache_rfc2616', TRUE),
+    '#description'   => t('Bypass the boost cache when the headers contain a "no-cache" cache-control directive (ctrl-F5 in browser). Disable this to make boost always serve pages from the cache. Good time to disable this is right before your site goes into maintance mode.'),
+  );
+  $form['htaccess']['boost_ignore_htaccess_warning'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Ignore .htaccess warning'),
+    '#default_value' => variable_get('boost_ignore_htaccess_warning', FALSE),
+    '#description'   => t('Do not warn about missing or modified boost rules in the .htaccess file on the <a href="!link">status report page</a>. Enable this if you have a good reason to modify the boost rules in .htaccss.', array('!link' => url('admin/reports/status'))),
+  );
 
   // Clear database button
   $form['clear'] = array(
@@ -798,7 +836,7 @@ function boost_admin_boost_performance_page_validate($form, &$form_state) {
   $boost_previously = variable_get('boost_enabled', '');
   extract($form_state['values'], EXTR_SKIP | EXTR_REFS);
   if (BOOST_MULTISITE_SINGLE_DB) {
-    $boost_file_path = boost_cache_directory(NULL, FALSE);
+    $boost_file_path = boost_cache_directory(NULL, FALSE, $boost_root_cache_dir, $boost_normal_dir);
   }
 
   // Boost enabled/disabled logic
@@ -903,10 +941,10 @@ function boost_admin_generate_htaccess($server_name = '%{SERVER_NAME}', $documen
 
   // Various dir's
   $cache_dir = BOOST_ROOT_CACHE_DIR;
-  $gzip_dir = !(BOOST_GZIP_DIR == '') ? '/' . BOOST_GZIP_DIR : '';
-  $normal_dir = !(BOOST_NORMAL_DIR == '') ? '/' . BOOST_NORMAL_DIR : '';
-  $permanent_dir_gzip = !(BOOST_PERM_GZ_DIR == '') ? '/' . BOOST_PERM_GZ_DIR : '';
-  $permanent_dir = !(BOOST_PERM_NORMAL_DIR == '') ? '/' . BOOST_PERM_NORMAL_DIR : '';
+  $gzip_dir = !(BOOST_GZIP_DIR == '') ? '/' . BOOST_GZIP_DIR . '/' : '/';
+  $normal_dir = !(BOOST_NORMAL_DIR == '') ? '/' . BOOST_NORMAL_DIR . '/': '/';
+  $permanent_dir_gzip = !(BOOST_PERM_GZ_DIR == '') ? '/' . BOOST_PERM_GZ_DIR  . '/': '/';
+  $permanent_dir = !(BOOST_PERM_NORMAL_DIR == '') ? '/' . BOOST_PERM_NORMAL_DIR  . '/': '/';
 
   // with a \ slash
   $html = str_replace('.', '\\.', BOOST_FILE_EXTENSION);
@@ -1044,7 +1082,7 @@ function boost_admin_generate_htaccess($server_name = '%{SERVER_NAME}', $documen
   if (BOOST_AGGRESSIVE_GZIP) {
     $string .= "\n";
     $string .= "  # Gzip Cookie Test\n";
-    $string .= "  RewriteRule boost-gzip-cookie-test\.html  $cache_dir$permanent_dir_gzip/boost-gzip-cookie-test\.html\.gz [L,T=text/html]\n";
+    $string .= "  RewriteRule boost-gzip-cookie-test\.html  $cache_dir$permanent_dir_gzip" . "boost-gzip-cookie-test\.html\.gz [L,T=text/html]\n";
   }
   if (BOOST_CACHE_CSS || BOOST_CACHE_JS) {
     if (BOOST_GZIP) {
@@ -1055,23 +1093,23 @@ function boost_admin_generate_htaccess($server_name = '%{SERVER_NAME}', $documen
       $string .= "  RewriteCond %{HTTP:Accept-encoding} !gzip\n";
       $string .= "  RewriteRule .* - [S=$skip]\n";
       if (BOOST_CACHE_CSS) {
-        $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$permanent_dir_gzip/$server_name%{REQUEST_URI}$permanent_char$css$gz -s\n";
-        $string .= "  RewriteRule .* $cache_dir$permanent_dir_gzip/$server_name%{REQUEST_URI}$permanent_char$css$gz [L,QSA,T=text/css]\n";
+        $string .= "  RewriteCond $document_root$base_path$cache_dir$permanent_dir_gzip$server_name%{REQUEST_URI}$permanent_char$css$gz -s\n";
+        $string .= "  RewriteRule .* $cache_dir$permanent_dir_gzip$server_name%{REQUEST_URI}$permanent_char$css$gz [L,QSA,T=text/css]\n";
       }
       if (BOOST_CACHE_JS) {
-        $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$permanent_dir_gzip/$server_name%{REQUEST_URI}$permanent_char$js$gz -s\n";
-        $string .= "  RewriteRule .* $cache_dir$permanent_dir_gzip/$server_name%{REQUEST_URI}$permanent_char$js$gz [L,QSA,T=text/javascript]\n";
+        $string .= "  RewriteCond $document_root$base_path$cache_dir$permanent_dir_gzip$server_name%{REQUEST_URI}$permanent_char$js$gz -s\n";
+        $string .= "  RewriteRule .* $cache_dir$permanent_dir_gzip$server_name%{REQUEST_URI}$permanent_char$js$gz [L,QSA,T=text/javascript]\n";
       }
     }
     $string .= "\n";
     $string .= "  # NORMAL - Cached css & js files\n";
     if (BOOST_CACHE_CSS) {
-      $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$permanent_dir/$server_name%{REQUEST_URI}$permanent_char$css -s\n";
-      $string .= "  RewriteRule .* $cache_dir$permanent_dir/$server_name%{REQUEST_URI}$permanent_char$css [L,QSA,T=text/css]\n";
+      $string .= "  RewriteCond $document_root$base_path$cache_dir$permanent_dir$server_name%{REQUEST_URI}$permanent_char$css -s\n";
+      $string .= "  RewriteRule .* $cache_dir$permanent_dir$server_name%{REQUEST_URI}$permanent_char$css [L,QSA,T=text/css]\n";
     }
     if (BOOST_CACHE_JS) {
-      $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$permanent_dir/$server_name%{REQUEST_URI}$permanent_char$js -s\n";
-      $string .= "  RewriteRule .* $cache_dir$permanent_dir/$server_name%{REQUEST_URI}$permanent_char$js [L,QSA,T=text/javascript]\n";
+      $string .= "  RewriteCond $document_root$base_path$cache_dir$permanent_dir$server_name%{REQUEST_URI}$permanent_char$js -s\n";
+      $string .= "  RewriteRule .* $cache_dir$permanent_dir$server_name%{REQUEST_URI}$permanent_char$js [L,QSA,T=text/javascript]\n";
     }
   }
   if (BOOST_CACHE_HTML || BOOST_CACHE_XML || BOOST_CACHE_JSON) {
@@ -1080,10 +1118,14 @@ function boost_admin_generate_htaccess($server_name = '%{SERVER_NAME}', $documen
     $string .= "\n";
     $string .= "  # Caching for anonymous users\n";
     $string .= "  # Skip boost IF not get request OR uri has wrong dir OR cookie is set OR request came from this server OR https request\n";
-    $string .= "  RewriteCond %{REQUEST_METHOD} !^GET$ [OR]\n";
-    $string .= "  RewriteCond %{REQUEST_URI} (^$drupal_subdir(admin|$cache_dir|misc|modules|sites|system|openid|themes|node/add))|(/(comment/reply|edit|user|user/(login|password|register))$) [OR]\n";
+    $string .= "  RewriteCond %{REQUEST_METHOD} !^(GET|HEAD)$ [OR]\n";
+    $string .= "  RewriteCond %{REQUEST_URI} (^$base_path(admin|$cache_dir|misc|modules|sites|system|openid|themes|node/add))|(/(comment/reply|edit|user|user/(login|password|register))$) [OR]\n";
     $string .= "  RewriteCond %{HTTP_COOKIE} DRUPAL_UID [OR]\n";
     $string .= BOOST_LOOPBACK_BYPASS && BOOST_OVERWRITE_FILE ? "  RewriteCond %{REMOTE_ADDR} ^$server_ip$ [OR]\n" : '';
+    if (variable_get('boost_apache_rfc2616', TRUE)) {
+      $string .= "  RewriteCond %{HTTP:Pragma} no-cache [OR]\n";
+      $string .= "  RewriteCond %{HTTP:Cache-Control} no-cache [OR]\n";
+    }
     $string .= "  RewriteCond %{HTTPS} on\n";
     $string .= "  RewriteRule .* - [S=$skip]\n";
     if (BOOST_GZIP) {
@@ -1094,31 +1136,31 @@ function boost_admin_generate_htaccess($server_name = '%{SERVER_NAME}', $documen
       $string .= "  RewriteCond %{HTTP:Accept-encoding} !gzip\n";
       $string .= "  RewriteRule .* - [S=$skip]\n";
       if (BOOST_CACHE_HTML) {
-        $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html$gz -s\n";
-        $string .= "  RewriteRule .* $cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html$gz [L,T=text/html]\n";
+        $string .= "  RewriteCond $document_root$base_path$cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html$gz -s\n";
+        $string .= "  RewriteRule .* $cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html$gz [L,T=text/html]\n";
       }
       if (BOOST_CACHE_XML) {
-        $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml$gz -s\n";
-        $string .= "  RewriteRule .* $cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml$gz [L,T=text/xml]\n";
+        $string .= "  RewriteCond $document_root$base_path$cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml$gz -s\n";
+        $string .= "  RewriteRule .* $cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml$gz [L,T=text/xml]\n";
       }
       if (BOOST_CACHE_JSON) {
-        $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json$gz -s\n";
-        $string .= "  RewriteRule .* $cache_dir$gzip_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json$gz [L,T=text/javascript]\n";
+        $string .= "  RewriteCond $document_root$base_path$cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json$gz -s\n";
+        $string .= "  RewriteRule .* $cache_dir$gzip_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json$gz [L,T=text/javascript]\n";
       }
     }
     $string .= "\n";
     $string .= "  # NORMAL\n";
     if (BOOST_CACHE_HTML) {
-      $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html -s\n";
-      $string .= "  RewriteRule .* $cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html [L,T=text/html]\n";
+      $string .= "  RewriteCond $document_root$base_path$cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html -s\n";
+      $string .= "  RewriteRule .* $cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$html [L,T=text/html]\n";
     }
     if (BOOST_CACHE_XML) {
-      $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml -s\n";
-      $string .= "  RewriteRule .* $cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml [L,T=text/xml]\n";
+      $string .= "  RewriteCond $document_root$base_path$cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml -s\n";
+      $string .= "  RewriteRule .* $cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$xml [L,T=text/xml]\n";
     }
     if (BOOST_CACHE_JSON) {
-      $string .= "  RewriteCond $document_root$drupal_subdir/$cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json -s\n";
-      $string .= "  RewriteRule .* $cache_dir$normal_dir/$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json [L,T=text/javascript]\n";
+      $string .= "  RewriteCond $document_root$base_path$cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json -s\n";
+      $string .= "  RewriteRule .* $cache_dir$normal_dir$server_name%{REQUEST_URI}$char%{QUERY_STRING}$json [L,T=text/javascript]\n";
     }
   }
   $string .= "\n";

@@ -3,7 +3,22 @@ CHANGELOG for Subscriptions 1.x for Drupal 6
 Subscriptions 6.x-1.x-dev:
 
 
-Subscriptions 6.x-1.1:
+Subscriptions 6.x-1.2 (2010-02-17):
+  Enhancements:
+   - Some minor code tuning.
+   - #648600: Create new subscriptions_digest_alter().
+   - #401298: Provide !revision_name and !revision_log variables.
+   - #581042: Implement a pager query for user/UID/subscriptions/node.
+   - #590022: Reduce the footprint of subscriptions_mail.
+  Bugs fixed:
+   - Fix some strings.
+   - #611850: Really keep users from getting notifications from blocked content types.
+   - #591470: Avoid iterating over all thread subscriptions when preparing the node subscribe form.
+   - Tune a string.
+   - #590738: Ensure that subscriptions_update_6101() runs successfully and remove the obsolete {subscriptions_user}.last_sent column.
+
+
+Subscriptions 6.x-1.1 (2009-09-28):
   Enhancements:
    - Update .pot file and German translation, tune some strings.
    - #581644: Provide a (temporary) work-around for bug in D6.14, which disables the cron job, and improve warning messages.

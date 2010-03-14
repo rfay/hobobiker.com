@@ -1,4 +1,4 @@
-# $Id: subscriptions.pot,v 1.13 2009/09/28 11:01:58 salvis Exp $
+# $Id: subscriptions.pot,v 1.15 2009/11/03 22:35:11 salvis Exp $
 #
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -839,7 +839,7 @@ msgid "Limit the percentage of cron job time that !Module may use. If you have m
 msgstr ""
 
 #: subscriptions_mail.module:353
-msgid "Warning: @message"
+msgid "Warning: !message"
 msgstr ""
 
 #: subscriptions_mail.module:358
@@ -847,7 +847,7 @@ msgid "Queue"
 msgstr ""
 
 #: subscriptions_mail.module:359
-msgid "There are %count item(s) in the queue."
+msgid "There are %count items in the queue."
 msgstr ""
 
 #: subscriptions_mail.module:360

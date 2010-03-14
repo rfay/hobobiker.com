@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_content.module,v 1.40 2009/08/27 19:05:27 salvis Exp $
+// $Id: subscriptions_content.module,v 1.44 2010/02/03 21:29:08 salvis Exp $
 
 /**
  * @file
@@ -105,7 +105,7 @@ function _subscriptions_content_node_options($account, $node) {
       }
     }
     // Content type
-    $type_name = node_get_types('name', $node->type);
+    $type_name = check_plain(node_get_types('name', $node->type));
     if ($type_name) {
       $options['type'][] = array(
         'name' => t('To %type content', array('%type' => $type_name)) . $unlisted_tag,
@@ -114,7 +114,7 @@ function _subscriptions_content_node_options($account, $node) {
       );
       // Content type and author
       $options['type'][] = array(
-        'name' => t('To %type content by %name', array('%type' => $type_name, '%name' => ($node->uid ? $node->name : variable_get('anonymous', '???')))) . $unlisted_tag,
+        'name' => t('To %type content by %name', array('%type' => $type_name, '%name' => ($node->uid ? check_plain($node->name) : variable_get('anonymous', '???')))) . $unlisted_tag,
         'params' => array('module' => 'node', 'field' => 'type', 'value' => $node->type, 'author_uid' => $node->uid),
         'link' => 'type/'. $node->type .'/'. $node->uid,
       );
@@ -133,6 +133,9 @@ function _subscriptions_content_access($load_function, $load_args, $node) {
   ///global $user;  /// keep this for remote debugging
   if (($load_function == 'subscriptions_content_node_load' || ($load_function == 'subscriptions_content_comment_load' && $node->_subscriptions_comments)) &&
     ($node->status || user_access('administer nodes')) && node_access('view', $node)) {
+    if (!empty($node->type) && subscriptions_content_type_is_blocked($node->type) && !user_access('subscribe to all content types')) {
+      return FALSE;
+    }
     // We vote 'yes'. Other modules might vote 'no' and then that wins.
     ///watchdog('subs debug', "_sca returns TRUE for node $node->nid, user $user->uid.");  ///
     return TRUE;
@@ -499,11 +502,21 @@ function subscriptions_content_node_admin_nodes_submit($form, &$form_state) {
  */
 function _subscriptions_content_autosubscribe($content_type, $module, $field, $value, $context)
 {
-  $blockeds = variable_get('subscriptions_blocked_content_types', array());
-  if (in_array($content_type, $blockeds)) {
+  if (subscriptions_content_type_is_blocked($content_type)) {
     return;
   }
   subscriptions_autosubscribe($module, $field, $value, $context);
+}
+
+/**
+ * Return TRUE if the content type is blocked.
+ *
+ * @param $content_type
+ */
+function subscriptions_content_type_is_blocked($content_type)
+{
+  $blockeds = variable_get('subscriptions_blocked_content_types', array());
+  return in_array($content_type, $blockeds);
 }
 
 /**
@@ -560,6 +573,9 @@ function _subscriptions_content_node_mailvars(&$mailvars, $node, $field, $s) {
   }
   $mailvars['!has_files'] = empty($files) ? 0 : 1;
   $mailvars['!files'] = $files;
+
+  $mailvars['!revision_name'] = subscriptions_user_load($node->revision_uid)->name;
+  $mailvars['!revision_log'] = _subscriptions_content_format_text($node->log);
 }
 
 /**
@@ -743,7 +759,14 @@ function subscriptions_content_node_form(&$form_state, $account, $form) {
     LEFT JOIN {node_comment_statistics} ncs ON n.nid = ncs.nid
     WHERE s.module = 'node' AND s.field = 'nid' AND s.recipient_uid = %d
     ORDER BY latest_activity DESC");
-  $result = db_query($sql, $uid);
+  $sql_count = db_rewrite_sql("
+    SELECT COUNT(n.nid) 
+    FROM {node} n
+    INNER JOIN {subscriptions} s ON ". ($GLOBALS['db_type'] == 'pgsql' ? 'CAST(' : '')
+                                  ."n.nid". ($GLOBALS['db_type'] == 'pgsql' ? ' AS VARCHAR)' : '')
+                                       ." = s.value
+    WHERE s.module = 'node' AND s.field = 'nid' AND s.recipient_uid = %d");
+  $result = pager_query($sql, 50, 0, $sql_count, $uid);
   while ($s = db_fetch_array($result)) {
     $subscriptions[$s['nid']][$s['author_uid']] = $s;
   }
@@ -814,6 +837,7 @@ function subscriptions_content_node_form(&$form_state, $account, $form) {
     $form['submit'] = array('#type' => 'submit', '#value' => t('Save'), '#weight' => 10);
     $form['#submit'][] = 'subscriptions_page_form_submit';
     $form['note'] = array('#type' => 'item', '#description' => '<div>'. t('Note: Deactivated subscriptions will be removed from the list.') .'</div>' );
+    $form['pager'] = array('#value' => theme('pager', NULL, 50, 0));
   }
   else {
     $form = array(
@@ -956,6 +980,8 @@ function subscriptions_content_mail_edit_tokens_list($mailkey, $options = array(
         '!sender_contact_page' => t('The contact page of the sender.'),
         '!subs_type'           => t("The type of the subscription, like '!thread' or '!category'.", array('!thread' => t('thread'), '!category' => $tr('category'))),
         '!node_type'           => t("The type of the node, like '!forum' or '!story'.", array('!forum' => 'forum', '!story' => 'story')),
+        '!revision_name'       => t('The name of the user who made the last change to the node.'),
+        '!revision_log'        => t('The revision log entry of the node.'),
         '!title'               => t('The title of the subscriptions item.'),
         '!teaser'              => t('An excerpt of the subscriptions item.'),
         '!body'                => t('The body of the subscriptions item.'),
@@ -1092,16 +1118,17 @@ function subscriptions_content_form_mail_edit_trans_delete($form, &$form_state) 
  * @ingroup hooks
  */
 function subscriptions_content_node_type($op, $info) {
-  if ($op != 'delete') {
-    return;
-  }
-  $type = $info->type;
-  db_query("DELETE FROM {subscriptions_queue} WHERE module = 'node' AND field = 'type' AND value = '%s'", $type);
-  db_query("DELETE FROM {subscriptions} WHERE module = 'node' AND field = 'type' AND value = '%s'", $type);
-  foreach (array('blocked', 'unlisted') as $key) {
-    $array = variable_get('subscriptions_'. $key .'_content_types', array());
-    unset($array[$type]);
-    variable_set('subscriptions_'. $key .'_content_types', $array);
+  switch ($op) {
+    case 'delete':
+      $type = $info->type;
+      db_query("DELETE FROM {subscriptions_queue} WHERE module = 'node' AND field = 'type' AND value = '%s'", $type);
+      db_query("DELETE FROM {subscriptions} WHERE module = 'node' AND field = 'type' AND value = '%s'", $type);
+      foreach (array('blocked', 'unlisted') as $key) {
+        $array = variable_get('subscriptions_'. $key .'_content_types', array());
+        unset($array[$type]);
+        variable_set('subscriptions_'. $key .'_content_types', $array);
+      }
+      break;
   }
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.module,v 1.89 2009/08/26 00:11:50 salvis Exp $
+// $Id: subscriptions.module,v 1.90 2009/11/25 19:34:30 salvis Exp $
 
 /**
  * @mainpage Subscriptions module
@@ -607,4 +607,16 @@ function _subscriptions_get_setting($name, $account) {
     }
   }
   return $defaults[$uid][$name];
+}
+
+/**
+ * Load (and cache) a user.
+ */
+function subscriptions_user_load($uid) {
+  static $users = array();
+
+  if (!isset($users[$uid])) {
+    $users[$uid] = user_load($uid);
+  }
+  return $users[$uid];
 }
