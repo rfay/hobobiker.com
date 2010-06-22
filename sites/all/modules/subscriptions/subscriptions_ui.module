@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_ui.module,v 1.18 2010/02/03 21:29:08 salvis Exp $
+// $Id: subscriptions_ui.module,v 1.19 2010/06/03 20:58:25 salvis Exp $
 
 /**
  * @file
@@ -21,7 +21,7 @@ function subscriptions_ui_nodeapi(&$node, $op, $teaser) {
         (!variable_get('subscriptions_form_link_only', 0) && (!arg(2) || arg(2) == 'view') ||
           variable_get('subscriptions_form_link_only', 0) && arg(2) == 'subscribe' )) {
       if ($form = drupal_get_form('subscriptions_ui_node_form', $node)) {
-        $node->content['subscriptions'] = array(
+        $node->content['subscriptions_ui'] = array(
           '#value' => $form,
           '#weight' => 100,
         );
@@ -71,6 +71,8 @@ function subscriptions_ui_can_subscribe() {
  * Implementation of hook_link().
  *
  * Add a Subscribe link to node pages (depending on the Display Settings).
+ *
+ * @ingroup hooks
  */
 function subscriptions_ui_link($type, $node = NULL, $teaser = NULL) {
   global $user;
@@ -401,3 +403,24 @@ function subscriptions_ui_subscriptions_ui($nid)
 {
   return array('priority' => 0, 'module' => 'subscriptions_ui');
 }
+
+/**
+ * Implementation of hook hook_content_extra_fields().
+ *
+ * Enables CCK (admin/content/types/CONTENT_TYPE/fields) to configure the
+ * position of the Subscribe fieldset within the node.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_ui_content_extra_fields($type_name) {
+  $extra = array();
+  if (!variable_get('subscriptions_form_in_block', 0)) {
+    $extra['subscriptions_ui'] = array(
+      'label' => t('Subscribe'),
+      'description' => t('!Subscriptions_UI module form.', array('!Subscriptions_UI' => 'Subscriptions UI')),
+      'weight' => 100,
+    );
+  }
+  return $extra;
+}
+

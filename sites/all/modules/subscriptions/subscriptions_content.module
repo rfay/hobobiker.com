@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_content.module,v 1.44 2010/02/03 21:29:08 salvis Exp $
+// $Id: subscriptions_content.module,v 1.49 2010/04/27 19:06:52 salvis Exp $
 
 /**
  * @file
@@ -192,7 +192,7 @@ function subscriptions_content_nodeapi(&$node, $op, $arg = 0) {
     case 'load':
     case 'prepare':
       $unpublished_nid = ($node->status ? NULL : $node->nid);
-      $node->subscriptions_notify = TRUE;
+      $node->subscriptions_notify = in_array((isset($node->nid) ? ($node->status ? 'n_pub' : 'n_unpub') : 'n_new'), subscriptions_content_get_default_workflow($node->type));
       break;
 
     case 'update':
@@ -246,33 +246,6 @@ function subscriptions_content_comment($comment, $op) {
   static $is_unpublished;
   static $inserted_cid = 0;
   $comment = (array)$comment;  // $comment can be an object or an array.
-
-  if ($op == 'form') {
-    $is_unpublished = (isset($comment['admin']) ? $comment['admin']['status']['#default_value'] : !user_access('post comments without approval'));
-    if (user_access('administer comments')) {
-      $tr = 't';
-      $form['subscriptions_notify'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Send subscriptions notifications'),
-        '#default_value' => TRUE,
-      ); // hook_form_alter() will move the checkbox inside the Administration fieldset!
-
-      if (isset($comment['admin']) && $is_unpublished) {  // for update
-        $form['subscriptions_notify']['#description'] = t('Subscriptions notifications are not sent for unpublished comments (except to users who have the %administer_comments permission), but when you change !Status to %Published, Subscriptions will send out "new" notifications, unless you suppress this here.',
-                                                          array('%administer_comments' => $tr('administer comments'),
-                                                                '!Status' => $tr('Status'),
-                                                                '%Published' => $tr('Published')));
-      }
-      elseif ($is_unpublished) {
-        $form['subscriptions_notify']['#description'] = t('Subscriptions notifications are not sent for unpublished comments, except to users who have the %administer_comments permission, and you can even suppress the latter here.',
-                                                          array('%administer_comments' => $tr('administer comments')));
-      }
-      else {
-        $form['subscriptions_notify']['#description'] = t('You can suppress sending subscriptions notifications here; this option is not saved.');
-      }
-    }
-    return (isset($form) ? $form : NULL);
-  }
 
   if (!isset($comment['nomail']) && ($op == 'insert' || $op == 'update' || ($op == 'publish' && $comment['cid'] != $inserted_cid))) {
     if (!isset($comment['subscriptions_notify']) || $comment['subscriptions_notify']) {
@@ -401,6 +374,48 @@ function _subscriptions_content_validate_blocked_nodes($form, $form_state) {
 /**
  * Implementation of hook_form_alter().
  *
+ * Add the 'Send subscriptions notifications' to the Workflow settings on
+ * admin/content/types/CONTENT_TYPE,
+ *
+ * @ingroup hooks
+ * @ingroup form
+ */
+function subscriptions_content_form_node_type_form_alter(&$form, &$form_state) {
+  $tr = 't';
+  $form['workflow']['subscriptions_workflow'] = array(
+    '#type' => 'select',
+    '#title' => t('Default %Send_subscriptions_notifications for', array('%Send_subscriptions_notifications' => t('Send subscriptions notifications'))),
+    '#default_value' => subscriptions_content_get_default_workflow($form['#node_type']->type),
+    '#options' => array(
+      'n_new' => t('New nodes'),
+      'n_unpub' => t('Unpublished nodes (as new)'),
+      'n_pub' => t('Published nodes (as update)'),
+      'c_new' => t('New comments'),
+      'c_unpub' => t('Unpublished comments (as new)'),
+      'c_pub' => t('Published comments (as update)'),
+    ),
+    '#multiple' => TRUE,
+    '#description' => t('Select all situations where generation of notifications should be ON.') .'<br />'.
+      t('Items that are created in unpublished state create notifications to administrators only; when they are later published, "new" notifications are generated.') .'<br />'.
+      t('Users with the %administer_nodes / %administer_comments permissions will be able to override these options.', array(
+        '%administer_nodes' => $tr('administer nodes'),
+        '%administer_comments' => $tr('administer comments'),
+      )),
+  );
+  $form['#submit'][] = 'subscriptions_content_node_type_form_submit';
+}
+
+function subscriptions_content_get_default_workflow($content_type) {
+  return variable_get('subscriptions_default_workflow_'. $content_type, array('n_new', 'n_unpub', 'n_pub', 'c_new', 'c_unpub', 'c_pub'));
+}
+
+function subscriptions_content_node_type_form_submit($form, &$form_state) {
+  variable_set('subscriptions_default_workflow_'. $form_state['values']['type'], $form_state['values']['subscriptions_workflow']);
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
  * Add the Send Subscriptions Notifications checkbox to the Publishing Options
  * fieldset on the node edit form.
  *
@@ -453,11 +468,12 @@ function subscriptions_content_form_node_admin_nodes_alter(&$form, &$form_state)
  * @ingroup form
  */
 function subscriptions_content_form_comment_form_alter(&$form, &$form_state) {
-
-  if (isset($form['subscriptions_notify'])) {
+  $is_update = isset($form['admin']);
+  $is_unpublished = ($is_update ? $form['admin']['status']['#default_value'] : !user_access('post comments without approval'));
+  if (user_access('administer comments')) {
+    $tr = 't';
     // create the Administration fieldset if it doesn't exist:
     if (!isset($form['admin'])) {
-      $tr = 't';
       $form['admin'] = array(
         '#type' => 'fieldset',
         '#title' => $tr('Administration'),
@@ -466,9 +482,32 @@ function subscriptions_content_form_comment_form_alter(&$form, &$form_state) {
         '#weight' => -2,
       );
     }
-    // move the checkbox inside the Administration fieldset:
-    $form['admin']['subscriptions_notify'] = $form['subscriptions_notify'];
-    unset($form['subscriptions_notify']);
+    $form['admin']['subscriptions_notify'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Send subscriptions notifications'),
+      '#weight' => -1,
+    );
+
+    $node = node_load($form['nid']['#value']);
+    $default_workflow = subscriptions_content_get_default_workflow($node->type);
+    if ($is_update && $is_unpublished) {
+      $form['admin']['subscriptions_notify']['#description'] = t('Subscriptions notifications are not sent for unpublished comments (except to users who have the %administer_comments permission), but when you change !Status to %Published, Subscriptions will send out "new" notifications, unless you suppress this here.', array(
+        '%administer_comments' => $tr('administer comments'),
+        '!Status' => $tr('Status'),
+        '%Published' => $tr('Published'),
+      ));
+      $form['admin']['subscriptions_notify']['#default_value'] = in_array('c_unpub', $default_workflow);
+    }
+    elseif ($is_unpublished) {
+      $form['admin']['subscriptions_notify']['#description'] = t('Subscriptions notifications are not sent for unpublished comments, except to users who have the %administer_comments permission, and you can even suppress the latter here.', array(
+        '%administer_comments' => $tr('administer comments'),
+      ));
+      $form['admin']['subscriptions_notify']['#default_value'] = in_array('c_new', $default_workflow);
+    }
+    else { // published, new or update
+      $form['admin']['subscriptions_notify']['#description'] = t('You can suppress sending subscriptions notifications here; this option is not saved.');
+      $form['admin']['subscriptions_notify']['#default_value'] = in_array(($is_update ? 'c_pub' : 'c_new'), $default_workflow);
+    }
   }
 }
 
@@ -574,7 +613,8 @@ function _subscriptions_content_node_mailvars(&$mailvars, $node, $field, $s) {
   $mailvars['!has_files'] = empty($files) ? 0 : 1;
   $mailvars['!files'] = $files;
 
-  $mailvars['!revision_name'] = subscriptions_user_load($node->revision_uid)->name;
+  $account = subscriptions_user_load($node->revision_uid);
+  $mailvars['!revision_name'] = $account->name;
   $mailvars['!revision_log'] = _subscriptions_content_format_text($node->log);
 }
 
@@ -617,6 +657,12 @@ function _subscriptions_content_format_comments($node, $comment_template, $separ
       '!comment_is_new' => (integer)$comment->_subscriptions_is_new,
       '!comment_is_published' => (integer)($comment->status == COMMENT_PUBLISHED),
     );
+    if (function_exists('realname_make_name')) {
+      $mailvars += array(
+        '!comment_realname' => realname_make_name($comment),
+      );
+    }
+
     $template = module_invoke('subscriptions_mail', 'template_preprocess', $comment_template, $mailvars);
     $comments[] = strtr($template ? $template : $comment_template, $mailvars);
   }
@@ -963,6 +1009,13 @@ function subscriptions_content_mail_edit_tokens_list($mailkey, $options = array(
     case 'comments':
       $tokens += array(
         '!comment_name'         => t('The name of the comment author.'),
+      );
+      if (module_exists('realname')) {
+        $tokens += array(
+          '!comment_realname'   => t('The real name of the comment author (provided by Realname module).'),
+        );
+      }
+      $tokens += array(
         '!comment_title'        => t('The title of the comment.'),
         '!comment_text'         => t('The body text of the comment.'),
         '!comment_url'          => t('The direct URL of the comment.'),
@@ -975,6 +1028,13 @@ function subscriptions_content_mail_edit_tokens_list($mailkey, $options = array(
       $tokens += array(
         '!unsubscribe_url'     => t('The user can unsubscribe by clicking this link.'),
         '!sender_name'         => t('The name of the sender (if the sender is visible).'),
+      );
+      if (module_exists('realname')) {
+        $tokens += array(
+          '!sender_realname'   => t('The real name of the sender (provided by RealName module).'),
+        );
+      }
+      $tokens += array(
         '!sender_page'         => t('The user page of the sender (if the sender is visible).'),
         '!sender_has_contact_page' => t("The sender's contact setting: 1 = contact form enabled, 0 = disabled."),
         '!sender_contact_page' => t('The contact page of the sender.'),

@@ -1,11 +1,12 @@
-; $Id: simplemenu.info,v 1.4.2.2.2.1 2008/02/28 21:47:17 m3avrck Exp $
+; $Id: simplemenu.info,v 1.4.2.2.2.5 2010/05/16 09:00:07 alexiswilke Exp $
 name = SimpleMenu
-description = Creates a menu bar that is displayed at the top of every page.
+description = Displays a menu bar with drop down items. By default it appears at the top of the screen with the Navigation menu.
 core = 6.x
+package = Menu
 
-; Information added by drupal.org packaging script on 2008-12-13
-version = "6.x-1.2"
+; Information added by drupal.org packaging script on 2010-05-31
+version = "6.x-1.7"
 core = "6.x"
 project = "simplemenu"
-datestamp = "1229191831"
+datestamp = "1275339610"
 

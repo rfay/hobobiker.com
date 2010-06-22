@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.module,v 1.90 2009/11/25 19:34:30 salvis Exp $
+// $Id: subscriptions.module,v 1.91 2010/05/07 12:02:36 salvis Exp $
 
 /**
  * @mainpage Subscriptions module
@@ -306,6 +306,7 @@ function subscriptions_queue($event) {
         $join = empty($query['join']) ? '' : $query['join'];
         $where = empty($query['where']) ? array() : array($query['where']);
         $args = array($event['load_function'], $event['load_args'], $event['is_new'], $module, $field);
+        $groupby = empty($query['groupby']) ? '' : $query['groupby'];
         // author-specific subscriptions trigger on comments, when the node author is subscribed to:
         $args[] = ($module == 'node' && $event['type'] == 'comment' && isset($event['node']->uid) ? $event['node']->uid : $event['uid']);
         if (!empty($query['value'])) {
@@ -335,7 +336,8 @@ function subscriptions_queue($event) {
           WHERE
             s.module = '%s' AND
             s.field = '%s' AND
-            s.author_uid IN (%d, -1) AND $conditions";
+            s.author_uid IN (%d, -1) AND $conditions
+          $groupby";
         $result = db_query($sql, $args);
         $affected_rows = db_affected_rows();
         /*  for debugging:

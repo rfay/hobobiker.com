@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_mail.module,v 1.30 2009/09/28 12:42:15 salvis Exp $
+// $Id: subscriptions_mail.module,v 1.31 2010/04/06 23:18:43 salvis Exp $
 
 /**
  * @file
@@ -136,7 +136,14 @@ function subscriptions_mail_subscriptions_tokens_list($mailkey, $options = array
     default:
       $tokens += array(
         '!site'           => t('The name of the site.'),
-        '!recipient_name' => t('Name of the recipient.'),
+        '!recipient_name' => t('The name of the recipient.'),
+      );
+      if (module_exists('realname')) {
+        $tokens += array(
+          '!recipient_realname' => t('The real name of the recipient (provided by Realname module).'),
+        );
+      }
+      $tokens += array(
         '!recipient_page' => t('The user page of the recipient.'),
         '!manage_url'     => t('The URL where the user can manage her subscriptions.'),
       );

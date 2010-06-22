@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_taxonomy.module,v 1.14 2010/02/03 21:29:08 salvis Exp $
+// $Id: subscriptions_taxonomy.module,v 1.17 2010/05/07 12:02:36 salvis Exp $
 
 /**
  * @file
@@ -33,6 +33,7 @@ function subscriptions_taxonomy_subscriptions($op, $arg0 = NULL, $arg1 = NULL, $
                                                           .'tn.tid'. ($GLOBALS['db_type'] == 'pgsql' ? ' AS VARCHAR)' : ''),
           'where' => 'tn.nid = %d',
           'args' => array($node->nid),
+          'groupby' => 'GROUP BY u.uid, tn.nid',
         );
         if ($arg0['type'] == 'comment') {
           $where = ' AND s.send_comments = 1';
@@ -86,14 +87,13 @@ function _subscriptions_taxonomy_node_options($account, $node) {
     if (in_array($term->vid, $vids_to_omit)) {
       continue;
     }
-    $term_name = check_plain($term->name);
     $options['tid'][] = array(
-      'name' => t('To content in %term', array('%term' => $term_name)),
+      'name' => t('To content in %term', array('%term' => $term->name)),
       'params' => array('module' => 'node', 'field' => 'tid', 'value' => $tid),
       'link' => 'taxa/'. $tid,
     );
     $options['tid'][] = array(
-      'name' => t('To content in %term by %name', array('%term' => $term_name, '%name' => ($node->uid ? check_plain($node->name) : variable_get('anonymous', '???')))),
+      'name' => t('To content in %term by %name', array('%term' => $term->name, '%name' => ($node->uid ? check_plain($node->name) : variable_get('anonymous', '???')))),
       'params' => array('module' => 'node', 'field' => 'tid', 'value' => $tid, 'author_uid' => $node->uid),
       'link' => 'taxa/'. $tid .'/'. $node->uid,
     );
@@ -263,7 +263,9 @@ function subscriptions_taxonomy_taxa_form(&$form_state, $vocabularies, $account,
         if (is_array($term)) {
           $term = (object)$term;
         }
-        $title = str_repeat('--&nbsp;', (empty($term->depth) ? 0 : $term->depth)) . l(check_plain($term->name), 'taxonomy/term/'. $term->tid);
+        $depth = (empty($term->depth) ? 0 : $term->depth);
+        $title = '<span class="indenter">'. str_repeat('--&nbsp;', $depth) .'</span>'.
+          l($term->name, 'taxonomy/term/'. $term->tid, array('attributes' => array('class' => 'depth-'. $depth)));
         if (!isset($subscriptions_vid[$term->tid][-1])) {
           // author-less item is missing -- add it here:
           $subscriptions_vid[$term->tid][-1] = array(

@@ -15,7 +15,7 @@ Subscriptions 5.x-2.0 has been rewritten from scratch by chx and salvis.
 Ported to Drupal 6 and continuously enhanced by salvis.
 Doxygen documentation by develCuy, sponsored by www.transit.york.ac.uk.
 
-http://api.drupal-contrib.org/api/subscriptions provides on-line developer documentation.
+http://drupalcontrib.org/drupal-6-modules provides on-line developer documentation.
 
 Initial Translations:
 - German:               salvis
@@ -27,9 +27,10 @@ Initial Translations:
 - Danish:               wulff / Anders Lund
 - Brazilian Portuguese: Márcio Moreira
 - Hungarian:            muczy
+- Arabic:               N2H
 
 Contributed Modules:
-- moderate_content_notifications:  written and maintained by beginner.
+-
 
 Known independent add-on modules:
 - subscriptions_author:  by develCuy, sponsored by www.transit.york.ac.uk.
@@ -202,7 +203,8 @@ You can use conditional text in the templates. The syntax is
 !varname can be the any variable and will be replaced;
 value is a string that doesn't contain a '?';
 then_text is a string that doesn't contain a ':' and
-else_text doesn't have that limitation.
+else_text must not contain '}}'. The exception is: each of then_text and
+else_text can be another conditional expressen (one level of recursion).
 
 Both then_text and else_text can contain newlines and variables.
 

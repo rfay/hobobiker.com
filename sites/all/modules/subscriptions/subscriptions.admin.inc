@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.admin.inc,v 1.21 2009/04/18 20:26:35 salvis Exp $
+// $Id: subscriptions.admin.inc,v 1.23 2010/04/27 17:07:21 salvis Exp $
 
 /**
  * @file
@@ -591,6 +591,9 @@ function subscriptions_intervals(&$form_state) {
   foreach (_subscriptions_send_intervals() as $interval => $text) {
     $default .= "$interval|$text\n";
   }
+  $form['info'] = array(
+    '#value' => t('Define the selection of %Send_interval options available through the user interface. Adding additional ones is easy, but removing one that is already in use is not recommended.', array('%Send_interval' => t('Send interval'))),
+  );
   $form['intervals'] = array(
     '#type' => 'textarea',
     '#cols' => 40,

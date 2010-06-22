@@ -1,5 +1,5 @@
 <?php
-// $Id: mail_edit_user.inc,v 1.1.2.2 2009/09/14 00:29:43 litwol Exp $
+// $Id: mail_edit_user.inc,v 1.1.2.3 2010/05/17 22:19:52 salvis Exp $
 
 //hook_mailkeys
 function user_mailkeys() {
@@ -29,6 +29,7 @@ function user_mail_edit_tokens_list($mailkey, $options = array()) {
     case 'status_blocked':
     case 'status_deleted':
       $tokens['!username']= "User's username";
+      $tokens['!username_themed']= "User's username (themed)";
       $tokens['!site']= 'Site name';
       $tokens['!login_url']= 'One time login URL for password reset';
       $tokens['!uri_brief']= "Website's URL without the leading http://";
@@ -48,6 +49,7 @@ function user_mail_edit_tokens_value($mailkey, $mail, $options = array()) {
   $account = $mail['params']['account'];
   $language = $mail['language'];
   $tokens = array(
+    '!username_themed' => strip_tags(theme('username', $account, array('plain' => TRUE))),
     '!username' => $account->name,
     '!site' => variable_get('site_name', 'Drupal'),
     '!login_url' => user_pass_reset_url($account),

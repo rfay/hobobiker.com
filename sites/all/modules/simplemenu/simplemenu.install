@@ -1,5 +1,12 @@
 <?php
-// $Id: simplemenu.install,v 1.1.2.1 2008/10/12 23:35:48 rz Exp $
+// $Id: simplemenu.install,v 1.1.2.5 2010/05/16 10:45:25 alexiswilke Exp $
+
+/**
+ * Get rid of the variables used by simple menu.
+ */
+function simplemenu_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'simplemenu_%'");
+}
 
 /**
  * Implementation of hook_update_N().
@@ -7,8 +14,40 @@
 function simplemenu_update_6001() {
   // if navigation menu was used in Drupal 5 use the same in Drupal 6.
   // otherwise, we can't do anything.
-  if(variable_get('simplemenu_menu', 1) == 1) {
+  if (variable_get('simplemenu_menu', 1) == 1) {
     variable_set('simplemenu_menu', 'navigation:0');
   }
   return array();
 }
+
+/**
+ * Implementation of hook_update_N().
+ */
+function simplemenu_update_6002() {
+  // fix variable name
+  variable_set('simplemenu_detect_popup', variable_get('simplemenu_detect_popop', 1));
+  variable_del('simplemenu_detect_popop');
+  return array();
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function simplemenu_update_6003() {
+  if (variable_get('simplemenu_devel', 0)) {
+    drupal_set_message('The Simplemenu Devel is now defined in a separate module. Enable that module if you want to use the devel menu.', 'warning');
+  }
+  variable_del('simplemenu_devel');
+  return array();
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function simplemenu_update_6004() {
+  // enable multiple menus selection
+  variable_set('simplemenu_menus', array(variable_get('simplemenu_menu', 'navigation:0')));
+  return array();
+}
+
+// vim: ts=2 sw=2 et syntax=php

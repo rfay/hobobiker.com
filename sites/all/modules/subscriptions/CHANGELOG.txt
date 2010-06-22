@@ -3,6 +3,23 @@ CHANGELOG for Subscriptions 1.x for Drupal 6
 Subscriptions 6.x-1.x-dev:
 
 
+Subscriptions 6.x-1.3 (2010-06-10):
+  Enhancements:
+   - #817342: Allow CCK to configure the position of the Subscribe fieldset within the node.
+   - Allow one level of recursion in mail template conditional expressions.
+   - #751870: Integration with realname module.
+   - #572216: Add CSS depth classes on the taxonomy subscription page.
+   - #761264: Set /Send subscriptions notifications/ /Publishing option/ defaults by content type.
+   - #761260: Add a /Send subscriptions notifications/ option to the comment's Administration fieldset (was lost when porting from D5).
+   - #756964: Add some helpful information to the admin/settings/subscriptions/intervals page.
+   - #727608: Add Arabic translation.
+  Bugs fixed:
+   - #817648: Update README.txt regarding API documentation.
+   - #792496: Fix taxonomy subscriptions creating multiple queue entries.
+   - #751212: Avoid rvalue->member construct, which is apparently not supported by PHP 4.x.
+   - Avoid double check_plain() causing taxonomy terms to be double-&quote;quoted&quote;.
+
+
 Subscriptions 6.x-1.2 (2010-02-17):
   Enhancements:
    - Some minor code tuning.
@@ -16,7 +33,6 @@ Subscriptions 6.x-1.2 (2010-02-17):
    - #591470: Avoid iterating over all thread subscriptions when preparing the node subscribe form.
    - Tune a string.
    - #590738: Ensure that subscriptions_update_6101() runs successfully and remove the obsolete {subscriptions_user}.last_sent column.
-
 
 Subscriptions 6.x-1.1 (2009-09-28):
   Enhancements:

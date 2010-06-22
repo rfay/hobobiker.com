@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_mail.cron.inc,v 1.5 2010/02/03 21:01:16 salvis Exp $
+// $Id: subscriptions_mail.cron.inc,v 1.7 2010/04/21 19:32:43 salvis Exp $
 
 /**
  * @file
@@ -134,6 +134,13 @@ function _subscriptions_mail_cron() {
             '!subs_type' => $fields[$langcode][$module][$field]['!subs_type'],
             '!unsubscribe_url' => url("s/del/$module/$ori_field/$ori_value/". $s['author_uid'] .'/'. $s['uid'] .'/'. md5(drupal_get_private_key() . $module . $ori_field . $ori_value . $s['author_uid'] . $s['uid']), array('absolute' => TRUE)),
           );
+          if (function_exists('realname_make_name')) {
+            $recipient = (object) array('uid' => $s['uid']);
+            $mailvars += array(
+              '!recipient_realname' => realname_make_name($recipient),
+              '!sender_realname' => realname_make_name($sender),
+            );
+          }
           $mailvars_function($mailvars, $object, $field, $s);
           $mailvars += module_invoke_all('subscriptions_get_mailvars', $object);
           if ($digest && !empty($object->_subscriptions_comments) && module_exists('subscriptions_content')) {
@@ -282,10 +289,12 @@ function _subscriptions_mail_send($mailkey, $name, $to, $subject, $body, $from, 
  * "==" and "!=":
  * {{!variable_name==sometext?text for true condition:text for false condition}}
  *
- * sometext must not contain a question mark, and the true text no colon.
+ * sometext must not contain a question mark, and the true_text no colon.
+ * true_text and false_text may contain newlines as well as a nested
+ * conditional expression (one level of recursion).
  */
 function subscriptions_mail_template_preprocess($template, $mailvars) {
-  preg_match_all('/{{(?P<condition>[^?]+?)\?(?P<true>[^:]*?):(?P<false>[^\]]*?)}}/', $template, $conditions);
+  preg_match_all('/{{(?P<condition>[^?]+?)\?(?P<true>({{(.|\n)*?}})|([^:]*?)):(?P<false>({{(.|\n)*?}})|((.|\n)*?))}}/', $template, $conditions);
 
   // locate the actual operators/operand for each
   $replacement = '';
@@ -304,7 +313,7 @@ function subscriptions_mail_template_preprocess($template, $mailvars) {
     // replace the condition with the result of its evalutation
     $template = str_replace($v, $replacement, $template);
   }
-  return $template;
+  return (empty($conditions[0]) ? $template : subscriptions_mail_template_preprocess($template, $mailvars));
 }
 
 /**
