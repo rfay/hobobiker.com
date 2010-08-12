@@ -1,5 +1,5 @@
 <?php
-// $Id: simplemenu.admin.inc,v 1.1.2.7 2010/05/16 23:20:01 alexiswilke Exp $
+// $Id: simplemenu.admin.inc,v 1.1.2.9 2010/06/04 09:28:51 alexiswilke Exp $
 
 /**
  * @file
@@ -43,6 +43,13 @@ function simplemenu_admin_settings() {
     '#options' => $theme_selection,
     '#default_value' => variable_get('simplemenu_theme', 'original'),
     '#description' => t('Select which theme to use. If you specify custom, you need to define CSS in your theme.'),
+  );
+
+  $form['default_menu']['simplemenu_hide_when_empty'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide when empty'),
+    '#default_value' => variable_get('simplemenu_hide_when_empty', FALSE),
+    '#description' => t('Hide the whole menubar when empty. This is quite handy for when you have users who do not have permission to see any one menu items of the selected menus. When this flag is not set, you see a message letting you know that Simplemenu could not display a menu.'),
   );
 
 
@@ -135,7 +142,7 @@ function simplemenu_admin_settings() {
     '#type' => 'select',
     '#title' => t('Scope of simplemenu variable'),
     '#options' => $scope,
-    '#description' => t('By default, the <code>simplemenu</code> variable is put in the footer (backward compatible.) It is also possible to put it in the header instead.'),
+    '#description' => t('By default, the <code>simplemenu</code> variable is put in the footer (backward compatible.) It is possible to put it in the header instead.'),
     '#default_value' => variable_get('simplemenu_menu_scope', 'footer'),
   );
 
@@ -198,6 +205,13 @@ function simplemenu_admin_settings() {
     '#title' => t('Detect pop-up windows'),
     '#default_value' => variable_get('simplemenu_detect_popup', 1),
     '#description' => t("Choose whether SimpleMenu should attempt to detect if it is inside of a pop-up window.  If enabled, SimpleMenu will not display if it is inside of a pop-up window."),
+  );
+
+  $form['advanced']['simplemenu_call_theme'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow Simplemenu to call the theme() function'),
+    '#description' => t('When a module calls theme() from their hook_init() function, it can break any other module that attempts to set the theme to something else than the default. By default, Simplemenu avoids the theme() function altogether meaning that its menu items may not look right in your theme, but the menu works. This flag is always ignored on the block list page.'),
+    '#default_value' => variable_get('simplemenu_call_theme', FALSE),
   );
 
   $form['advanced']['simplemenu_visibility_operator'] = array(

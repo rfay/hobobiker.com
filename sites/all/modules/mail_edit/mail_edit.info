@@ -4,9 +4,9 @@ description = Allows editing of all mails
 package = Mail
 core = 6.x
 version = VERSION
-; Information added by drupal.org packaging script on 2010-05-18
+; Information added by drupal.org packaging script on 2010-07-11
 version = "6.x-1.x-dev"
 core = "6.x"
 project = "mail_edit"
-datestamp = "1274141417"
+datestamp = "1278834817"
 

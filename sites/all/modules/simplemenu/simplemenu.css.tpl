@@ -1,8 +1,10 @@
-/* $Id: simplemenu.css.tpl,v 1.1.2.1 2010/05/15 10:40:53 alexiswilke Exp $ */
+/* $Id: simplemenu.css.tpl,v 1.1.2.2 2010/06/07 22:35:44 alexiswilke Exp $ */
 
 /* There is a version of this file commented in great detail for educational purposes here:
  * http://users.tpg.com.au/j_birch/plugins/superfish/superfish.commented.css
  */
+
+@STICKY_TABLE@
 
 /*** ESSENTIAL STYLES ***/
 #simplemenu, #simplemenu * {
