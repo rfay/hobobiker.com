@@ -1,5 +1,5 @@
 <?php
-// $Id: simplemenu.module,v 1.9.2.11.2.13 2010/05/26 06:10:34 alexiswilke Exp $
+// $Id: simplemenu.module,v 1.9.2.11.2.19 2010/07/13 06:09:59 alexiswilke Exp $
 
 /**
  * @file
@@ -33,7 +33,7 @@ function simplemenu_enabled() {
   if (!isset($enabled)) {
     global $theme;
     $exclusions = variable_get('simplemenu_exclusions', array());
-    $enabled = (!isset($exclusions[$theme]) || !$exclusions[$theme])
+    $enabled = empty($exclusions[$theme])
       && user_access('view simplemenu')
       && _simplemenu_page_visibility()
       && _simplemenu_superuser_active();
@@ -48,10 +48,13 @@ function simplemenu_enabled() {
 function simplemenu_init() {
   // do a simple access check here, since theme isn't available to check yet
   if (simplemenu_enabled()) {
-    _simplemenu_add_menu();
-    _simplemenu_add_css();    // basic CSS must be before _simplemenu_add_theme()
-    _simplemenu_add_theme();
-    _simplemenu_add_js();
+    // we first run add menu because it could be completely empty in which
+    // case we want to avoid sending the any output
+    if (_simplemenu_add_menu()) {
+      _simplemenu_add_css();    // basic CSS must be before _simplemenu_add_theme()
+      _simplemenu_add_theme();
+      _simplemenu_add_js();
+    }
   }
 }
 
@@ -65,9 +68,18 @@ function simplemenu_init() {
  * to be sent inline.
  */
 function _simplemenu_add_menu() {
-  $simplemenu = 'var simplemenu=' . drupal_to_js(simplemenu_get_menu()) . ';';
+  $menu = simplemenu_get_menu();
+  if (!$menu) {
+    return FALSE;
+  }
 
-  $has_file = variable_get('simplemenu_cache_menu', TRUE);
+  $simplemenu = 'var simplemenu=' . drupal_to_js($menu) . ';';
+
+  // Note that if file_downloads is set to private the file wouldn't be visible
+  // from the outside so we cannot cache it... It is fixed in D7 with the
+  // use of protocols such as 'public://css'.
+  $has_file = variable_get('simplemenu_cache_menu', TRUE)
+    && variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PUBLIC;
   if ($has_file) {
     $js_path = file_create_path('js'); // same path as concatenated Core JS
     $js_md5 = md5($simplemenu); // this is a lot faster than transferring the menu for each page!
@@ -94,6 +106,8 @@ function _simplemenu_add_menu() {
   else {
     drupal_add_js($simplemenu, 'inline', $scope);
   }
+
+  return TRUE;
 }
 
 /** \brief Generate the CSS and add it to the page.
@@ -126,14 +140,17 @@ function _simplemenu_add_css() {
       switch ($fix) {
       case 'top':
         $tags['@FIX@'] = "position: fixed;\n  top: 0;";
+        $tags['@STICKY_TABLE@'] = "table.sticky-header {\n  top: 21px !important\n}";
         break;
 
       case 'bottom':
         $tags['@FIX@'] = "position: fixed;\n  bottom: 0;";
+        $tags['@STICKY_TABLE@'] = '';
         break;
 
       default: // scroll
         $tags['@FIX@'] = 'position: relative;';
+        $tags['@STICKY_TABLE@'] = '';
         break;
 
       }
@@ -318,8 +335,39 @@ function simplemenu_get_menu() {
   drupal_alter('simplemenu_tree', $tree);
 
   // now generate the output
-  $menu = menu_tree_output($tree);
+  // by default avoid calling the theme() function
+  $in_block = !variable_get('simplemenu_call_theme', FALSE);
+  if (!$in_block) {
+    // if we are editing a block, then we MUST avoid calling theme().
+    $in_block = arg(0) == 'admin' && arg(1) == 'build' && arg(2) == 'block';
+    if ($in_block && arg(3)) {
+      $in_block = arg(3) == 'list';
+    }
+  }
+  if ($in_block) {
+    // this is a duplicate of the Core function where I replaced
+    // the theme() calls with the actual function code (& optimized!)
+    $menu = simplemenu_tree_output($tree, '');
+  }
+  else {
+    // See http://drupal.org/node/816036
+    //     http://drupal.org/node/336119
+    //
+    // This function calls theme() and that's bad for anyone
+    // who uses more than one theme (admin theme(), blocks
+    // list, etc.) and the theming of the menu items may very
+    // well break the simplemenu expected <ul>/<li> combinaison.
+    $menu = menu_tree_output($tree);
+  }
+
   if (!$menu) {
+    if (variable_get('simplemenu_hide_when_empty', FALSE)) {
+      // this is useful for people who have different users with
+      // different roles and when some do not have enough right
+      // to see anything, the menu disappear completely
+      return;
+    }
+    // some default in case no menu was selected
     $menu = '<ul class="menu"><li><a href="' . url('admin/settings/simplemenu') . '">'
         . t('No menu items found. Try a different menu as the default.') . '</a></li></ul>';
   }
@@ -332,6 +380,72 @@ function simplemenu_get_menu() {
 
   variable_set('simplemenu_running', FALSE);
   return '<div class="simplemenu-block">' . $menu . '&nbsp;</div>';
+}
+
+
+/**
+ * \brief Duplicate of menu_tree_output() to handle the block list.
+ *
+ * This function handles the block list properly by skipping the
+ * theme() function usage whenever the user is in the list of blocks
+ * page. This means the possible theming of simplemenu will "break"
+ * on that page.
+ *
+ * \param[in] $tree The menu tree to be displayed.
+ * \param[in] $id The identifier to add to the ul tag.
+ *
+ * \return The menu tree in the form of a \<ul> list.
+ */
+function simplemenu_tree_output($tree, $id) {
+  $output = '';
+  $items = array();
+
+  // Pull out just the menu items we are going to render so that we
+  // get an accurate count for the first/last classes.
+  foreach ($tree as $data) {
+    if (!$data['link']['hidden']) {
+      $items[] = $data;
+    }
+  }
+
+  $last_item = count($items) - 1;
+  foreach ($items as $i => $data) {
+
+    if (empty($data['link']['localized_options'])) {
+      $link = l($data['link']['title'], $data['link']['href']);
+    }
+    else {
+      $link = l($data['link']['title'], $data['link']['href'], $data['link']['localized_options']);
+    }
+
+    $menu = $data['below'] ? simplemenu_tree_output($data['below'], $data['link']['mlid']) : '';
+
+    if ($menu) {
+      $class = 'expanded';
+    }
+    elseif ($data['link']['has_children']) {
+      $class = 'collapsed';
+    }
+    else {
+      $class = 'leaf';
+    }
+    if ($i == 0) {
+      $class .= ' first';
+    }
+    if ($i == $last_item) {
+      $class .= ' last';
+    }
+    if ($data['link']['in_active_trail']) {
+      $class .= ' active-trail';
+    }
+    $output .= '<li class="'. $class .'" id="simplemenu-li-'. $data['link']['mlid'] .'">'. $link . $menu ."</li>\n";
+  }
+
+  if ($id) {
+    $id = ' id="simplemenu-ul-' . $id . '"';
+  }
+
+  return $output ? '<ul class="menu"' . $id . '>'. $output .'</ul>' : '';
 }
 
 /**
@@ -374,20 +488,18 @@ function simplemenu_tree_all_data($root_menu = 'navigation:0') {
     }
     else {
       // Build and run the query, and build the tree.
+      $where = '';
+      $args = array($menu_name);
       if ($mlid > 0) {
         $item = menu_link_load($mlid);
-        // The tree is a subtree of $menu_name, so we need to restrict the query to
-        // this subtree.
-        $px = "p$item[depth]";
-        $where = " AND ml.$px = %d AND ml.mlid != %d";
-        $args = array($item[$px], $mlid);
+        if ($item) {
+          // The tree is a subtree of $menu_name, so we need to restrict the query to
+          // this subtree.
+          $px = "p" . (int) $item['depth'];
+          $where = " AND ml.$px = %d AND ml.mlid != %d";
+          $args = array($menu_name, $item[$px], $mlid);
+        }
       }
-      else {
-        // Get all links in this menu.
-        $where = '';
-        $args = array();
-      }
-      array_unshift($args, $menu_name);
       // Select the links from the table, and recursively build the tree.  We
       // LEFT JOIN since there is no match in {menu_router} for an external
       // link.

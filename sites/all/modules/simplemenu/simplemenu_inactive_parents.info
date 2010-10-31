@@ -6,9 +6,9 @@ core = 6.x
 package = Menu
 project = simplemenu
 
-; Information added by drupal.org packaging script on 2010-05-31
-version = "6.x-1.7"
+; Information added by drupal.org packaging script on 2010-07-24
+version = "6.x-1.9"
 core = "6.x"
 project = "simplemenu"
-datestamp = "1275339610"
+datestamp = "1280007308"
 
