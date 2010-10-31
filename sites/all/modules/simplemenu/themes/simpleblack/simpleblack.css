@@ -12,6 +12,14 @@
   text-align: left;
   list-style-image: none;
 }
+#simplemenu .simplemenu-separator {
+  display: block;
+  margin: 0;
+  background-color: #aaaaaa;
+  border-top: 1px solid #525252;
+  border-bottom: 1px solid #101010;
+  height: 2px;
+}
 #simplemenu a {
   background: transparent;
   border-bottom: none;

@@ -1,5 +1,5 @@
 <?php
-// $Id: simplemenu.admin.inc,v 1.1.2.9 2010/06/04 09:28:51 alexiswilke Exp $
+// $Id: simplemenu.admin.inc,v 1.1.2.11 2010/08/29 21:22:09 alexiswilke Exp $
 
 /**
  * @file
@@ -210,7 +210,9 @@ function simplemenu_admin_settings() {
   $form['advanced']['simplemenu_call_theme'] = array(
     '#type' => 'checkbox',
     '#title' => t('Allow Simplemenu to call the theme() function'),
-    '#description' => t('When a module calls theme() from their hook_init() function, it can break any other module that attempts to set the theme to something else than the default. By default, Simplemenu avoids the theme() function altogether meaning that its menu items may not look right in your theme, but the menu works. This flag is always ignored on the block list page.'),
+    '#description' => t('When a module calls theme() from their hook_init() function, it can break any other module that attempts to set the theme to something else than the default. By default, Simplemenu avoids the theme() function altogether meaning that its menu items may not look right in your theme, but the menu works. This flag is always ignored on the block list page.')
+      . '<br /><br />'
+      . t('IMPORTANT NOTE: SimpleMenu Inactive Parent Menu uses the theme() function and thus requires this flag to be set.'),
     '#default_value' => variable_get('simplemenu_call_theme', FALSE),
   );
 
@@ -254,7 +256,7 @@ function simplemenu_admin_settings_validate($form, &$form_state) {
  */
 function simplemenu_admin_settings_submit($form, $form_state) {
   // make sure we regenerate the CSS file
-  variable_set('simplemenu_css_filename', '');
+  variable_del('simplemenu_css_filename');
 }
 
 // vim: ts=2 sw=2 et syntax=php

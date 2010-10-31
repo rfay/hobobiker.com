@@ -1,4 +1,4 @@
-/* $Id: blackblue.css,v 1.1.2.3.2.3 2010/05/15 10:42:33 alexiswilke Exp $ */
+/* $Id: blackblue.css,v 1.1.2.3.2.4 2010/07/24 22:21:06 alexiswilke Exp $ */
 
 .simplemenu-block {
   height: 21px;
@@ -9,6 +9,13 @@
   font:11px Verdana, Helvetica, sans-serif;
   width: 100%;
   text-align: left;
+}
+#simplemenu .simplemenu-separator {
+  display: block;
+  margin: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #fff;
+  height: 2px;
 }
 #simplemenu a {
   color: #fff;
@@ -27,10 +34,17 @@
   background: url(arrow_down.gif) no-repeat 94%;
   padding-right: 18px;
 }
-#simplemenu li:hover, #simplemenu li.sfHover,
-#simplemenu a:focus, #simplemenu a:hover, #simplemenu a:active {
+#simplemenu li:hover,
+#simplemenu li.sfHover,
+#simplemenu a:focus,
+#simplemenu a:hover,
+#simplemenu a:active {
   background: #4c77b3;
   color: #fff;
+}
+#simplemenu li:hover .simplemenu-separator,
+#simplemenu li.sfHover .simplemenu-separator {
+  background: #fff;
 }
 #simplemenu li ul {
   border: 1px solid #ccc;

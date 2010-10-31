@@ -1,5 +1,19 @@
 <?php
-// $Id: simplemenu.install,v 1.1.2.5 2010/05/16 10:45:25 alexiswilke Exp $
+// $Id: simplemenu.install,v 1.1.2.6 2010/08/14 08:10:40 alexiswilke Exp $
+
+/**
+ * @file
+ * Installation and Uninstallation functions.
+ */
+
+/**
+ * Initialize some variables to values that should not otherwise
+ * be viewed as defaults.
+ */
+function simplemenu_install() {
+  // make sure we do not appear in the IMCE pop-up window
+  variable_set('simplemenu_visibility_pages', "imce*\n");
+}
 
 /**
  * Get rid of the variables used by simple menu.

@@ -1,5 +1,5 @@
 <?php
-// $Id: simplemenu.module,v 1.9.2.11.2.19 2010/07/13 06:09:59 alexiswilke Exp $
+// $Id: simplemenu.module,v 1.9.2.11.2.24 2010/08/29 21:22:09 alexiswilke Exp $
 
 /**
  * @file
@@ -132,7 +132,7 @@ function _simplemenu_add_css() {
     // XXX add a variable simplemenu_update which is set to TRUE whenever
     //     the settings get modified and false here
     $output_filename = variable_get('simplemenu_css_filename', '');
-    if (!$output_filename) {
+    if (!$output_filename || !file_exists($output_filename)) {
       $tags = array(
         '@MENUBAR_ZINDEX@' => simplemnu_get_zindex('simplemenu_menubar_zindex', 9999),
         '@DROPDOWN_ZINDEX@' => simplemnu_get_zindex('simplemenu_dropdown_zindex', 9999),
@@ -167,7 +167,7 @@ function _simplemenu_add_css() {
         // system cache will take the current Simplemenu CSS in account
         _drupal_flush_css_js();
       }
-      //variable_set('simplemenu_css_filename', $output_filename);
+      variable_set('simplemenu_css_filename', $output_filename);
     }
     drupal_add_css($output_filename);
   }
@@ -185,6 +185,16 @@ function _simplemenu_add_css() {
     // use a default that cannot react to the dynamic changes...
     drupal_add_css($simplemenu_path .'/simplemenu.css');
   }
+}
+
+/** \brief The cache is being cleared.
+ *
+ * Simplemenu uses a cache which, when being cleared, needs to be rebuilt.
+ * This means we want to delete the CSS filename info since that file is
+ * being deleted at that time.
+ */
+function simplemenu_flush_caches() {
+  variable_del('simplemenu_css_filename');
 }
 
 /** \brief Add the module theme.
@@ -379,7 +389,7 @@ function simplemenu_get_menu() {
         . ' id="simplemenu"' . substr($menu, $pos);
 
   variable_set('simplemenu_running', FALSE);
-  return '<div class="simplemenu-block">' . $menu . '&nbsp;</div>';
+  return '<div class="simplemenu-block">' . $menu . '</div>';
 }
 
 
@@ -397,6 +407,8 @@ function simplemenu_get_menu() {
  * \return The menu tree in the form of a \<ul> list.
  */
 function simplemenu_tree_output($tree, $id) {
+  static $cnt = 0;
+
   $output = '';
   $items = array();
 
@@ -408,10 +420,19 @@ function simplemenu_tree_output($tree, $id) {
     }
   }
 
+  $inactive_parents = module_exists('simplemenu_inactive_parents');
+
   $last_item = count($items) - 1;
   foreach ($items as $i => $data) {
 
-    if (empty($data['link']['localized_options'])) {
+    if ($data['link']['title'] == '-') {
+      $link = '<span class="simplemenu-separator"></span>';
+    }
+    elseif ($inactive_parents && !empty($data['link']['has_children'])) {
+      ++$cnt;
+      $link = '<a name="menu-id-' . $cnt . '">' . $data['link']['title'] . '</a>';
+    }
+    elseif (empty($data['link']['localized_options'])) {
       $link = l($data['link']['title'], $data['link']['href']);
     }
     else {
