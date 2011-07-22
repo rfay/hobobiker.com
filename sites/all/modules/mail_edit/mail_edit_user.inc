@@ -1,5 +1,4 @@
 <?php
-// $Id: mail_edit_user.inc,v 1.1.2.3 2010/05/17 22:19:52 salvis Exp $
 
 //hook_mailkeys
 function user_mailkeys() {
@@ -28,16 +27,16 @@ function user_mail_edit_tokens_list($mailkey, $options = array()) {
     case 'status_activated':
     case 'status_blocked':
     case 'status_deleted':
-      $tokens['!username']= "User's username";
-      $tokens['!username_themed']= "User's username (themed)";
-      $tokens['!site']= 'Site name';
-      $tokens['!login_url']= 'One time login URL for password reset';
-      $tokens['!uri_brief']= "Website's URL without the leading http://";
-      $tokens['!uri']= "Website's URL";
-      $tokens['!mailto']= "User's Email address (email address to which this email is being sent to)";
-      $tokens['!date']= "Date and time when this email is sent";
-      $tokens['!login_uri'] = "URL to user's profile or login form if user is not logged in";
-      $tokens['!edit_uri'] = "URL to user's profile edit page";
+      $tokens['!username']= t("User's username");
+      $tokens['!username_themed']= t("User's username (themed)");
+      $tokens['!site']= t('Site name');
+      $tokens['!login_url']= t('One time login URL for password reset');
+      $tokens['!uri_brief']= ("Website's URL without the leading http://");
+      $tokens['!uri']= t("Website's URL");
+      $tokens['!mailto']= t("User's Email address (email address to which this email is being sent to)");
+      $tokens['!date']= t("Date and time when this email is sent");
+      $tokens['!login_uri'] = t("URL to user's profile or login form if user is not logged in");
+      $tokens['!edit_uri'] = t("URL to user's profile edit page");
       break;
   }
   return $tokens;

@@ -51,12 +51,12 @@
 #simplemenu a:focus,
 #simplemenu a:hover,
 #simplemenu a:active {
-  background: #555;
+  background-color: #555;
   color: #fff;
 }
 
 ul#simplemenu a.active {
-  background: #555;
+  background-color: #555;
   color: #fff;
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.module,v 1.91 2010/05/07 12:02:36 salvis Exp $
+// $Id: subscriptions.module,v 1.93 2010/07/15 14:27:06 salvis Exp $
 
 /**
  * @mainpage Subscriptions module
@@ -171,15 +171,6 @@ function subscriptions_menu() {
     'access arguments' => array(2, 3, 4, 5, 6, 7),
   );
   return $items;
-
-  // potx fails to pick up these strings:
-  t('Add subscription');
-  t('Remove subscription');
-  t('Enables site settings for user subscriptions.');
-  t('Site settings');
-  t('User defaults');
-  t('Overview');
-  t('Interval');
 }
 
 function _subscriptions_rem_access($a2, $a3, $a4, $a5, $a6, $md) {
@@ -326,8 +317,8 @@ function subscriptions_queue($event) {
         }
         $conditions = implode(' AND ', $where);
         $sql = "
-          INSERT INTO {subscriptions_queue} (uid, name, mail, language, module, field, value, author_uid, send_interval, digest, last_sent, load_function, load_args, is_new)
-          SELECT u.uid, u.name, u.mail, u.language, s.module, s.field, s.value, s.author_uid, s.send_interval, su.digest, COALESCE(sls.last_sent, 0), '%s', '%s', '%d'
+          INSERT INTO {subscriptions_queue} (uid, name, language, module, field, value, author_uid, send_interval, digest, last_sent, load_function, load_args, is_new, suspended)
+          SELECT u.uid, u.name, u.language, s.module, s.field, s.value, s.author_uid, s.send_interval, su.digest, COALESCE(sls.last_sent, 0), '%s', '%s', '%d', suspended
           FROM {subscriptions} s
           INNER JOIN {subscriptions_user} su ON s.recipient_uid = su.uid
           INNER JOIN {users} u ON su.uid = u.uid
@@ -622,3 +613,28 @@ function subscriptions_user_load($uid) {
   }
   return $users[$uid];
 }
+
+/**
+ * Returns whether notifications are suspended for the given user,
+ * and optionally alert the user if delivery is suspended.
+ */
+function subscriptions_suspended($uid, $alert = FALSE) {
+  $result = db_result(db_query("SELECT suspended FROM {subscriptions_user} WHERE uid = %d", $uid));
+  if ($result && $alert && empty($_POST)) {
+    include_once drupal_get_path('module', 'subscriptions') .'/subscriptions.admin.inc';
+    _subscriptions_suspended_alert($uid, $result);
+  }
+  return $result;
+}
+
+/**
+ * Implementation of hook_form_alter() for the user/uid/edit form.
+ *
+ * Display a message if subscriptions notifications are suspended.
+ *
+ * @ingroup hooks
+ */
+function subscriptions_form_user_profile_form_alter(&$form, &$form_state) {
+  subscriptions_suspended(arg(1), TRUE);
+}
+

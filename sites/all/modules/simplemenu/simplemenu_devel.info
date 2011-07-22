@@ -1,4 +1,3 @@
-; $Id: simplemenu_devel.info,v 1.1.2.1 2010/05/16 09:10:28 alexiswilke Exp $
 name = SimpleMenu Devel Menu
 description = Include the developer menu in the simplemenu tree.
 dependencies[] = simplemenu
@@ -7,9 +6,9 @@ core = 6.x
 package = Menu
 project = simplemenu
 
-; Information added by drupal.org packaging script on 2010-08-30
-version = "6.x-1.13"
+; Information added by drupal.org packaging script on 2011-06-13
+version = "6.x-1.14"
 core = "6.x"
 project = "simplemenu"
-datestamp = "1283140912"
+datestamp = "1307939220"
 

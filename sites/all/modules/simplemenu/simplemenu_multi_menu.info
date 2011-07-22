@@ -1,4 +1,3 @@
-; $Id: simplemenu_multi_menu.info,v 1.1.2.1 2010/05/16 23:20:33 alexiswilke Exp $
 name = SimpleMenu Multi-Menu support
 description = Give support to display multiple menu in the top row.
 dependencies[] = simplemenu
@@ -10,9 +9,9 @@ project = simplemenu
 version = "6.x-1.x-dev"
 
 
-; Information added by drupal.org packaging script on 2010-08-30
-version = "6.x-1.13"
+; Information added by drupal.org packaging script on 2011-06-13
+version = "6.x-1.14"
 core = "6.x"
 project = "simplemenu"
-datestamp = "1283140912"
+datestamp = "1307939220"
 

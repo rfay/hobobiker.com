@@ -1,5 +1,4 @@
 <?php
-// $Id: simplemenu.admin.inc,v 1.1.2.11 2010/08/29 21:22:09 alexiswilke Exp $
 
 /**
  * @file
@@ -11,6 +10,15 @@
  */
 function simplemenu_admin_settings() {
   $simplemenu_path = drupal_get_path('module', 'simplemenu');
+
+  if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) != FILE_DOWNLOADS_PUBLIC) {
+    $form['private_warning'] = array(
+      '#value' => '<p style="color: red; font-weight: bold;">'.
+        t('WARNING: Your !file_system is set to Private. Although the menu will work, many of the options offered here will not. The JavaScript caching of the menu will be ignored. The CSS can also be changed dynamically from this form. In Private mode, unless you have Chaos Tools (ctools) installed, the default simplemenu/simplemenu.css file is used instead.',
+          array('!file_system' => l('file system', 'admin/settings/file-system')))
+        . '</p>',
+    );
+  }
 
   // menu selection
   $form['default_menu'] = array(

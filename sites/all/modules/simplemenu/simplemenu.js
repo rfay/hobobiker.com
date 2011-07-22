@@ -1,4 +1,3 @@
-// $Id: simplemenu.js,v 1.9.2.12.2.11 2010/07/25 00:49:46 alexiswilke Exp $
 
 Drupal.behaviors.simplemenuAttach = function() {
   // If detect pop-ups setting is enabled and we are in a pop-up window

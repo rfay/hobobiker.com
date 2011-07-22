@@ -1,5 +1,4 @@
 <?php
-// $Id: simplemenu.module,v 1.9.2.11.2.24 2010/08/29 21:22:09 alexiswilke Exp $
 
 /**
  * @file
@@ -125,6 +124,26 @@ function _simplemenu_add_css() {
   global $user;
 
   $simplemenu_path = drupal_get_path('module', 'simplemenu');
+
+  // set $use_ctools to false if not private downloads
+  $use_ctools = false;
+
+  // test if the file area is private as drupal_add_css fails for generated files in this case
+  if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) != FILE_DOWNLOADS_PUBLIC) {
+
+    // ctools css api can handle adding generated css with private filesystems
+    // check if there is a suitable version and set $use_ctools to true if so
+    if (module_exists('ctools') && module_invoke('ctools', 'api_version', '1.0')) {
+      ctools_include('css');
+      $use_ctools = true;
+    }
+    else {
+      // use the static version of the CSS if private files and no ctools
+      drupal_add_css($simplemenu_path .'/simplemenu.css');
+      return;   
+    }
+  }
+
   $css_path = file_create_path('css'); // same path as concatenated Core CSS
   if (file_check_directory($css_path, FILE_CREATE_DIRECTORY)) {
     $fix = variable_get('simplemenu_fix', 'scroll');
@@ -134,8 +153,8 @@ function _simplemenu_add_css() {
     $output_filename = variable_get('simplemenu_css_filename', '');
     if (!$output_filename || !file_exists($output_filename)) {
       $tags = array(
-        '@MENUBAR_ZINDEX@' => simplemnu_get_zindex('simplemenu_menubar_zindex', 9999),
-        '@DROPDOWN_ZINDEX@' => simplemnu_get_zindex('simplemenu_dropdown_zindex', 9999),
+        '@MENUBAR_ZINDEX@' => simplemenu_get_zindex('simplemenu_menubar_zindex', 9999),
+        '@DROPDOWN_ZINDEX@' => simplemenu_get_zindex('simplemenu_dropdown_zindex', 9999),
       );
       switch ($fix) {
       case 'top':
@@ -169,7 +188,13 @@ function _simplemenu_add_css() {
       }
       variable_set('simplemenu_css_filename', $output_filename);
     }
-    drupal_add_css($output_filename);
+    
+    if ($use_ctools) {
+      ctools_css_add_css($output_filename);
+    }
+    else {
+      drupal_add_css($output_filename);
+    }
   }
   else {
     // in case we cannot create the dynamic CSS
@@ -281,7 +306,7 @@ function _simplemenu_add_js() {
  *
  * \return A string representing the current value of the specified z-index.
  */
-function simplemnu_get_zindex($name, $default) {
+function simplemenu_get_zindex($name, $default) {
   $zindex = variable_get($name, $default);
 
   if ($zindex == -1) {
@@ -305,7 +330,7 @@ function simplemenu_perm() {
  * Render an HTML list of links for a given menu.
  */
 function simplemenu_get_menu() {
-  variable_set('simplemenu_running', TRUE);
+  simplemenu_running(TRUE);
 
   // if a user turned off menu module but SimpleMenu was previously set
   // reset variable so a menu appears
@@ -374,7 +399,8 @@ function simplemenu_get_menu() {
     if (variable_get('simplemenu_hide_when_empty', FALSE)) {
       // this is useful for people who have different users with
       // different roles and when some do not have enough right
-      // to see anything, the menu disappear completely
+      // to see anything, the menu disappears completely
+      simplemenu_running(FALSE);
       return;
     }
     // some default in case no menu was selected
@@ -388,8 +414,32 @@ function simplemenu_get_menu() {
   $menu = str_replace('class="menu', 'class="menu clear-block', substr($menu, 0, $pos))
         . ' id="simplemenu"' . substr($menu, $pos);
 
-  variable_set('simplemenu_running', FALSE);
+  simplemenu_running(FALSE);
   return '<div class="simplemenu-block">' . $menu . '</div>';
+}
+
+
+/**
+ * @brief Is the simplemenu being built?
+ *
+ * Track whether the simplemenu is currently being built.
+ * This allows other modules to alter their behaviour for the simplemenu.
+ *
+ * This function is safe in a multi-website or even a multi-server environment.
+ *
+ * @param optional boolean $new_state
+ *    Set to TRUE when the simplemenu is being generated.  
+ *    Set to FALSE at the end of the generation process.
+ *
+ * @return Boolean
+ * TRUE if simplemenu is currently being built.
+ */
+function simplemenu_running($new_state = NULL) {
+  static $state = FALSE;
+  if(!is_null($new_state)) {
+    $state = (bool) $state;
+  }
+  return $state;
 }
 
 
@@ -477,7 +527,7 @@ function simplemenu_tree_output($tree, $id) {
 function simplemenu_menu_tree($menu_name = 'navigation:0') {
   static $menu_tree = array();
 
-  if (!isset($menu_output[$menu_name])) {
+  if (!isset($menu_tree[$menu_name])) {
     $menu_tree[$menu_name] = simplemenu_tree_all_data($menu_name);
   }
   return $menu_tree[$menu_name];

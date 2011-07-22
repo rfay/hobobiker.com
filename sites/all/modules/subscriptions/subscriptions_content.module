@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_content.module,v 1.49 2010/04/27 19:06:52 salvis Exp $
+// $Id: subscriptions_content.module,v 1.53 2010/12/27 16:22:49 salvis Exp $
 
 /**
  * @file
@@ -225,7 +225,7 @@ function subscriptions_content_nodeapi(&$node, $op, $arg = 0) {
         _subscriptions_content_autosubscribe($node->type, 'node', 'nid', $node->nid, ($op == 'insert' ? 'on_post' : 'on_update'));
       }
 
-      if (!isset($node->subscriptions_notify) || $node->subscriptions_notify) {
+      if ((!isset($node->subscriptions_notify) || $node->subscriptions_notify) && !subscriptions_content_suppress_notifications()) {
         subscriptions_queue($event);
       }
       break;
@@ -384,7 +384,7 @@ function subscriptions_content_form_node_type_form_alter(&$form, &$form_state) {
   $tr = 't';
   $form['workflow']['subscriptions_workflow'] = array(
     '#type' => 'select',
-    '#title' => t('Default %Send_subscriptions_notifications for', array('%Send_subscriptions_notifications' => t('Send subscriptions notifications'))),
+    '#title' => t('Default %Send_subscriptions_notifications options for', array('%Send_subscriptions_notifications' => t('Send subscriptions notifications'))),
     '#default_value' => subscriptions_content_get_default_workflow($form['#node_type']->type),
     '#options' => array(
       'n_new' => t('New nodes'),
@@ -446,16 +446,32 @@ function subscriptions_content_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Implementation of hook_form_alter().
  *
+ * Add submit handler to catch bulk content operations and suppress
+ * notifications by default.
+ *
+ * @ingroup hooks
+ * @ingroup form
+ */
+function subscriptions_content_form_node_admin_content_alter(&$form, &$form_state) {
+  $form['admin']['options']['subscriptions_notify'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Send subscriptions notifications'),
+    '#description' => '<br />'. t('When publishing unpublished nodes, you probably want to turn this ON.'),
+    '#prefix' => '<br />',
+  );
+  array_unshift($form['admin']['options']['submit']['#submit'], 'subscriptions_content_node_admin_nodes_submit');
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
  * Add submit handler to catch bulk content moderation submissions.
  *
  * @ingroup hooks
  * @ingroup form
  */
 function subscriptions_content_form_node_admin_nodes_alter(&$form, &$form_state) {
-
-  $handlers = array_reverse($form['#submit']);
-  $handlers[] = 'subscriptions_content_node_admin_nodes_submit';
-  $form['#submit'] = array_reverse($handlers);  // run before node_admin_nodes_submit()!
+  array_unshift($form['#submit'], 'subscriptions_content_node_admin_nodes_submit');
 }
 
 /**
@@ -515,6 +531,10 @@ function subscriptions_content_form_comment_form_alter(&$form, &$form_state) {
  * Handle bulk publishing.
  */
 function subscriptions_content_node_admin_nodes_submit($form, &$form_state) {
+  if (!$form_state['values']['subscriptions_notify']) {
+    subscriptions_content_suppress_notifications(TRUE);
+    return;
+  }
   if ($form_state['values']['operation'] == 'publish') {
     foreach ($form_state['values']['nodes'] as $nid) {
       if ($nid != 0 && ($node = node_load($nid)) && !$node->status) {
@@ -523,6 +543,17 @@ function subscriptions_content_node_admin_nodes_submit($form, &$form_state) {
       }
     }
   }
+}
+
+/**
+ * Provide a static flag to suppress notifications.
+ */
+function subscriptions_content_suppress_notifications($set = NULL) {
+  static $suppress_notifications = FALSE; // not drupal_static!
+  if ($set !== NULL) {
+    $suppress_notifications = $set;
+  }
+  return $suppress_notifications;
 }
 
 /**
@@ -581,6 +612,7 @@ function _subscriptions_content_node_mailvars(&$mailvars, $node, $field, $s) {
   $mailvars['!title'] = trim($node->title);
   $mailvars['!teaser'] = _subscriptions_content_format_text($node->teaser, $node->format);
   $mailvars['!body'] = _subscriptions_content_format_text($node->body, $node->format);
+  $mailvars['!nid'] = $node->nid;
   $mailvars['!full_node'] = (variable_get('subscriptions_generate_full_node', 0) ? _subscriptions_content_format_text(node_view($node, FALSE, TRUE, FALSE)) : '!full_node');
   $mailvars['!is_new'] = (integer) !empty($node->_subscriptions_is_new);
   $mailvars['!is_updated'] = (integer) !empty($node->_subscriptions_is_updated);
@@ -651,8 +683,11 @@ function _subscriptions_content_format_comments($node, $comment_template, $separ
   foreach ($node->_subscriptions_comments as $comment) {
     $mailvars = array(
       '!comment_name' => ($comment->uid == 0 ? variable_get('anonymous', '!comment_name') : $comment->name),
+      '!comment_uid' => $comment->uid,
       '!comment_title' => trim($comment->subject),
       '!comment_text' => _subscriptions_content_format_text($comment->comment, $comment->format),
+      '!comment_cid' => $comment->cid,
+      '!comment_nid' => $comment->nid,
       '!comment_url' => url('node/'. $comment->nid, array('fragment' => 'comment-'. $comment->cid, 'absolute' => TRUE)),
       '!comment_is_new' => (integer)$comment->_subscriptions_is_new,
       '!comment_is_published' => (integer)($comment->status == COMMENT_PUBLISHED),
@@ -719,7 +754,7 @@ function subscriptions_content_comment_load($cid, $sqid) {
   if (empty($nid)) {
     return;
   }
-  $item = db_fetch_array(db_query('SELECT * FROM {subscriptions_queue} WHERE sqid = %d', $sqid));
+  $item = db_fetch_array(db_query('SELECT sq.module, sq.field FROM {subscriptions_queue} sq WHERE sqid = %d', $sqid));
   if ($item['module'] != 'node' || $item['field'] != 'nid') {
     // Only if we're processing a node/nid queue item should we cut off the comments at an update item, otherwise not:
     $sqid = NULL;
@@ -756,11 +791,11 @@ function _subscriptions_content_load($nid, $comment_load_sqid) {
       }
     }
     $sql = "
-      SELECT q.sqid AS _subscriptions_sqid, q.is_new AS _subscriptions_is_new, c.* 
-      FROM {comments} c 
+      SELECT q.sqid AS _subscriptions_sqid, q.is_new AS _subscriptions_is_new, c.*
+      FROM {comments} c
         INNER JOIN {subscriptions_queue} q ON ". ($GLOBALS['db_type'] == 'pgsql' ? 'CAST(' : '')
                                             ."c.cid". ($GLOBALS['db_type'] == 'pgsql' ? ' AS VARCHAR)' : '')
-                                                 ." = q.load_args AND q.uid = %d AND q.load_function = '%s' 
+                                                 ." = q.load_args AND q.uid = %d AND q.load_function = '%s'
       WHERE c.nid = %d ". $published_comments_only .' '. $limit_sqids;
     $sql = db_rewrite_sql($sql, 'c', 'cid');
     $result = db_query($sql, $user->uid, 'subscriptions_content_comment_load', $nid);
@@ -806,7 +841,7 @@ function subscriptions_content_node_form(&$form_state, $account, $form) {
     WHERE s.module = 'node' AND s.field = 'nid' AND s.recipient_uid = %d
     ORDER BY latest_activity DESC");
   $sql_count = db_rewrite_sql("
-    SELECT COUNT(n.nid) 
+    SELECT COUNT(n.nid)
     FROM {node} n
     INNER JOIN {subscriptions} s ON ". ($GLOBALS['db_type'] == 'pgsql' ? 'CAST(' : '')
                                   ."n.nid". ($GLOBALS['db_type'] == 'pgsql' ? ' AS VARCHAR)' : '')
@@ -886,11 +921,12 @@ function subscriptions_content_node_form(&$form_state, $account, $form) {
     $form['pager'] = array('#value' => theme('pager', NULL, 50, 0));
   }
   else {
-    $form = array(
-      array(
-        '#type' => 'item',
-        '#value' => t('There are no subscribed pages.'),
-      ),
+    unset($form['header']);
+    unset($form['footer']);
+    $form['notice'] = array(
+      '#type' => 'item',
+      '#value' => t('There are no subscribed pages.'),
+      '#weight' => 10,
     );
   }
   return $form;
@@ -1016,14 +1052,17 @@ function subscriptions_content_mail_edit_tokens_list($mailkey, $options = array(
         );
       }
       $tokens += array(
+        '!comment_uid'          => t('The ID of the comment author (0 = %anonymous).', array('%anonymous' => variable_get('anonymous', t('Anonymous')))),
         '!comment_title'        => t('The title of the comment.'),
         '!comment_text'         => t('The body text of the comment.'),
+        '!comment_cid'          => t('The ID of the comment.'),
+        '!comment_nid'          => t("The ID of the comment's node."),
         '!comment_url'          => t('The direct URL of the comment.'),
         '!comment_is_new'       => t('The type of comment notification: 1 = new comment, 0 = updated comment.'),
         '!comment_is_published' => t('The comment publication state: 1 = published, 0 = unpublished.<br />(Unpublished comments are sent to users with the %administer_comments permission only.)', array('%administer_comments' => $tr('administer comments'))),
       );
       return $tokens;
-      
+
     default:
       $tokens += array(
         '!unsubscribe_url'     => t('The user can unsubscribe by clicking this link.'),
@@ -1038,10 +1077,12 @@ function subscriptions_content_mail_edit_tokens_list($mailkey, $options = array(
         '!sender_page'         => t('The user page of the sender (if the sender is visible).'),
         '!sender_has_contact_page' => t("The sender's contact setting: 1 = contact form enabled, 0 = disabled."),
         '!sender_contact_page' => t('The contact page of the sender.'),
+        '!sender_uid'          => t('The ID of the sender (even if the sender is not visible!) (0 = %anonymous).', array('%anonymous' => variable_get('anonymous', t('Anonymous')))),
         '!subs_type'           => t("The type of the subscription, like '!thread' or '!category'.", array('!thread' => t('thread'), '!category' => $tr('category'))),
         '!node_type'           => t("The type of the node, like '!forum' or '!story'.", array('!forum' => 'forum', '!story' => 'story')),
         '!revision_name'       => t('The name of the user who made the last change to the node.'),
         '!revision_log'        => t('The revision log entry of the node.'),
+        '!nid'                 => t('The ID of the node.'),
         '!title'               => t('The title of the subscriptions item.'),
         '!teaser'              => t('An excerpt of the subscriptions item.'),
         '!body'                => t('The body of the subscriptions item.'),
@@ -1144,12 +1185,12 @@ function subscriptions_content_form_mail_edit_trans_alter(&$form, &$form_state) 
       '#rows' => 2,
       '#description' => t('The separator between comments (if needed).'),
     );
-    
+
     $form['op']['#submit'][] = 'subscriptions_content_form_mail_edit_trans_save';
     if (isset($form['delete'])) {
       $form['delete']['#submit'][] = 'subscriptions_content_form_mail_edit_trans_delete';
     }
-  } 
+  }
 }
 
 /**

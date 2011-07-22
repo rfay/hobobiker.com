@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_mail.install,v 1.1 2009/04/14 02:26:21 salvis Exp $
+// $Id: subscriptions_mail.install,v 1.2 2010/10/09 14:46:26 salvis Exp $
 
 /**
  * @file
@@ -16,6 +16,7 @@ function subscriptions_mail_install() {
  * Implementation of hook_uninstall().
  */
 function subscriptions_mail_uninstall() {
+  variable_del('subscriptions_mail_trash_silently');
   variable_del('subscriptions_number_of_mails');
   variable_del('subscriptions_site_mail_name');
   variable_del('subscriptions_site_mail');

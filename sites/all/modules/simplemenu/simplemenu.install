@@ -1,5 +1,4 @@
 <?php
-// $Id: simplemenu.install,v 1.1.2.6 2010/08/14 08:10:40 alexiswilke Exp $
 
 /**
  * @file
@@ -12,7 +11,7 @@
  */
 function simplemenu_install() {
   // make sure we do not appear in the IMCE pop-up window
-  variable_set('simplemenu_visibility_pages', "imce*\n");
+  variable_set('simplemenu_visibility_pages', "imce*\nnoderelationships/*\n");
 }
 
 /**

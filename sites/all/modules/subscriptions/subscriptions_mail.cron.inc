@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_mail.cron.inc,v 1.7 2010/04/21 19:32:43 salvis Exp $
+// $Id: subscriptions_mail.cron.inc,v 1.11 2010/12/27 16:22:49 salvis Exp $
 
 /**
  * @file
@@ -55,11 +55,11 @@ function _subscriptions_mail_cron() {
 
   while ((empty($mails_allowed) || $single_count + $digest_count < $mails_allowed)
           && timer_read('page')/1000 < $lost_seconds + $usable_seconds) {
-    $result = db_query_range('SELECT * FROM {subscriptions_queue} WHERE last_sent + send_interval < %d ORDER BY sqid', time(), 0, 1);
+    $result = db_query_range('SELECT * FROM {subscriptions_queue} WHERE suspended = 0 AND last_sent + send_interval < %d ORDER BY sqid', time(), 0, 1);
     if (!($s = db_fetch_array($result))) {
       break;  // No more ready queue items, terminate loop.
     }
-    
+
     $saved_user = $user;
     $saved_language = $language;
     session_save_session(FALSE);
@@ -67,9 +67,10 @@ function _subscriptions_mail_cron() {
     drupal_init_language();
     $langcode = $language->language;
     $digest_data = array();
-    
+
     do {  // once and repeat while adding to a digest
       if ($user->status && $user->access) {
+        $s['mail'] = $user->mail;
         $cids = array();
         $load_function = $s['load_function'];
         $index = $load_args = $s['load_args'];
@@ -125,6 +126,7 @@ function _subscriptions_mail_cron() {
             '!site' => variable_get('site_name', 'drupal'),
             '!recipient_name' => $s['name'],
             '!recipient_page' => url($base, array('absolute' => TRUE)),
+            '!recipient_uid' => $s['uid'],
             '!sender_name' => ($show_node_info ? ($sender->uid ? $sender->name : variable_get('anonymous', '!sender_name')) : '!sender_name'),
             '!sender_page' => ($show_node_info && $sender->uid ? url("user/$sender->uid", array('absolute' => TRUE)) : '!sender_page'),
             '!sender_contact_page' => ($show_node_info ? (empty($sender->contact) ? t('(disabled)') : url("user/$sender->uid/contact", array('absolute' => TRUE))) : '!sender_contact_page'),
@@ -210,16 +212,27 @@ function _subscriptions_mail_cron() {
 
   if ($single_count + $digest_count > 0) {
     $current_seconds = timer_read('page')/1000;
-    $watchdog = 'watchdog';  // keep potx from translating 'cron'
-    $watchdog('cron', '!Module sent !single_count single and !digest_count digest notifications in !used_seconds of !total_seconds seconds; !remaining_items queue items remaining, !remaining_seconds seconds left for other cron client modules.', array(
+    $variables = array(
       '!Module'            => 'Subscriptions',
       '!single_count'      => $single_count,
       '!digest_count'      => $digest_count,
       '!used_seconds'      => round($current_seconds - $lost_seconds),
       '!total_seconds'     => $total_seconds,
-      '!remaining_items'   => db_result(db_query("SELECT COUNT(*) FROM {subscriptions_queue} WHERE last_sent + send_interval < %d", time())),
+      '!remaining_items'   => db_result(db_query("SELECT COUNT(*) FROM {subscriptions_queue} WHERE last_sent + send_interval < %d AND suspended = 0", time())),
+      '!suspended_items'   => db_result(db_query("SELECT COUNT(*) FROM {subscriptions_queue} WHERE last_sent + send_interval < %d AND suspended <> 0", time())),
       '!remaining_seconds' => round($total_seconds - $current_seconds),
-    ));
+      '%varname'           => 'subscriptions_mail_trash_silently',
+      '!cron'              => 'cron',
+    );
+    if (variable_get('subscriptions_mail_trash_silently', 0)) {
+      $message = t('!Module DISCARDED !single_count single and !digest_count digest notifications in !used_seconds of !total_seconds seconds, due to the %varname variable being set.', $variables);
+    }
+    else {
+      $message = t('!Module sent !single_count single and !digest_count digest notifications in !used_seconds of !total_seconds seconds.', $variables);
+    }
+    $message .= ' '. t('!remaining_items queue items remaining (plus !suspended_items suspended), !remaining_seconds seconds left for other @cron client modules.', $variables);
+    $watchdog = 'watchdog'; // keep potx from translating 'cron'
+    $watchdog('cron', $message);
   }
 }
 
@@ -230,7 +243,7 @@ function subscriptions_mail_mail($key, &$message, $params) {
   global $base_url;
 
   $url = parse_url($base_url);
-  $list_id = variable_get('site_name', '') .' '. t('Subscriptions') .' <subscriptions.'. $url['host'] .'>'; 
+  $list_id = variable_get('site_name', '') .' '. t('Subscriptions') .' <subscriptions.'. $url['host'] .'>';
 
   $message['subject'] = $params['context']['subject'];
   $message['body'] = $params['context']['message'];
@@ -243,6 +256,11 @@ function subscriptions_mail_mail($key, &$message, $params) {
  */
 function _subscriptions_mail_send($mailkey, $name, $to, $subject, $body, $from, $uid, $send_intervals) {
   global $user;
+
+  if (variable_get('subscriptions_mail_trash_silently', 0)) {
+    // Block notification mail; useful for staging and development servers.
+    return;
+  }
 
   $mail_success = drupal_mail('subscriptions_mail', $mailkey, $to, user_preferred_language($user), array(
     'account' => $user,

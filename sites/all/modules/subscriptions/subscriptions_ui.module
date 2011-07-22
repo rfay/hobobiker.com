@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions_ui.module,v 1.19 2010/06/03 20:58:25 salvis Exp $
+// $Id: subscriptions_ui.module,v 1.20 2010/06/10 20:45:59 salvis Exp $
 
 /**
  * @file
@@ -78,6 +78,7 @@ function subscriptions_ui_link($type, $node = NULL, $teaser = NULL) {
   global $user;
   
   if ($type == 'node' && subscriptions_ui_can_subscribe() && empty($teaser)) {
+    subscriptions_suspended($user->uid, TRUE);
     if (variable_get('subscriptions_form_link_only', 0) && arg(2) != 'subscribe' && (!variable_get('subscriptions_avoid_empty_subscribe_links', 0) || module_invoke_all('subscriptions', 'node_options', $user, $node))) {
       $blocked_types = variable_get('subscriptions_blocked_content_types', array());
       if (in_array($node->type, $blocked_types) && !user_access('subscribe to all content types')) {

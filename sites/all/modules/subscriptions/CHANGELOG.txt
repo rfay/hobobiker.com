@@ -1,6 +1,20 @@
+$Id: CHANGELOG.txt,v 1.131 2011/02/19 01:13:47 salvis Exp $
+
 CHANGELOG for Subscriptions 1.x for Drupal 6
 
+
 Subscriptions 6.x-1.x-dev:
+
+
+Subscriptions 6.x-1.4 (2011-02-19):
+  Enhancements:
+   - #1007566, #952170: Add ID mailvars: !recipient_uid, !nid, !sender_uid, !comment_uid, !comment_cid, !comment_nid.
+   - #928116: Add subscriptions_mail_trash_silently kill-switch.
+   - Default to suppress notifications on bulk node updates.
+   - #840812: Clarify "digest mode" description in the case where the "send interval" is inaccessible.
+   - Implement suspending sending of notifications and avoid using obsolete mail addresses.
+  Bugs fixed:
+   - Fix links in suspension message.
 
 
 Subscriptions 6.x-1.3 (2010-06-10):
@@ -18,7 +32,6 @@ Subscriptions 6.x-1.3 (2010-06-10):
    - #792496: Fix taxonomy subscriptions creating multiple queue entries.
    - #751212: Avoid rvalue->member construct, which is apparently not supported by PHP 4.x.
    - Avoid double check_plain() causing taxonomy terms to be double-&quote;quoted&quote;.
-
 
 Subscriptions 6.x-1.2 (2010-02-17):
   Enhancements:

@@ -1,5 +1,4 @@
 <?php
-// $Id: simplemenu_inactive_parents.module,v 1.1.2.3 2010/05/16 23:20:01 alexiswilke Exp $
 
 /**
  * @file
@@ -45,7 +44,7 @@ function simplemenu_inactive_parents_theme_menu_item_link($link) {
   static $cnt = 0;
 
   // this is a drop down?
-  if (!empty($link['has_children']) && variable_get('simplemenu_running', FALSE)) {
+  if (!empty($link['has_children']) && simplemenu_running()) {
     ++$cnt;
     return '<a name="menu-id-' . $cnt . '">' . $link['title'] . '</a>';
   }

@@ -262,3 +262,24 @@ subscribers.
 
 
 
+
+Blocking sending of email notifications
+---------------------------------------
+
+The Subscriptions module can be configured to discard all notification emails
+by adding a kill-switch in your settings.php file. This is often useful during
+development and testing when you have a database of real users subscribed to
+receive notifications, but you do not wish to send these notifications from a
+development or staging server.
+
+Add a single line at the end of the settings.php file like this:
+
+  $conf['subscriptions_mail_trash_silently'] = TRUE;
+
+Note that by default, this variable is set to FALSE, unless you specifically
+override it. Although it cannot be configured directly from the settings page
+in the administration interface, you will receive an error message on that
+page to remind you that this kill-switch has been enabled from the code.
+
+Also see the MailLog module for site-wide control that allows blocking of all
+email messages.

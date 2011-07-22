@@ -1,5 +1,5 @@
 <?php
-// $Id: subscriptions.admin.inc,v 1.23 2010/04/27 17:07:21 salvis Exp $
+// $Id: subscriptions.admin.inc,v 1.26 2010/07/12 11:03:13 salvis Exp $
 
 /**
  * @file
@@ -266,6 +266,11 @@ function subscriptions_page($account, $stype) {
       );
   }
   else {
+    subscriptions_suspended(arg(1), TRUE);
+    //if (variable_get('subscriptions_hide_overview_page', 0)) {
+    //  $dummy_form_state = NULL;
+    //  $form = subscriptions_user_suspend_form($dummy_form_state, $account);
+    //}
     $form['header'][] = array(
       '#value'         => t('Current subscriptions:'),
       '#weight'        => -2,
@@ -331,10 +336,106 @@ function subscriptions_page_user_overview($account) {
   $output  = theme('table', $header, $rows);
   $output .= theme('item', array('#value' => '', '#description' => t('Note: The counts on this page may differ from the ones on the detail pages for various technical reasons.')));
   $output .= '<br />';
-
+  if (isset($account)) {
+    $output .= drupal_get_form('subscriptions_user_suspend_form', $account);
+  }
   $output .= drupal_get_form('subscriptions_user_settings_form', $account);
   drupal_set_title($uid < 0 ? t('Subscriptions') : check_plain($account->name));
   return $output;
+}
+
+/**
+ * Returns the form definition for the suspend part of the overview page.
+ *
+ * @params $account
+ *   Must be a valid user account from user_load().
+ *
+ * @ingroup form
+ */
+function subscriptions_user_suspend_form(&$form_state, $account) {
+  $uid = $account->uid;
+  $suspended = subscriptions_suspended($account->uid, TRUE);
+  $tr = 't';
+  $form['suspend'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => $tr('Delivery of notifications'),
+    '#weight'        => 5,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => !$suspended,
+  );
+  $count = 0;
+  if ($suspended) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {subscriptions_queue} WHERE uid = %d AND suspended <> 0", $uid));
+  }
+  $options[] = $tr('Yes');
+  if ($count > 0) {
+    $form['suspend']['queued'] = array(
+      '#value'       => '<div>'. t('You have %count items queued for delivery. (The number of resulting notifications will typically be much smaller.)', array('%count' => $count)) .'</div>',
+    );
+    $options[-1] = t('!Yes, but drop the queued items', array('!Yes' => $tr('Yes')));
+  }
+  $options[] = $tr('No');
+  if (user_access('administer user subscriptions')) {
+    $options[2] = t('!No, and alert user to bad email address (administrator option)', array('!No' => $tr('No')));
+  }
+  $form['suspend']['state'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Receive notifications'),
+    '#description'   => t('You can temporarily suspend notifications from being sent, e.g. during a vacation. They will be retained and sent after you reenable notifications.'),
+    '#default_value' => ( user_access('administer user subscriptions') ? $suspended : min($suspended, 1) ),
+    '#options'       => $options,
+  );
+  $form['suspend']['uid'] = array(
+    '#type'          => 'value',
+    '#value'         => $uid,
+  );
+  $form['suspend']['save'] = array(
+    '#type'          => 'submit',
+    '#value'         => t('Save'),
+  );
+  return $form;
+}
+
+/**
+ * User suspend subform submit handler.
+ *
+ * @ingroup form
+ */
+function subscriptions_user_suspend_form_submit($form, &$form_state) {
+  $form_values = $form_state['values'];
+  if ($form_values['op'] == $form_values['save']) {
+    $uid = $form_values['uid'];
+    $suspended = $form_values['state'];
+    if ($suspended == -1) {
+      db_query("DELETE FROM {subscriptions_queue} WHERE uid = %d AND suspended <> 0", $uid);
+      $suspended = 0;
+    }
+    db_query("UPDATE {subscriptions_user} SET suspended = %d WHERE uid = %d", $suspended, $uid);
+    db_query("UPDATE {subscriptions_queue} SET suspended = %d WHERE uid = %d", $suspended, $uid);
+    drupal_set_message(t('The changes have been saved.'));
+  }
+}
+
+/**
+ * Helper function to display a message to the user if notifications
+ * are suspended.
+ */
+function _subscriptions_suspended_alert($uid, $suspended) {
+  $path2 = url("user/$uid/subscriptions/overview", array('fragment' => 'subscriptions-user-suspend-form'));
+  switch ($suspended) {
+    case 2:
+      $msg = t('Your subscriptions have been suspended because your e-mail address does not work anymore!');
+      if (!(arg(0) == 'user' && arg(1) == $uid && arg(2) == 'edit')) {
+        drupal_set_message($msg .'<br />'. t('Please go <a href="@path1">here</a> to update your e-mail address and then <a href="@path2">here</a> to resume delivery of your notifications.', array('@path1' => url("user/$uid/edit"), '@path2' => $path2)), 'error', FALSE);
+      }
+      else {
+        drupal_set_message($msg .'<br />'. t('Please correct/verify your e-mail address below and then go <a href="@path2">here</a> to resume delivery of your notifications.', array('@path2' => $path2)), 'error', FALSE);
+      }
+      break;
+    case 1:
+      drupal_set_message(t('Your subscriptions are suspended. Please go <a href="@path2">here</a> to resume delivery of your notifications.', array('@path2' => $path2)), 'warning', FALSE);
+      break;
+  }
 }
 
 /**
@@ -390,7 +491,7 @@ function subscriptions_user_settings_form(&$form_state, $account) {
       '#type'          => 'checkbox',
       '#title'         => t('Hide the %Overview page from your users', array('%Overview' => t('Overview'))),
       '#default_value' => variable_get('subscriptions_hide_overview_page', 0),
-      '#description'   => t("If you hide this page, your users won't be able to change any of these settings. The default is OFF."),
+      '#description'   => t("If you hide this page, your users won't be able to change any of these settings. The default is OFF.") .'<br />'. t('Also, you must give your users the %subscribe_to_content permission, so that they have access to the %Pages_Threads page!', array('%subscribe_to_content' => $tr('subscribe to content'), '%Pages_Threads' => $tr('Pages/Threads'))),
     );
   }
   $form['settings']['autosub'] = array(
@@ -429,6 +530,11 @@ function subscriptions_user_settings_form(&$form_state, $account) {
     '#default_value' => _subscriptions_get_setting('digest', $account),
     '#description'   => t("Merges your notifications into a single email, sent at the interval you specify."),
   );
+  if (_subscriptions_get_setting('send_interval_visible', $account) == -2) {
+    $interval = _subscriptions_send_intervals();
+    $interval = $interval[_subscriptions_get_setting('send_interval', $account)];
+    $form['settings']['digest']['#description'] = t('Merges your notifications into a single email, sent at regular intervals (%interval).', array('%interval' => $interval));
+  }
   $form['settings']['preferences'] = array(
     '#type'          => 'fieldset',
     '#title'         => t('Preferences'),
@@ -526,7 +632,6 @@ function subscriptions_user_settings_form(&$form_state, $account) {
       '#value'       => t('Reset to site defaults'),
     );
   }
-  $form['settings']['#submit'][] = 'subscriptions_user_options_submit';
   return $form;
 }
 
@@ -548,7 +653,7 @@ function subscriptions_user_settings_form_submit($form, &$form_state) {
     }
     else {
       $uid = -DRUPAL_AUTHENTICATED_RID;
-      if (variable_get('subscriptions_hide_overview_page', 0) != $form_state['values']['hide_overview_page']) { 
+      if (variable_get('subscriptions_hide_overview_page', 0) != $form_state['values']['hide_overview_page']) {
         variable_set('subscriptions_hide_overview_page', $form_state['values']['hide_overview_page']);
         menu_rebuild();
       }

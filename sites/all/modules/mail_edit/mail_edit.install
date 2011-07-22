@@ -1,5 +1,4 @@
 <?php
-// $Id: mail_edit.install,v 1.1.4.4 2008/12/23 00:45:39 litwol Exp $
 
 function mail_edit_install() {
   if (db_table_exists('mail_edit') && !db_table_exists('mail_edit_registry')) {
@@ -22,36 +21,36 @@ function mail_edit_uninstall() {
 function mail_edit_schema() {
   
   $schema['mail_edit'] = array(
-    'description' => t(''),
+    'description' => '',
     'fields' => array(
       'description' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'subject' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'id' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'language' => array(
         'type' => 'varchar',
         'length' => '10',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'body' => array(
         'type' => 'text',
         'size' => 'normal',
-        'description' => t(''),
+        'description' => '',
       ),
     ),
     'primary key' => array('id', 'language'),
@@ -60,31 +59,31 @@ function mail_edit_schema() {
     ),
   );
   $schema['mail_edit_registry'] = array(
-    'description' => t(''),
+    'description' => '',
     'fields' => array(
       'id' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'module' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'mailkey' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),
       'description' => array(
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'description' => t(''),
+        'description' => '',
       ),      
     ),
     'primary key' => array('id'),
@@ -112,36 +111,36 @@ function mail_edit_update_6000() {
 
     // Now install the D6 schema as of update_6000:
     $schema['mail_edit'] = array(
-      'description' => t(''),
+      'description' => '',
       'fields' => array(
         'description' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'subject' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'id' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'language' => array(
           'type' => 'varchar',
           'length' => '10',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'body' => array(
           'type' => 'text',
           'size' => 'normal',
-          'description' => t(''),
+          'description' => '',
         ),
       ),
       'primary key' => array('id', 'language'),
@@ -150,31 +149,31 @@ function mail_edit_update_6000() {
       ),
     );
     $schema['mail_edit_registry'] = array(
-      'description' => t(''),
+      'description' => '',
       'fields' => array(
         'id' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'module' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'mailkey' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),
         'description' => array(
           'type' => 'varchar',
           'length' => '255',
           'not null' => TRUE,
-          'description' => t(''),
+          'description' => '',
         ),      
       ),
       'primary key' => array('id'),

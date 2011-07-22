@@ -1,5 +1,4 @@
 <?php
-// $Id: simplemenu_multi_menu.module,v 1.1.2.1 2010/05/16 23:20:33 alexiswilke Exp $
 
 /**
  * @file
@@ -71,7 +70,7 @@ function simplemenu_multi_menu_theme_menu_item_link($link) {
   static $cnt = 0;
 
   // this is a drop down?
-  if (!empty($link['simplemenu_multi_menu_root']) && variable_get('simplemenu_running', FALSE)) {
+  if (!empty($link['simplemenu_multi_menu_root']) && simplemenu_running()) {
     ++$cnt;
     return '<a name="menu-id-' . $cnt . '">' . $link['title'] . '</a>';
   }
