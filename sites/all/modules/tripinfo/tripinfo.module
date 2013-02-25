@@ -15,56 +15,34 @@
 
 function tripinfo_menu() {
 
-
-  /* TODO
-   Non menu code that was placed in hook_menu under the '!$may_cache' block
-   so that it could be run during initialization, should now be moved to hook_init.
-   Previously we called hook_init twice, once early in the bootstrap process, second
-   just after the bootstrap has finished. The first instance is now called boot
-   instead of init.
-    
-   In Drupal 6, there are now two hooks that can be used by modules to execute code
-   at the beginning of a page request. hook_boot() replaces hook_boot() in Drupal 5
-   and runs on each page request, even for cached pages. hook_boot() now only runs
-   for non-cached pages and thus can be used for code that was previously placed in
-   hook_menu() with $may_cache = FALSE:
-    
-   Dynamic menu items under a '!$may_cache' block can often be simplified
-   to remove references to arg(n) and use of '%<function-name>' to check
-   conditions. See http://drupal.org/node/103114.
-    
-   The title and description arguments should not have strings wrapped in t(),
-   because translation of these happen in a later stage in the menu system.
-   */
-
   $items['tripinfo'] = array(
-	'title' => 'Hobobiker Trip Details',
-	'page callback' => 'tripinfo_list',
-	'access arguments' => array('access content'),
-	'type' => MENU_CALLBACK
+    'title' => 'Hobobiker Trip Details',
+    'page callback' => 'tripinfo_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
 
   $items['tripinfo_item'] = array(
-	'page callback' => 'tripinfo_item',
-	'access arguments' => array('access content'),  
-	'type' => MENU_CALLBACK
+    'page callback' => 'tripinfo_item',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
 
   $items['tripinfo_maponly'] = array(
-	'page callback' => 'tripinfo_maponly',
-	'access arguments' => array('access content'),  
-	'type' => MENU_CALLBACK
+    'page callback' => 'tripinfo_maponly',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
 
   $items['loadnode'] = array(
-	'page callback' => 'tripinfo_loadnode',
-	'access arguments' => array('access content'),  
-	'type' => MENU_CALLBACK
+    'page callback' => 'tripinfo_loadnode',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
   $items['mappage'] = array(
-	'page callback' => 'tripinfo_mappage',
-	'access arguments' => array('access content'),  
-	'type' => MENU_CALLBACK
+    'page callback' => 'tripinfo_mappage',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
   );
 
   return $items;
@@ -72,14 +50,13 @@ function tripinfo_menu() {
 
 
 function validate_date($date) {
-  list($y,$m, $d) = split('-', $date, 3);
+  list($y, $m, $d) = split('-', $date, 3);
   return sprintf("%04d-%02d-%02d", $y, $m, $d);
-
 }
 
 function tripinfo_list() {
-  $startdate="2007-01-30";
-  $enddate="2009-06-30";
+  $startdate = "2007-01-30";
+  $enddate = "2009-06-30";
 
   if ($_REQUEST['startdate']) {
     $startdate = validate_date($_GET['startdate']);
@@ -111,12 +88,16 @@ function tripinfo_list() {
 
 
 function tripinfo_gmap($overlays) {
+  drupal_set_html_head('<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?sensor=false&key=' . variable_get('googlemap_api_key', '') . '"
+    </script>');
 
-  drupal_set_html_head('<script src="http://maps.google.com/maps?file=api&v=2&hl=en&key='.variable_get('googlemap_api_key', '').'" type="text/javascript"></script>');
-  drupal_add_js(drupal_get_path('module','tripinfo')."/tripinfo_filtermap.js");
+  drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_filtermap.js");
 
   $output .= "<div style='height:500px;width:100%'><div class='mapholder' id='mapholder' style='width:100%;height:100%'>
 	 <div class='filtermap' id='filtermap' style='width:100%;height:100%;border:2px solid black'></div>";
+
+  // TODO: This should be done with Drupal.settings
   foreach ($overlays as $overlay) {
     $output .= "<div class='geoxmlfile' style='display:none'>$overlay</div>";
     if (strlen($urllist)) {
@@ -124,17 +105,23 @@ function tripinfo_gmap($overlays) {
     }
     $urllist .= $overlay;
   }
-  $kmlfile=$overlays[0];
-  $urllist=drupal_urlencode($urllist);
-  
-  $output .= "You can ".
-   l("explore this in a larger window","tripinfo_maponly", 
-   array('query'=>"overlays=$urllist", 'attributes'=>array('id'=>'filtermap_largerlink', 'target'=>'_blank', 'class'=>$thickboxclass)));
-  $output .= "or ". 
-  l("Explore in Google Earth",$kmlfile) . "</div></div>";
+  $kmlfile = $overlays[0];
+  $urllist = drupal_urlencode($urllist);
+
+  $output .= "You can " .
+    l("explore this in a larger window", "tripinfo_maponly",
+      array(
+        'query' => "overlays=$urllist",
+        'attributes' => array(
+          'id' => 'filtermap_largerlink',
+          'target' => '_blank',
+          'class' => $thickboxclass
+        )
+      ));
+  $output .= "or " .
+    l("Explore in Google Earth", $kmlfile) . "</div></div>";
 
   return $output;
-
 }
 
 
@@ -144,67 +131,57 @@ function tripinfo_item() {
     $date = validate_date($_GET['date']);
   }
   $startdate = $_REQUEST['startdate'];
-  $enddate=$_REQUEST['enddate'];
-  list($year,$month,$day) = split("-",$date);
-  $unixtime=mktime(0,0,0,$month,$day,$year);
+  $enddate = $_REQUEST['enddate'];
+  list($year, $month, $day) = split("-", $date);
+  $unixtime = mktime(0, 0, 0, $month, $day, $year);
 
   $date .= "T00:00:00";
-  $query="select body, field_date_value date, month(field_date_value) month,
+  $query = "select body, field_date_value date, month(field_date_value) month,
 	    day(field_date_value) day, year(field_date_value) year, field_start_value start,
-		field_destination_value destination, field_miles_value miles, 
+		field_destination_value destination, field_miles_value miles,
 		field_elevation_gain_value ElevGain, field_camp_or_hotel_value
-		from 
+		from
 		content_type_triplog t, node_revisions r
-		
-		where r.nid = t.nid and r.vid = t.vid 
+
+		where r.nid = t.nid and r.vid = t.vid
 		and field_date_value = '$date'";
 
 
   $sth = db_query($query);
-  if (! $sth) { die ("query: $query failed"); return -2; }
+  if (!$sth) {
+    die ("query: $query failed");
+    return -2;
+  }
 
   $row = db_fetch_object($sth);
 
-  //	$prevdate = db_fetch_object(db_query(
-  //		'select left(field_date_value,10) date, field_start_value start,field_destination_value dest from content_type_triplog t
-  //		   where t.field_date_value < "%s" order by field_date_value desc limit 1',
-  //		   $date));
-  //	$nextdate = db_fetch_object(db_query(
-  //		'select left(field_date_value,10) date,field_start_value start,field_destination_value dest from content_type_triplog t
-  //		   where t.field_date_value > "%s" order by field_date_value asc limit 1',
-  //		   $date));
+  $fulldate = sprintf("%04d%02d%02d", $row->year, $row->month, $row->day);
+  $mysqldate = sprintf("%04d-%02d-%02d", $row->year, $row->month, $row->day);
+  $mysqltomorrow = strftime("%Y-%m-%d", $unixtime + 3600 * 24);
 
-  $fulldate=sprintf("%04d%02d%02d",$row->year, $row->month,$row->day);
-  $mysqldate=sprintf("%04d-%02d-%02d",$row->year, $row->month,$row->day);
-  $mysqltomorrow=strftime("%Y-%m-%d",$unixtime+3600*24);
-
-  $gpxfname="files/gps/$fulldate.gpx";
-  $kmlfname="files/gps/$fulldate.kml";
-  $profile_fname="files/gps/$fulldate.png";
-  $kmlurl="http://www.hobobiker.com/$kmlfname";
-  $rssurl="http://www.hobobiker.com/flickr_georss/?min_taken_date=$mysqldate&max_taken_date=$mysqltomorrow";
+  $gpxfname = "files/gps/$fulldate.gpx";
+  $kmlfname = "files/gps/$fulldate.kml";
+  $profile_fname = "files/gps/$fulldate.png";
+  $kmlurl = "http://www.hobobiker.com/$kmlfname";
+  $rssurl = "http://www.hobobiker.com/flickr_georss/?min_taken_date=$mysqldate&max_taken_date=$mysqltomorrow";
 
 
-
-
-  $whentime = mktime(12,0,0,$row->month, $row->day, $row->year);
+  $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
   $when = strftime("%B %d, %Y", $whentime);
 
-  $page .= ($tripinfo_nav = theme_tripinfo_navigation($date,$startdate,$enddate));
-
+  $page .= ($tripinfo_nav = theme_tripinfo_navigation($date, $startdate, $enddate));
 
   $page .= "<h3>$when: $row->start to $row->destination</h3>";
 
   if (file_exists($kmlfname)) {
-    $page .= tripinfo_gmap(array($kmlurl,$rssurl));
+    $page .= tripinfo_gmap(array($kmlurl, $rssurl));
   }
-
 
   $page .= "<div class=\"tripdesc\" style='border-top: 2px solid black;'><i>$row->body</i></div>";
 
   $page .= "<ul>";
-  $km = round($row->miles/.62);
-  $meters = round($row->ElevGain/3.24);
+  $km = round($row->miles / .62);
+  $meters = round($row->ElevGain / 3.24);
   $page .= "<li>$row->miles miles/$km kilometers</li>";
   $page .= "<li><a href='#profile'>Elevation Gain: $row->ElevGain feet/$meters meters</a></li>";
   $page .= "<li>Where we stayed: $row->field_camp_or_hotel_value</li>";
@@ -226,19 +203,17 @@ function tripinfo_item() {
   $page .= $tripinfo_nav;
 
   return $page;
-
 }
 
 function tripinfo_table($startdate, $enddate) {
 
-  $query="select field_date_value date, month(field_date_value) month,
+  $query = "select field_date_value date, month(field_date_value) month,
 	    day(field_date_value) day, year(field_date_value) year, field_start_value start,
-		field_destination_value destination, field_miles_value miles, 
+		field_destination_value destination, field_miles_value miles,
 		field_elevation_gain_value ElevGain, field_camp_or_hotel_value 'Where stayed'
-		from content_type_triplog 
-		where field_date_value >= '$startdate' and field_date_value <= '$enddate' 
+		from content_type_triplog
+		where field_date_value >= '$startdate' and field_date_value <= '$enddate'
 		and field_miles_value <> 0 order by field_date_value asc";
-
 
 
   // $page .= "$query";
@@ -248,24 +223,27 @@ function tripinfo_table($startdate, $enddate) {
 		<th>Elev ft/mt</th></tr>\n";
 
   $sth = db_query($query);
-  if (! $sth) { die ("query: $query failed"); return -2; }
+  if (!$sth) {
+    die ("query: $query failed");
+    return -2;
+  }
 
   while ($row = db_fetch_object($sth)) {
 
-    $fulldate=sprintf("%04d%02d%02d",$row->year, $row->month,$row->day);
+    $fulldate = sprintf("%04d%02d%02d", $row->year, $row->month, $row->day);
 
-    $date =  sprintf("%04d-%02d-%02d",$row->year, $row->month,$row->day);
+    $date = sprintf("%04d-%02d-%02d", $row->year, $row->month, $row->day);
     $location = $row->location;
     $miles = $row->miles;
     $elevgain = $row->ElevGain;
     $page .= "<tr>";
 
     $page .= "<th scope='row'>" . l("$row->start to $row->destination",
-      "tripinfo_item", array('query'=>"date=$date&startdate=$startdate&enddate=$enddate")) . "</th>";
+      "tripinfo_item", array('query' => "date=$date&startdate=$startdate&enddate=$enddate")) . "</th>";
     $page .= "<td>$date</td>";
 
-    $km = round($row->miles/.62);
-    $elevgainmt = round($row->ElevGain/3.24);
+    $km = round($row->miles / .62);
+    $elevgainmt = round($row->ElevGain / 3.24);
     $page .= "<td>$row->miles/$km</td><td>$row->ElevGain/$elevgainmt</td>";
     $page .= "</tr>";
   }
@@ -277,27 +255,27 @@ function tripinfo_table($startdate, $enddate) {
 }
 
 
-function tripinfo_filter($op, $delta=0, $format=-1, $text='') {
-  switch($op) {
+function tripinfo_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
     case 'list':
-      return array(0=>'Multiple-source Google Map (multisource)');
+      return array(0 => 'Multiple-source Google Map (multisource)');
     case 'description':
       return t('Create a google map from multiple XML or GEOrss sources. Use "multisource:http:...,http://..."');
     case 'settings':
       break;
     case 'no cache':
-      return false; // debugging only
+      return FALSE; // debugging only
     case 'prepare':
       return $text;
     case 'process':
-      return tripinfo_filter_gmap($format,$text);
+      return tripinfo_filter_gmap($format, $text);
     default:
       return $text;
   }
 
 }
 
-function tripinfo_filter_gmap($format,$text) {
+function tripinfo_filter_gmap($format, $text) {
   $text = preg_replace_callback('/\[multisource:(.+?)\]/', 'tripinfo_gen_gmap', $text);
 
   return $text;
@@ -313,22 +291,30 @@ function tripinfo_gen_gmap($text) {
 ?>
 ENDOUTPUT;
 
-  $overlays = split(",\w*",$text[1]);
+  $overlays = split(",\w*", $text[1]);
   $output .= "<div class='mapholder' id='mapholder'><div class='filtermap' id='filtermap'></div>";
   foreach ($overlays as $overlay) {
     $output .= "<div class='geoxmlfile' style='display:none'>$overlay</div>";
-    if (strlen($urllist)) { $urllist .= ","; }
+    if (strlen($urllist)) {
+      $urllist .= ",";
+    }
     $urllist .= $overlay;
   }
   $urllist = drupal_urlencode($urllist);
-  $output .= "You can " . l("explore this in a larger window","tripinfo_maponly",
-    array('query'=>"overlays=$urllist", 'attributes'=>array('id'=>'filtermap_largerlink', 'target'=>'_blank')));
-  $output .= " or ".l("explore in Google Earth",$overlays[0]) . "</div>";
+  $output .= "You can " . l("explore this in a larger window", "tripinfo_maponly",
+    array(
+      'query' => "overlays=$urllist",
+      'attributes' => array(
+        'id' => 'filtermap_largerlink',
+        'target' => '_blank'
+      )
+    ));
+  $output .= " or " . l("explore in Google Earth", $overlays[0]) . "</div>";
 
   return $output;
 }
 
-function theme_tripinfo_navigation($date,$startdate,$enddate) {
+function theme_tripinfo_navigation($date, $startdate, $enddate) {
   $output = '';
   $links = '';
 
@@ -336,23 +322,40 @@ function theme_tripinfo_navigation($date,$startdate,$enddate) {
 
     if ($prev = tripinfo_item_prev($date)) {
       // drupal_add_link(array('rel' => 'prev', 'href' => "tripinfo_item/?date=$prev->item&startdate=$startdate&enddate=$enddate"));
-      $links .=       
-        l('‹ ' . $prev->title, "tripinfo_item",  
-        array( 'query'=>"date=$prev->item&startdate=$startdate&enddate=$enddate", 'attributes' => array('class' => 'page-previous', 'title' => t('Go to previous page'))));
+      $links .=
+        l('‹ ' . $prev->title, "tripinfo_item",
+          array(
+            'query' => "date=$prev->item&startdate=$startdate&enddate=$enddate",
+            'attributes' => array(
+              'class' => 'page-previous',
+              'title' => t('Go to previous page')
+            )
+          ));
       // TODO remove # , "date=$prev->item&startdate=$startdate&enddate=$enddate");
     }
     if ($startdate) {
       //drupal_add_link(array('rel' => 'up', 'href' => "tripinfo/?startdate=$startdate&enddate=$enddate"));
-      $links .= 
-        l(t('Up') , "tripinfo", array('query'=>"startdate=$startdate&enddate=$enddate", 'attributes'=>array('class' => 'page-up', 'title' => t('Go back to list'))));
+      $links .=
+        l(t('Up'), "tripinfo", array(
+          'query' => "startdate=$startdate&enddate=$enddate",
+          'attributes' => array(
+            'class' => 'page-up',
+            'title' => t('Go back to list')
+          )
+        ));
       //TODO remove #,"startdate=$startdate&enddate=$enddate");
     }
     if ($next = tripinfo_item_next($date)) {
       //drupal_add_link(array('rel' => 'next', 'href' => "tripinfo_item/?date=$next->item&startdate=$startdate&enddate=$enddate"));
-      $links .= 
-      l($next->title . ' ›', "tripinfo_item", 
-        array('query'=>"date=$next->item&startdate=$startdate&enddate=$enddate",  
-        'attributes'=>array('class' => 'page-next', 'title' => t('Go to next page'))));
+      $links .=
+        l($next->title . ' ›', "tripinfo_item",
+          array(
+            'query' => "date=$next->item&startdate=$startdate&enddate=$enddate",
+            'attributes' => array(
+              'class' => 'page-next',
+              'title' => t('Go to next page')
+            )
+          ));
       // TODO remove #, "date=$next->item&startdate=$startdate&enddate=$enddate");
     }
 
@@ -362,7 +365,7 @@ function theme_tripinfo_navigation($date,$startdate,$enddate) {
         $output .= $tree;
       }
       if (isset($links)) {
-        $output .= '<div class="page-links clear-block">'. $links .'</div>';
+        $output .= '<div class="page-links clear-block">' . $links . '</div>';
       }
       $output .= '</div>';
     }
@@ -373,36 +376,38 @@ function theme_tripinfo_navigation($date,$startdate,$enddate) {
 
 function tripinfo_item_prev($date) {
   $prevdate = db_fetch_object(db_query(
-	'select left(field_date_value,10) item, field_start_value start,field_destination_value dest from content_type_triplog t
+    'select left(field_date_value,10) item, field_start_value start,field_destination_value dest from content_type_triplog t
 	   where t.field_date_value < "%s" order by field_date_value desc limit 1',
-  $date));
-  $prevdate->title="$prevdate->start to $prevdate->dest";
+    $date));
+  $prevdate->title = "$prevdate->start to $prevdate->dest";
   return $prevdate;
 }
 
 function tripinfo_item_next($date) {
   $nextdate = db_fetch_object(db_query(
-	'select left(field_date_value,10) item,field_start_value start,field_destination_value dest from content_type_triplog t
+    'select left(field_date_value,10) item,field_start_value start,field_destination_value dest from content_type_triplog t
 	   where t.field_date_value > "%s" order by field_date_value asc limit 1',
-  $date));
-  $nextdate->title="$nextdate->start to $nextdate->dest";
+    $date));
+  $nextdate->title = "$nextdate->start to $nextdate->dest";
   return $nextdate;
 
 }
 
 function tripinfo_loadnode($nid) {
-  if(arg(0) == 'loadnode' && is_numeric(arg(1))) $node = node_load(array('nid'=>arg(1)));
+  if (arg(0) == 'loadnode' && is_numeric(arg(1))) {
+    $node = node_load(array('nid' => arg(1)));
+  }
   global $user;
-  $output  = node_view($node,false,true,false);
+  $output = node_view($node, FALSE, TRUE, FALSE);
   //drupal_add_js(drupal_get_path('tripinfo') . "/tripinfo_map.js");
   print $output;
 }
 
 function tripinfo_maponly() {
   $overlaylist = urldecode($_REQUEST['overlays']);
-  $overlays=split(',',$overlaylist);
+  $overlays = split(',', $overlaylist);
 
-  $content.="<div id='mapholder' style='height:500px'>
+  $content .= "<div id='mapholder' style='height:500px'>
 	 <div id='maponly_map' style='width:100%;height:100%'></div></div>";
   foreach ($overlays as $overlay) {
     if (strlen($overlay)) {
@@ -411,18 +416,20 @@ function tripinfo_maponly() {
   }
 
 
-  if(arg(0) == 'mappage' && is_numeric(arg(1))) $node = node_load(array('nid'=>arg(1)));
+  if (arg(0) == 'mappage' && is_numeric(arg(1))) {
+    $node = node_load(array('nid' => arg(1)));
+  }
 
-  drupal_set_html_head('<script src="http://maps.google.com/maps?file=api&v=2&hl=en&key='.variable_get('googlemap_api_key', '').'" type="text/javascript"></script>');
-  drupal_add_js(drupal_get_path('module','tripinfo')."/tripinfo_maponly.js");
+  drupal_set_html_head('<script src="http://maps.google.com/maps?file=api&v=2&hl=en&key=' . variable_get('googlemap_api_key', '') . '" type="text/javascript"></script>');
+  drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_maponly.js");
 
 
-  $head.=drupal_get_html_head();
-  $head.=drupal_get_css();
-  $head.=drupal_get_js();
+  $head .= drupal_get_html_head();
+  $head .= drupal_get_css();
+  $head .= drupal_get_js();
 
-  $page =<<<ENDPAGE
-	
+  $page = <<<ENDPAGE
+
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="$language" xml:lang="$language">
 

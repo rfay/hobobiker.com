@@ -1,4 +1,3 @@
-; $Id$
 name = tripinfo
 description = "Display hobobiker trip info"
 core = 6.x
