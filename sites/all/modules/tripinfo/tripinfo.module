@@ -84,7 +84,7 @@ function tripinfo_gmap($kmlfile) {
   $settings['tripinfo'] = array('kmlfile' => $kmlfile);
   drupal_add_js($settings, 'setting');
 
-    l("Explore in Google Earth", $kmlfile) . "</div></div>";
+  $output .= l("Explore in Google Earth", $kmlfile) . "</div></div>";
 
   return $output;
 }
@@ -137,7 +137,7 @@ function tripinfo_item($date, $startdate, $enddate) {
     $page .= tripinfo_gmap($kmlurl);
   }
 
-  $page .= "<div class=\"tripdesc\" style='border-top: 2px solid black;'><i>$row->body</i></div>";
+  $page .= "<div class=\"tripdesc\" style='margin-top: 60px; border-top: 2px solid black;'><i>$row->body</i></div>";
 
   $page .= "<ul>";
   $km = round($row->miles / .62);
