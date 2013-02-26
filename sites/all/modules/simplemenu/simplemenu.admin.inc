@@ -107,7 +107,7 @@ function simplemenu_admin_settings() {
   $form['settings']['simplemenu_effect_speed'] = array(
     '#type' => 'radios',
     '#title' => t('Show speed'),
-    '#options' => array('slow' => t('Slow'), 'medium' => t('Medium'), 'fast' => t('Fast')),
+    '#options' => array('slow' => t('Slow'), 'medium' => t('Medium'), 'fast' => t('Fast'), '1' => t('Instantaneous')),
     '#default_value' => variable_get('simplemenu_effect_speed', 'fast'),
     '#description' => t('The speed of the effect, not used when "none" is set to show effect.'),
   );

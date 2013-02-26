@@ -48,7 +48,7 @@ function simplemenu_init() {
   // do a simple access check here, since theme isn't available to check yet
   if (simplemenu_enabled()) {
     // we first run add menu because it could be completely empty in which
-    // case we want to avoid sending the any output
+    // case we want to avoid sending any output
     if (_simplemenu_add_menu()) {
       _simplemenu_add_css();    // basic CSS must be before _simplemenu_add_theme()
       _simplemenu_add_theme();
