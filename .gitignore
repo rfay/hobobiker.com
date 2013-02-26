@@ -6,3 +6,4 @@ backup
 sites/default/settings.php
 files
 cache
+robots.txt
