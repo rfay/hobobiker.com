@@ -378,6 +378,10 @@ function conf_init() {
   global $db_url, $db_prefix, $db_collation, $cookie_domain, $conf, $installed_profile, $update_free_access;
   $conf = array();
 
+  if (!isset($_SERVER['SERVER_PROTOCOL']) || ($_SERVER['SERVER_PROTOCOL'] != 'HTTP/1.0' && $_SERVER['SERVER_PROTOCOL'] != 'HTTP/1.1')) {
+    $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
+  }
+
   if (isset($_SERVER['HTTP_HOST'])) {
     // As HTTP_HOST is user input, ensure it only contains characters allowed
     // in hostnames. See RFC 952 (and RFC 2181).
@@ -385,7 +389,7 @@ function conf_init() {
     $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);
     if (!drupal_valid_http_host($_SERVER['HTTP_HOST'])) {
       // HTTP_HOST is invalid, e.g. if containing slashes it may be an attack.
-      header('HTTP/1.1 400 Bad Request');
+      header($_SERVER['SERVER_PROTOCOL'] .' 400 Bad Request');
       exit;
     }
   }
@@ -399,7 +403,7 @@ function conf_init() {
     include_once './'. conf_path() .'/settings.php';
   }
 
-  // Ignore the placeholder url from default.settings.php.
+  // Ignore the placeholder URL from default.settings.php.
   if (isset($db_url) && $db_url == 'mysql://username:password@localhost/databasename') {
     $db_url = '';
   }
@@ -438,7 +442,7 @@ function conf_init() {
   }
   else {
     // Otherwise use $base_url as session name, without the protocol
-    // to use the same session identifiers across http and https.
+    // to use the same session identifiers across HTTP and HTTPS.
     list( , $session_name) = explode('://', $base_url, 2);
     // We escape the hostname because it can be modified by a visitor.
     if (!empty($_SERVER['HTTP_HOST'])) {
@@ -749,7 +753,7 @@ function drupal_page_cache_header($cache) {
   if ($if_modified_since && $if_none_match
       && $if_none_match == $etag // etag must match
       && $if_modified_since == $last_modified) {  // if-modified-since must match
-    header('HTTP/1.1 304 Not Modified');
+    header($_SERVER['SERVER_PROTOCOL'] .' 304 Not Modified');
     // All 304 responses must send an etag if the 200 response for the same object contained an etag
     header("Etag: $etag");
     return;
@@ -1149,7 +1153,7 @@ function _drupal_bootstrap($phase) {
     case DRUPAL_BOOTSTRAP_ACCESS:
       // Deny access to hosts which were banned - t() is not yet available.
       if (drupal_is_denied('host', ip_address())) {
-        header('HTTP/1.1 403 Forbidden');
+        header($_SERVER['SERVER_PROTOCOL'] .' 403 Forbidden');
         print 'Sorry, '. check_plain(ip_address()) .' has been banned.';
         exit();
       }
