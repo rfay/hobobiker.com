@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file contact_reply_to.module
+ *
+ * Change emails sent via the contact form to be Reply-to: the sending user
+ * instead of From: the sending user. Having them sent From: the sending user
+ * is a form of email spoofing and causes much Drupal contact mail to be
+ * classified as spam.
+ */
+
+/**
+ * Implements hook_mail_alter() to change values of outgoing headers.
+ * @param $message
+ *   The full message array
+ */
+function contact_reply_to_mail_alter(&$message){
+  if (in_array($message['id'], array('contact_page_mail', 'contact_page_copy', 'contact_user_mail', 'contact_user_copy'))) {
+    $site_mail = variable_get('site_mail', 'nobody@example.com');
+    $message['headers']['reply-to'] = $message['from'];
+    $message['from'] = $message['headers']['From'] = $site_mail;
+  }
+}
+
