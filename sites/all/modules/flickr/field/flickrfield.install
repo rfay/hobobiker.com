@@ -1,7 +1,6 @@
 <?php
-// $Id: flickrfield.install,v 1.2 2008/09/30 10:35:08 karens Exp $
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function flickrfield_install() {
   drupal_load('module', 'content');
@@ -9,7 +8,7 @@ function flickrfield_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function flickrfield_uninstall() {
   drupal_load('module', 'content');
@@ -17,7 +16,7 @@ function flickrfield_uninstall() {
 }
 
 /**
- * Implementation of hook_enable().
+ * Implements hook_enable().
  *
  * Notify content module when this module is enabled.
  */
@@ -27,7 +26,7 @@ function flickrfield_enable() {
 }
 
 /**
- * Implementation of hook_disable().
+ * Implements hook_disable().
  *
  * Notify content module when this module is disabled.
  */

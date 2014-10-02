@@ -1,5 +1,4 @@
 <?php
-// $Id: flickr.install,v 1.5.2.1 2009/01/30 10:39:01 paulbooker Exp $
 
 function flickr_install() {
   drupal_install_schema('flickr');
@@ -11,6 +10,12 @@ function flickr_uninstall() {
   variable_del('flickr_api_secret');
   variable_del('flickr_default_userid');
   variable_del('flickr_cache_duration');
+  variable_del('flickr_class');
+  variable_del('flickr_rel');
+  variable_del('flickr_title_suppress_on_small');
+  variable_del('flickr_metadata_suppress_on_small');
+  variable_del('flickr_caption_padding');
+  variable_del('flickr_info_overlay');
 }
 
 function flickr_schema() {
@@ -41,7 +46,7 @@ function flickr_schema() {
 }
 
 /**
- * Adding a table to map Drupal users to Flickr users
+ * Adding a table to map Drupal users to Flickr users.
  */
 function flickr_update_1() {
   flickr_install();

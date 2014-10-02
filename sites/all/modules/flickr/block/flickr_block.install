@@ -1,8 +1,7 @@
 <?php
-// $Id: flickr_block.install,v 1.5 2008/03/24 19:56:09 drewish Exp $
 
 function flickr_block_uninstall() {
-  foreach (range(0, 6) as $delta) {
+  foreach (range(0, 11) as $delta) {
     variable_del("flickr_block_{$delta}");
   }
 }
@@ -16,7 +15,7 @@ function flickr_block_update_1() {
     $show = variable_get("flickr_block_{$delta}_show_n", FALSE);
     $size = variable_get("flickr_block_{$delta}_size", FALSE);
     if ($user || $show || $size) {
-      variable_set('flickr_block_'. $delta, array(
+      variable_set('flickr_block_' . $delta, array(
         'user_id' => $user,
         'show_n' => (int) $show,
         'size' => $size,

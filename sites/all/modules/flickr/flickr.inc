@@ -1,42 +1,7 @@
 <?php
-// $Id: flickr.inc,v 1.31.2.3 2009/03/17 21:56:54 paulbooker Exp $
 
-define('FLICKR_REST_ENDPOINT', 'http://api.flickr.com/services/rest/');
-
-/**
- * Return a list of all possible photo sizes with the right
- * description and label
- *
- * @return An array of photo sizes
- */
-function flickr_photo_sizes() {
-  return array(
-    's' => array(
-      'label' => 'Square',
-      'description' => t('75x75 pixel square'),
-    ),
-    't' => array(
-      'label' => 'Thumbnail',
-      'description' => t('100 pixels on longest side'),
-    ),
-    'm' => array(
-      'label' => 'Small',
-      'description' => t('240 pixels on longest side'),
-    ),
-    '-' => array(
-      'label' => 'Medium',
-      'description' => t('500 pixels on longest side'),
-    ),
-    'b' => array(
-      'label' => 'Large',
-      'description' => t('1024 pixels on longest side'),
-    ),
-    'o' => array(
-      'label' => 'Original',
-      'description' => t('Original image')
-    ),
-  );
-};
+define('FLICKR_REST_ENDPOINT', 'https://api.flickr.com/services/rest/');
+require_once(drupal_get_path('module', 'flickr') . '/flickr.api.inc');
 
 /**
  * Submit a request to Flickr.
@@ -46,7 +11,7 @@ function flickr_photo_sizes() {
  * @param $args
  *   associative array of arguments names and values
  * @param $cacheable
- *   boolean indicating if it's safe cache the results of this request
+ *   boolean indicating if it's safe to cache the results of this request
  * @param $return_errors
  *   boolean indicating if the caller will handle displaying error messages
  *
@@ -60,7 +25,7 @@ function flickr_request($method, $args, $cacheable = TRUE, $return_errors = FALS
   $args['format'] = 'php_serial';
   ksort($args);
 
-  // Build an argument hash API signing (we'll also use it for the cache id)
+  // Build an argument hash API signing (we'll also use it for the cache id).
   $arg_hash = '';
   foreach ($args as $k => $v) {
     $arg_hash .= $k . $v;
@@ -71,16 +36,16 @@ function flickr_request($method, $args, $cacheable = TRUE, $return_errors = FALS
   }
 
   // Build the URL.
-  foreach ($args as $k => $v){
-    $encoded_params[] = urlencode($k) .'='. urlencode($v);
+  foreach ($args as $k => $v) {
+    $encoded_params[] = urlencode($k) . '=' . urlencode($v);
   }
-  $url = FLICKR_REST_ENDPOINT .'?'. implode('&', $encoded_params);  
+  $url = FLICKR_REST_ENDPOINT . '?' . implode('&', $encoded_params);
 
   // If it's a cachable request, try to load a cached value.
   if ($cacheable) {
     if ($cache = cache_get("flickr_$arg_hash", 'cache')) {
       // Check that the value is still "fresh".
-      if( $cache->expire > time() ) {
+      if ($cache->expire > time()) {
         return unserialize($cache->data);
       }
     }
@@ -92,8 +57,6 @@ function flickr_request($method, $args, $cacheable = TRUE, $return_errors = FALS
     if ($return_errors) {
       return array(
         'stat' => 'error',
-        //In Drupal <= 5.1, only HTTP errors are stored in $result->code correctly, not TCP/IP errors.
-        //We can not count on this variable being correct until this module requires Drupal 5.2 or above.
         'code' => $result->code,
         'message' => $result->error,
       );
@@ -195,13 +158,18 @@ function flickr_img($photo, $size = NULL, $attributes = NULL) {
       $img_url = flickr_photo_img($photo, $size);
     }
   }
-  $title = is_array($photo['title']) ? $photo['title']['_content'] : $photo['title'];
+  $info = !is_array($photo['title']) ? flickr_photo_get_info($photo['id']) : '';
+  $title = is_array($photo['title']) ? str_replace('"', "'", htmlspecialchars_decode(strip_tags($photo['description']['_content']))) : str_replace('"', "'", htmlspecialchars_decode(strip_tags($info['description']['_content'])));
+  if (empty($title) == 'title') {
+    // Make sure we are not passing an array where a string is expected.
+    $title = is_array($photo['title']) ? str_replace('"', "'", htmlspecialchars_decode(strip_tags($photo['title']['_content']))) : $photo['title'];
+  }
   return theme('image', $img_url, $title, $title, $attributes, FALSE);
 }
 
 /**
  * Create the url to $photo with size $size using the correct image farm
- * from the $photo variable
+ * from the $photo variable.
  *
  * @param $photo
  *   photo to which the url should point
@@ -214,15 +182,74 @@ function flickr_img($photo, $size = NULL, $attributes = NULL) {
  *   url for $photo with the correct size and format
  */
 function flickr_photo_img($photo, $size = NULL, $format = NULL) {
-  // early images don't have a farm setting so default to 1.
+  // Early images don't have a farm setting so default to 1.
   $farm = isset($photo['farm']) ? $photo['farm'] : 1;
   $server = $photo['server'];
   // photoset's use primary instead of id to specify the image.
   $id = isset($photo['primary']) ? $photo['primary'] : $photo['id'];
   $secret = $photo['secret'];
 
-  return "http://farm{$farm}.static.flickr.com/{$server}/{$id}_{$secret}" .($size ? "_$size." : '.') . ($size == 'o' ? $format : 'jpg');
+  return "https://farm{$farm}.static.flickr.com/{$server}/{$id}_{$secret}" . ($size ? "_$size." : '.') . ($size == 'o' ? $format : 'jpg');
 }
+
+/**
+ * Return a list of all possible photo sizes with the right
+ * description and label.
+ *
+ * @return An array of photo sizes
+ */
+function flickr_photo_sizes() {
+  return array(
+    's' => array(
+      'label' => 'Square',
+      'description' => t('75 px square'),
+    ),
+    't' => array(
+      'label' => 'Thumbnail',
+      'description' => t('100 px on longest side'),
+    ),
+    'q' => array(
+      'label' => 'Large Square',
+      'description' => t('150 px square'),
+    ),
+    'm' => array(
+      'label' => 'Small',
+      'description' => t('240 px on longest side'),
+    ),
+    'n' => array(
+      'label' => 'Small 320',
+      'description' => t('320 px on longest side'),
+    ),
+    '-' => array(
+      'label' => 'Medium',
+      'description' => t('500 px on longest side'),
+    ),
+    'z' => array(
+      'label' => 'Medium 640',
+      'description' => t('640 px on longest side'),
+    ),
+    'c' => array(
+      'label' => 'Medium 800',
+      'description' => t('800 px on longest side'),
+    ),
+    'b' => array(
+      'label' => 'Large',
+      'description' => t('1024 px on longest side'),
+    ),
+    'h' => array(
+      'label' => 'Large 1600',
+      'description' => t('1600 px on longest side'),
+    ),
+    'k' => array(
+      'label' => 'Large 2048',
+      'description' => t('2048 px on longest side'),
+    ),
+    'o' => array(
+      'label' => 'Original',
+      'description' => t('Original image'),
+    ),
+  );
+};
 
 /**
  * @param $owner
@@ -234,12 +261,70 @@ function flickr_photo_img($photo, $size = NULL, $format = NULL) {
  *   url for the flickr photo page showing photo with $id of $owner
  */
 function flickr_photo_page_url($owner, $id = NULL) {
-  $nsid = is_array($owner) ? $owner['nsid']: $owner;
+  $nsid = is_array($owner) ? $owner['nsid'] : $owner;
   if ($person = flickr_people_get_info($nsid)) {
     return $person['photosurl']['_content'] . $id;
   }
   else {
-    return "http://flickr.com/photos/$nsid/$id";
+    return "https://flickr.com/photos/$nsid/$id";
+  }
+}
+
+/**
+ * Given the URL to a flickr asset (set or photo), return info about that asset.
+ *
+ * @param string $url
+ *   The URL to the flickr asset, e.g. as returned by flickr_photoset_page_url()
+ *   or flickr_photo_page_url().
+ *
+ * @return mixed
+ *   string - If $url was empty or invalid, or Flickr API could not locate asset
+ *     info, return an error string.
+ *   array - Otherwise, return the info array from flickr_photoset_get_info() or
+ *     flickr_photo_get_info() as applicable.
+ */
+function flickr_get_info_by_url($url, $reset = FALSE) {
+  static $urls;
+  // Don't bother checking the same URL twice in a single page request.
+  if ($urls[$url] && !$reset) {
+    return $urls[$url];
+  }
+  if (empty($url)) {
+    $urls[$url] = t('Please enter a valid Flickr URL.');
+    return $urls[$url];
+  }
+  if (!valid_url($url)) {
+    $urls[$url] = t('Please enter a valid Flickr URL.');
+    return $urls[$url];
+  }
+  // Prepend the protocol if it's not there, so we can use parse_url().
+  if (strpos($url, 'http') !== 0) {
+    $url = 'https://' . $url;
+  }
+  $parts = parse_url($url);
+  if (strpos($parts['host'], 'flickr') === FALSE) {
+    $urls[$url] = t('Please enter a valid Flickr URL.');
+    return $urls[$url];
+  }
+  // Now, we only care about the path. Sanity-check the number of path elements.
+  $parts = explode('/', trim($parts['path'], '/'));
+  if (count($parts) < 3 || ($parts[2] == 'sets' && count($parts) < 4)) {
+    $urls[$url] = t('Unable to retrieve Flickr image or set. Please check the URL.');
+    return $urls[$url];
+  }
+  // Now that we're reasonably sure the URL is the correct format, see if the
+  // API can tell us about the asset.
+  if ($parts[2] == 'sets') {
+    $set_id = $parts[3];
+    $info = flickr_photoset_get_info($set_id);
+    $urls[$url] = $info ? $info : t('Unable to retrieve Flickr image or set. Please check the URL.');
+    return $urls[$url];
+  }
+  else {
+    $img_id = $parts[2];
+    $info = flickr_photo_get_info($img_id);
+    $urls[$url] = $info ? $info : t('Unable to retrieve Flickr image or set. Please check the URL.');
+    return $urls[$url];
   }
 }
 
@@ -253,112 +338,17 @@ function flickr_photo_page_url($owner, $id = NULL) {
  *   url for the photoset page of photoset $id of owner $owner
  */
 function flickr_photoset_page_url($owner, $id = NULL) {
-  $nsid = is_array($owner) ? $owner['nsid']: $owner;
+  $nsid = is_array($owner) ? $owner['nsid'] : $owner;
   if ($person = flickr_people_get_info($nsid)) {
-    return $person['photosurl']['_content'] .'sets/'. $id;
+    return $person['photosurl']['_content'] . 'sets/' . $id;
   }
   else {
-    return "http://flickr.com/photos/$nsid/sets/$id";
+    return "https://flickr.com/photos/$nsid/sets/$id";
   }
 }
 
 /**
- * @param $photo_id
- *   id of the photo to get info about
- *
- * @return
- *   response from the flickr method flickr.photos.getInfo
- *   (http://www.flickr.com/services/api/flickr.photos.getInfo.html)
- */
-function flickr_photo_get_info($photo_id) {
-  $response = flickr_request(
-    'flickr.photos.getInfo',
-    array('photo_id' => $photo_id)
-  );
-  if ($response) {
-    return $response['photo'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $photo_id
- *   id of the photo to get the available sizes of
- *
- * @return
- *   response from the flickr method flickr.photos.getSizes
- *   (http://www.flickr.com/services/api/flickr.photos.getSizes.html)
- */
-function flickr_photo_get_sizes($photo_id) {
-  $response = flickr_request(
-    'flickr.photos.getSizes',
-    array('photo_id' => $photo_id)
-  );
-  if ($response) {
-    return $response['sizes']['size'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $photoset_id
- *   id of the photoset to get information about
- *
- * @return
- *   response from the flickr method flickr.photosets.getInfo
- *   (http://www.flickr.com/services/api/flickr.photosets.getInfo.html)
- */
-function flickr_photoset_get_info($photoset_id) {
-  $response = flickr_request(
-    'flickr.photosets.getInfo',
-    array('photoset_id' => $photoset_id)
-  );
-  if ($response) {
-    return $response['photoset'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $nsid
- *   nsid of the user whose photoset list you want
- *
- * @return
- *   response from the flickr method flickr.photosets.getList
- *   (http://www.flickr.com/services/api/flickr.photosets.getList.html)
- */
-function flickr_photoset_get_list($nsid) {
-  $response = flickr_request(
-    'flickr.photosets.getList',
-    array('user_id' => $nsid)
-  );
-  if ($response) {
-    return $response['photosets']['photoset'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $nsid The Flickr user's NSID
- *
- * @return
- *   array with person's info from flickr.people.getInfo
- *   (http://www.flickr.com/services/api/flickr.people.getInfo.html)
- *   or FALSE on error.
- */
-function flickr_people_get_info($nisd) {
-  $response = flickr_request(
-    'flickr.people.getInfo',
-    array('user_id' => $nisd)
-  );
-  if ($response) {
-    return $response['person'];
-  }
-  return FALSE;
-}
-
-/**
- * Tries to match an 'identifier' onto a flickr nsid
+ * Tries to match an 'identifier' onto a flickr nsid.
  *
  * This function will first see whether $identifier is already
  * a nsid (format check only, no api call).  If it is not and the
@@ -377,7 +367,7 @@ function flickr_people_get_info($nisd) {
  */
 function flickr_user_find_by_identifier($identifier) {
   if (flickr_is_nsid($identifier)) {
-    //identifier is an NSID
+    // Identifier is an NSID.
     return $identifier;
   }
   if (valid_email_address($identifier) && ($user = flickr_user_find_by_email($identifier))) {
@@ -394,108 +384,6 @@ function flickr_is_nsid($id) {
   return preg_match('/^\d+@N\d+$/', $id);
 }
 
-/**
- * Lookup an nsid for a username.
- *
- * @param $username
- *   username to look for
- *
- * @return
- *   response from the flickr method flickr.people.findByUsername
- *   (http://www.flickr.com/services/api/flickr.people.findByUsername.html)
- */
-function flickr_user_find_by_username($username) {
-  $response = flickr_request(
-    'flickr.people.findByUsername',
-    array('username' => $username)
-  );
-  if ($response) {
-    return $response['user'];
-  }
-  return FALSE;
-}
-
-/**
- * Lookup an nsid for an email address
- *
- * @param $email
- *   email to look for
- *
- * @return
- *   response from the flickr method flickr.people.findByEmail
- *   (http://www.flickr.com/services/api/flickr.people.findByEmail.html)
- */
-function flickr_user_find_by_email($email) {
-  $response = flickr_request(
-    'flickr.people.findByEmail',
-    array('find_email' => $email)
-  );
-  if ($response) {
-    return $response['user'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $nsid
- *   nsid of the user whose tags will be returned
- * @param $count
- *   number of tags to return
- *
- * @return
- *   response from the flickr method flickr.tags.getListUserPopular
- *   (http://www.flickr.com/services/api/flickr.tags.getListUserPopular.html)
- */
-function flickr_tags_get_list_user_popular($nsid, $count=NULL) {
-  $args = array('user_id'=>$nsid);
-  if ($count != NULL) {
-    $args['count'] = $count;
-  }
-  $response = flickr_request('flickr.tags.getListUserPopular', $args);
-  if ($response) {
-    return $response['who']['tags']['tag'];
-  }
-  return FALSE;
-}
-
-/**
- * @param $nsid
- *   nsid of the user whose photoset tags will be returned
- *
- * @return
- *   response from the flickr method flickr.tags.getListUser
- *   (http://www.flickr.com/services/api/flickr.tags.getListUser.html)
- */
-function flickr_tags_get_list_user($nsid){
-  $response = flickr_request(
-    'flickr.tags.getListUser',
-    array('user_id' => $nsid)
-  );
-  if ($response) {
-    return $response['who']['tags']['tag'];
-  }
-  return FALSE;
-}
-
-
-function flickr_photos_search($nsid, $page = 1, $other_args = array()){
-  $args = array (
-    'user_id' => $nsid,
-    'page' => $page,
-  );
-
-  //set per_page to flickr module default if it is not specified in $other_args
-  if (!isset($other_args['per_page'])) {
-    $args['per_page'] = variable_get('flickr_photos_per_page', 20);
-  }
-
-  $response = flickr_request('flickr.photos.search', array_merge($args, $other_args));
-  if ($response) {
-    return $response['photos'];
-  }
-  return FALSE;
-}
-
 function flickr_tag_request_args($tags = array(), $mode = 'all') {
   $args = array();
   if (!empty($tags)) {
@@ -506,64 +394,37 @@ function flickr_tag_request_args($tags = array(), $mode = 'all') {
 }
 
 /**
- * Check if the response from the Flickr api call was an error
+ * Check if the response from the Flickr api call was an error.
  *
  * @param $response
  *   response to check
  *
  * @return
- *    true if the response is an error message
+ *   true if the response is an error message
  */
 function flickr_response_has_error($response) {
   return !(isset($response['stat']) && $response['stat'] == 'ok');
 }
 
 /**
- * Display an error message to flickr administrators and write an error to
- * watchdog.
+ * Display error message to flickr administrators and write error to watchdog.
  *
- * @param $mesageOrResposne
- *   message or error response to display
+ * @param $error_message
+ *   error message to display
  */
-function flickr_set_error($messageOrResponse) {
-  if (is_array($messageOrResponse)) {
+function flickr_set_error($error_message) {
+  if (is_array($error_message)) {
     $message = t('Flickr error @error_id: %flickr_error', array(
-      '@error_id' => $messageOrResponse['code'],
-      '%flickr_error'=> $messageOrResponse['message'],
+      '@error_id' => $error_message['code'],
+      '%flickr_error' => $error_message['message'],
     ));
   }
   else {
-    $message = $messageOrResponse;
+    $message = $error_message;
   }
 
   if (user_access('administer flickr')) {
     drupal_set_message($message, 'error');
   }
   watchdog('flickr', $message, array(), WATCHDOG_WARNING);
-}
-
-/**
- * @param $nid
- *   nsid of the group whose photos you want
- *
- * @return
- *   response from the flickr method flickr.photosets.getList
- *   (http://www.flickr.com/services/api/flickr.photosets.getList.html)
-*/
-function flickr_get_group_photos($nsid, $page = 1, $other_args = array()){
-  $args = array (
-    'group_id' => $nsid,
-    'page' => $page,
-  );
-
-  //set per_page to flickr module default if it is not specified in $other_args
-  if (!isset($other_args['per_page'])) {
-    $args['per_page'] = variable_get('flickr_photos_per_page', 20);
-  }
-
-  $response = flickr_request('flickr.groups.pools.getPhotos', array_merge($args, $other_args));
-  if ($response) {
-    return $response['photos'];
-  }
-  return FALSE;
 }

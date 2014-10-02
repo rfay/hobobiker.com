@@ -1,9 +1,3 @@
-/* $Id: flickr.css,v 1.4.2.1 2009/06/24 19:25:33 ksenzee Exp $ */
-
-.flickr-photos {}
-
-.flickr-photo {}
-
 .flickr-photo-img {
   vertical-align: text-bottom;
 }
@@ -15,12 +9,6 @@
   width: 260px;
   height: 260px;
 }
-
-
-
-.flickr-photosets {}
-
-.flickr-photoset {}
 
 .flickr-photoset-img {
   vertical-align: text-bottom;
@@ -34,12 +22,31 @@
   height: 130px;
 }
 
-.flickr-photoset-title {}
+span.flickr-wrap {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 5px 5px 0;
+}
 
-.flickr-photoset-count {}
+span.flickr-credit {
+  display: block;
+  line-height: 100%;
+  font-size: 80%;
+}
 
-/** Override for Drupal's default block, 95% width textfields on node forms. */
-.node-form .flickrfield_flickrid {
-  display: inline;
-  width: auto;
+.flickr-photoset-slideshow {
+  height: 0;
+  width: 100%;
+  /*Change percentage below to change ratio. Currently 16:9 (as most screens).*/
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  position: relative;
+}
+
+.flickr-photoset-slideshow object {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
