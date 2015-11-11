@@ -62,8 +62,8 @@ function admin_menu_link_build($item) {
   $item['module'] = 'admin_menu';
   $item['menu_name'] = 'admin_menu';
   $item += array(
-    'link_title' => $item['title'],
-    'link_path' => $item['path'],
+    'link_title' => isset($item['title']) ? $item['title'] : '',
+    'link_path' => isset($item['path']) ? $item['path'] : '',
     'hidden' => 0,
     'options' => array(),
   );

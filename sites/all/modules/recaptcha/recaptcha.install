@@ -6,10 +6,24 @@
  */
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function recaptcha_uninstall() {
-  // Delete all the recaptcha variables and then clear the variable cache  
-  db_query("delete from {variable} where name like '%s'", 'recaptcha_%');
+  // Delete all the recaptcha variables and then clear the variable cache
+  db_query("DELETE FROM {variable} WHERE name LIKE '%s'", 'recaptcha_%');
   cache_clear_all('variables', 'cache');
+}
+
+/**
+ * Issue #2473329: Remove obsolete variables.
+ */
+function recaptcha_update_6100() {
+  $ret = array();
+
+  foreach (array('recaptcha_secure_connection', 'recaptcha_api_server', 'recaptcha_api_secure_server', 'recaptcha_verify_server') as $variable) {
+    variable_del($variable);
+  }
+  $ret[] = array('success' => TRUE, 'query' => 'Removed obsolete variables.');
+
+  return $ret;
 }

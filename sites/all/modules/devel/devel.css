@@ -20,6 +20,11 @@ div.dev-query {
   color:#333;
   padding:.5em;
   }
+  
+div.dev-query .marker {
+  color: #f00;
+  font-weight: bold;
+}
 
 /**
  * Querylog
@@ -33,6 +38,11 @@ div.devel-querylog {
   position:relative;
   overflow:hidden;
   }
+
+div.devel-querylog .marker {
+  color: #f00;
+  font-weight: bold;
+}
   
 div.devel-querylog-header {
   border-top:3px solid #ccc;
@@ -76,3 +86,7 @@ div.devel-querylog div.cell {
     max-height:18em;
     font-family: 'Andale Mono', monospace;
     }
+
+#devel-execute-form textarea {
+  font-family: monospace;
+}

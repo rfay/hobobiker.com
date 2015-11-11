@@ -5,15 +5,19 @@ Admin Menu x.x-x.x, xxxx-xx-xx
 
 Admin Menu 6.x-1.x, xxxx-xx-xx
 ------------------------------
+#927018 by DamienMcKenna, mikeytown2: Fixed PHP notice in admin_menu_link_build().
+
 
 Admin Menu 6.x-1.8, 2011-06-16
 ------------------------------
 #1190466 by pwolanin: fix for Call to undefined function admin_menu_exit() breaks some drush commands.
 
+
 Admin Menu 6.x-1.7, 2011-06-15
 ------------------------------
 #1189672 by pwolanin: fix for 'flush all caches' open to csrf.
 #1189532 by pwolanin: fix rebuild logic to avoid an extra menu rebuild.
+
 
 Admin Menu 6.x-1.6, 2010-09-03
 ------------------------------

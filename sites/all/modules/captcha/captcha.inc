@@ -29,7 +29,7 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
   elseif ($captcha_type == NULL) {
     db_query("DELETE FROM {captcha_points} WHERE form_id = '%s'", $form_id);
   }
-  elseif (is_object($captcha_type) && isset($captcha_type->module) && isset($captcha_type->captcha_type)) {
+  elseif (is_object($captcha_type) && !empty($captcha_type->module) && !empty($captcha_type->captcha_type)) {
     db_query("DELETE FROM {captcha_points} WHERE form_id = '%s'", $form_id);
     db_query("INSERT INTO {captcha_points} (form_id, module, captcha_type) VALUES ('%s', '%s', '%s')", $form_id, $captcha_type->module, $captcha_type->captcha_type);
   }
@@ -58,7 +58,8 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
 function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
   if (module_exists('ctools')) {
     ctools_include('export');
-    $captcha_point = array_pop(ctools_export_load_object('captcha_points', 'names', array($form_id)));
+    $captcha_points = ctools_export_load_object('captcha_points', 'names', array($form_id));
+    $captcha_point = array_pop($captcha_points);
   }
   else {
     $result = db_query("SELECT module, captcha_type FROM {captcha_points} WHERE form_id = '%s'", $form_id);
@@ -71,7 +72,7 @@ function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
   if (!$captcha_point) {
     $captcha_point = NULL;
   }
-  elseif ($captcha_point->captcha_type == 'default') {
+  elseif (!empty($captcha_point->captcha_type) && $captcha_point->captcha_type == 'default') {
     if (!$symbolic) {
       list($module, $type) = explode('/', variable_get('captcha_default_challenge', 'captcha/Math'));
       $captcha_point->module = $module;
@@ -81,7 +82,7 @@ function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
       $captcha_point = 'default';
     }
   }
-  elseif ($captcha_point->module == NULL && $captcha_point->captcha_type == NULL && $symbolic) {
+  elseif (empty($captcha_point->module) && empty($captcha_point->captcha_type) && $symbolic) {
     $captcha_point = 'none';
   }
   elseif ($symbolic) {
