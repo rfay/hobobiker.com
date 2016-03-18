@@ -1,0 +1,320 @@
+<?php
+
+/**
+ * @file
+ * Reports on installed Drupal 6 modules to Tag1 Consulting, in order to
+ * receive security updates.
+ */
+
+/**
+ * URL to check for updates.
+ */
+define('TAG1UPDATE_DEFAULT_URL', 'https://updates.tag1consulting.com/entity/d6lts_site');
+
+/**
+ * Report changes at least once every hour.
+ */
+define('TAG1UPDATE_REPORT_CHANGE_FREQUENCY', 3600);
+
+/**
+ * Report lack of changes at least once every day.
+ */
+define('TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY', 86400);
+
+/**
+ * Implementation of hook_help().
+ */
+function tag1update_help($path) {
+  switch ($path) {
+    case 'admin/help#tag1update':
+      return '<p>' . t('Reports on your installed Drupal 6 modules to Tag1 Consulting so they can provide security updates backported from Drupal 7 and Drupal 8.') . '</p>';
+  }
+}
+
+/**
+ * Implenentation of hook_perm().
+ */
+function tag1update_perm() {
+  return array('administer tag1update');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function tag1update_menu() {
+  $items = array();
+
+  $items['admin/settings/tag1updates'] = array(
+    'title' => 'Tag1 Consulting Drupal 6 Updates',
+    'description' => 'Configure your website to talk to the Tag1 Consulting Drupal 6 update server.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tag1update_admin_settings'),
+    'access arguments' => array('administer tag1update'),
+    'file' => 'tag1update.admin.inc',
+  );
+  $items['admin/settings/tag1updates/configuration'] = array(
+    'title' => 'Configuration',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tag1update_admin_settings'),
+    'access arguments' => array('administer tag1update'),
+    'file' => 'tag1update.admin.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK
+  );
+  $items['admin/settings/tag1updates/review'] = array(
+    'title' => 'Review',
+    'description' => 'Review the information this module is sending to Tag1 Consulting.',
+    'page callback' => 'tag1update_admin_review',
+    'access arguments' => array('administer tag1update'),
+    'file' => 'tag1update.admin.inc',
+    'type' => MENU_LOCAL_TASK
+  );
+  $items['admin/settings/tag1updates/status'] = array(
+    'title' => 'Status',
+    'description' => 'Status of information being sent to Tag1 Consulting.',
+    'page callback' => 'tag1update_admin_status',
+    'access arguments' => array('administer tag1update'),
+    'file' => 'tag1update.admin.inc',
+    'type' => MENU_LOCAL_TASK
+  );
+  $items['admin/settings/tag1updates/status/manual'] = array(
+    'title' => 'Manually send',
+    'description' => 'Manually send report to Tag1 Consulting.',
+    'page callback' => 'tag1update_admin_send_manually',
+    'access arguments' => array('administer tag1update'),
+    'file' => 'tag1update.admin.inc',
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+
+/**
+ * Implementation of hook_cron().
+ */
+function tag1update_cron() {
+  tag1update_update_status();
+  $next_update = tag1update_next_update();
+  if ($next_update <= 0) {
+    tag1update_send_report();
+  }
+}
+
+/**
+ * Collect details about enabled themes and modules.
+ */
+function tag1update_update_status() {
+  if (variable_get('tag1update_report', 1)) {
+    // Build an array of all currently enabled modules.
+    $current = array();
+    $modules = module_rebuild_cache();
+    foreach ($modules as $name => $module) {
+      // We only care about enabled modules.
+      if ($module->status == 1) {
+        $current["$module->type:$module->name"] = array(
+          'name' => $module->name,
+          'type' => $module->type,
+          'info_name' => $module->info['name'],
+          'info_package' => $module->info['package'],
+          'info_version' => $module->info['version'],
+          'schema_version' => $module->schema_version,
+        );
+      }
+    }
+
+    // Add to the array all currently enabled themes.
+    $themes = list_themes();
+    foreach ($themes as $name => $theme) {
+      // We only caer about enabled themes.
+      if ($theme->status == 1) {
+        $current["$theme->type:$theme->name"] = array(
+          'name' => $theme->name,
+          'type' => $theme->type,
+          'info_name' => $theme->info['name'],
+          'info_package' => $theme->info['engine'],
+          'info_version' => $theme->info['version'],
+          'schema_version' => $theme->schema_version,
+        );
+      }
+    }
+
+    // Retrieve array describing all previously installed projects.
+    $old = array();
+    $result = db_query('SELECT name, type, info_name, info_package, info_version, schema_version FROM {tag1update}');
+    while ($project = db_fetch_array($result)) {
+      $type = $project['type'];
+      $name = $project['name'];
+      $old["$type:$name"] = $project;
+    }
+
+    $update = FALSE;
+    // See if anything else has changed.
+    foreach ($current as $key => $value) {
+      if (!isset($old["$key"])) {
+        // Something new has been enabled.
+        $update = TRUE;
+        db_query("INSERT INTO {tag1update} (name, type, info_name, info_package, info_version, schema_version) VALUES('%s', '%s', '%s', '%s', '%s', '%s')", $value['name'], $value['type'], $value['info_name'], $value['info_package'], $value['info_version'], $value['schema_version']);
+      }
+      else if ($value['info_version'] != $old["$key"]['info_version'] ||
+               $value['schema_version'] != $old["$key"]['schema_version']) {
+        // Something has changed.
+        $update = TRUE;
+        db_query("UPDATE {tag1update} SET info_name = '%s', info_package = '%s', info_version = '%s', schema_version = '%s' WHERE name = '%s' AND type = '%s'", $value['info_name'], $value['info_package'], $value['info_version'], $value['schema_version'], $value['name'], $value['type']);
+        unset($old["$key"]);
+      }
+      else {
+        // Nothing has changed.
+        unset($old["$key"]);
+      }
+    }
+    // Anything left has been disabled, remove.
+    foreach ($old as $key => $value) {
+      db_query("DELETE FROM {tag1update} WHERE name = '%s' AND type = '%s'", $value['name'], $value['type']);
+    }
+    if (!empty($old) || $update) {
+      if (!variable_get('tag1update_update', FALSE)) {
+        variable_set('tag1update_update', TRUE);
+      }
+    }
+  }
+  else {
+    // Be sure we're not collecting information when disabled.
+    db_query('DELETE FROM {tag1update}');
+  }
+}
+
+/**
+ * Return an array of all tracked data.
+ */
+function tag1update_get_status() {
+  global $base_url;
+
+  $status = array(
+    'type' => array(array('target_id' => 'd6lts_site')),
+    'title' => array(array('value' => variable_get('site_name', 'Drupal'))),
+    'field_base_url' => array(array('value' => $base_url)),
+    'field_server_name' => array(array('value' => check_plain($_SERVER['SERVER_NAME']))),
+    'field_server_address' => array(array('value' => check_plain($_SERVER['SERVER_ADDR']))),
+    'field_php_self' => array(array('value' => check_plain($_SERVER['PHP_SELF']))),
+    'field_php_version' => array(array('value' => phpversion())),
+    'field_last_update' => array(array('value' => time())),
+    'field_enable_timestamp' => array(array('value' => tag1update_get_enable_timestamp())),
+  );
+  $field_json_data = array();
+  $result = db_query('SELECT * FROM {tag1update}');
+  while ($update = db_fetch_array($result)) {
+    $field_json_data[] = $update;
+  }
+  $status['field_json_data'] = array(array('value' => $field_json_data));
+  return $status;
+}
+
+function tag1update_get_enable_timestamp() {
+  $tag1update_enable_timestamp = variable_get('tag1update_enable_timestamp', NULL);
+
+  if (is_null($tag1update_enable_timestamp)) {
+    $tag1update_enable_timestamp = time();
+    variable_set('tag1update_enable_timestamp', $tag1update_enable_timestamp);
+  }
+
+  return $tag1update_enable_timestamp;
+}
+
+/**
+ * Calculate the next time an update will be sent to Tag1.
+ */
+function tag1update_next_update() {
+  $last_update = variable_get('tag1update_last_update', 0);
+  if ($last_update == 0) {
+    // No updates reported yet, report immediately.
+    return 0;
+  }
+
+  $time_since_last_update = time() - $last_update;
+
+  if (variable_get('tag1update_update', FALSE)) {
+    if ($time_since_last_update > TAG1UPDATE_REPORT_CHANGE_FREQUENCY) {
+      // We haven't reported in the last frequency, report immediately.
+      return 0;
+    }
+    else {
+      // We've reported recently, wait.
+      return TAG1UPDATE_REPORT_CHANGE_FREQUENCY - $time_since_last_update;
+    }
+  }
+  else {
+    if ($time_since_last_update > TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY) {
+      // We haven't reported in the last frequency, report immediately.
+      return 0;
+    }
+    else {
+      // We've reported recently, wait.
+      return TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY - $time_since_last_update;
+    }
+  }
+}
+
+/**
+ * Send a status report to Tag1 Consulting about installed modules.
+ */
+function tag1update_send_report() {
+  $url = '';
+
+  // Prevent multiple threads from sending the update at the same time.
+  if (lock_acquire('tag1update_send_report', 60)) {
+    $url = variable_get('tag1update_url', TAG1UPDATE_DEFAULT_URL);
+    watchdog('tag1update', t('POSTing status to %url', array('%url' => $url)), array(), WATCHDOG_INFO);
+    $status = tag1update_get_status();
+    // Encode json_data
+    $status['field_json_data'] = array(array('value' => drupal_to_js($status['field_json_data'][0]['value'])));
+
+
+    $headers = array(
+      'Content-Type' => 'application/json',
+      'Drupal-Auth-Token' => variable_get('tag1update_token', ''),
+    );
+    $result = drupal_http_request($url, $headers, 'POST', drupal_to_js($status));
+
+    if (isset($result->code) && $result->code >= 200 && $result->code < 300) {
+      $result->success = TRUE;
+    }
+    else {
+      $result->success = FALSE;
+    }
+
+    if ($result->success == FALSE || variable_get('tag1update_debug', FALSE)) {
+      watchdog('tag1update', 'HTTP Response Code %code: %message', array('%code' => isset($result->code) ? $result->code : 0, '%message' => empty($result->error) ? $result->status_message : $result->error), $result->success ? WATCHDOG_NOTICE : WATCHDOG_ERROR);
+      if (isset($result->status_message)) {
+        watchdog('tag1update', 'Message: %message', array('%message' => $result->status_message));
+      }
+      if (isset($result->data)) {
+        watchdog('tag1update', 'Data: %data', array('%data' => $result->data));
+      }
+      if (isset($result->request)) {
+        watchdog('tag1update', 'Request: %request', array('%request' => $result->request), WATCHDOG_DEBUG);
+      }
+      if (is_array($result->headers)) {
+        $headers = array();
+        foreach ($result->headers as $header => $value) {
+          $headers[] = "$header: $value";
+        }
+        watchdog('tag1update', 'Response headers: %headers', array('%headers' => implode(' | ', $headers)), WATCHDOG_DEBUG);
+      }
+    }
+    else {
+      $result->success = TRUE;
+    }
+
+    if ($result->success) {
+      // We've reported all changes.
+      variable_del('tag1update_update');
+      variable_set('tag1update_last_update', time());
+    }
+    else {
+      watchdog('tag1update', t('Failed to send D6 LTS update to Tag1 Consulting.'));
+    }
+    lock_release('tag1update_send_report');
+  }
+
+  return $result;
+}
