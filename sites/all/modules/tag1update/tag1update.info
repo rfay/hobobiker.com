@@ -2,4 +2,4 @@ name = Tag1 Consulting Drupal 6 update status
 description = Reports all installed themes and modules to Tag1 Consulting.
 core = 6.x
 package = Tag1 Consulting
-version = 6.x-0.8
+version = 6.x-0.9

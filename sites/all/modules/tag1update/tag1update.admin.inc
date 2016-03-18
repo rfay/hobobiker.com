@@ -22,17 +22,10 @@ function tag1update_admin_settings() {
     '#default_value' => variable_get('tag1update_url', TAG1UPDATE_DEFAULT_URL),
     '#maxlength' => 255,
   );
-  $form['credentials'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Credentials'),
-    '#collapsible' => TRUE,
-    '#collapsed' => variable_get('tag1update_token', ''),
-  );
-  $form['credentials']['tag1update_token'] = array(
-    '#type' => 'password',
+  $form['tag1update_token'] = array(
+    '#type' => 'textfield',
     '#title' => t('Token'),
-    '#description' => t('Your secure login token for the Tag1 Drupal LTS website. !blank', array('!blank' => variable_get('tag1update_token', '') ? t('Leave blank if you don\'t want to change your token.') : '')),
-
+    '#description' => t('Your secure login token for the Tag1 Drupal LTS website.'),
     '#default_value' => variable_get('tag1update_token', ''),
     '#maxlength' => 255,
   );
@@ -49,18 +42,8 @@ function tag1update_admin_settings() {
     '#default_value' => variable_get('tag1update_debug', FALSE),
   );
 
-  $form['#submit'][] = 'tag1update_admin_settings_token_handler';
   $form['#submit'][] = 'tag1update_admin_settings_submit';
   return system_settings_form($form);
-}
-
-/**
- * Only save the token if set.
- */
-function tag1update_admin_settings_token_handler($form, &$form_state) {
-  if (empty($form_state['values']['tag1update_token'])) {
-    unset($form_state['values']['tag1update_token']);
-  }
 }
 
 /**
