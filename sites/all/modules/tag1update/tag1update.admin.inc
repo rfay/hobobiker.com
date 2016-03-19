@@ -12,7 +12,7 @@ function tag1update_admin_settings() {
   $form['tag1update_report'] = array(
     '#type' => 'checkbox',
     '#title' => t('Report enabled module information to Tag1 Consulting, Inc'),
-    '#description' => t('When checked, this module will send information about your enabled modules to Tag1 Consulting.'),
+    '#description' => t('When checked, this module will send information about your enabled modules and themes to Tag1 Consulting as part of the D6 LTS service.'),
     '#default_value' => variable_get('tag1update_report', '1'),
   );
   $form['tag1update_url'] = array(
@@ -116,7 +116,7 @@ function tag1update_admin_status() {
   else {
     $output .= '<p>' . t('The next @type will be sent to Tag1 in @time.', array('@type' => $report_type, '@time' => format_interval($next_update)));
   }
-  $output .= '&nbsp;&nbsp;&nbsp;' . l(t('Send manually'), '/admin/settings/tag1updates/status/manual') . '</p>';
+  $output .= '&nbsp;&nbsp;&nbsp;' . l(t('Send manually'), 'admin/settings/tag1updates/status/manual') . '</p>';
 
   $last_update = variable_get('tag1update_last_update', 0);
   if (!$last_update) {
