@@ -28,12 +28,13 @@ support@tag1consulting.com.
   rename from "tag1update-1.0" to "tag1update".
 
 2. Enable the module.
-  Visit admin/build/modules and enable the 'Tag1 Consulting Drupal 6 update 
-  status' module.
+  Visit 'Administer › Site building › Modules' at admin/build/modules and enable
+  the 'Tag1 Consulting Drupal 6 update status' module.
 
 3. Configure the module.
-  Visit admin/settings/tag1updates and enter the following information, if
-  not already there:
+  Visit 'Administer › Site configuration › Tag1 Consulting Drupal 6 udpates' at
+  admin/settings/tag1updates and enter the following information, if not already
+  there:
     Reporting URL: https://updates.tag1consulting.com/entity/d6lts_site
     Token: {{enter the token provided by Tag1 Consulting}}
   Click 'Save configuration'.

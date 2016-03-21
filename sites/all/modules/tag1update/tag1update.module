@@ -2,8 +2,9 @@
 
 /**
  * @file
- * Reports on installed Drupal 6 modules to Tag1 Consulting, in order to
- * receive security updates.
+ * Reports on installed Drupal 6 modules and themes to Tag1 Consulting, in
+ * order to receive security updates. This is part of a paid Drupal 6 Long Term
+ * Support service.
  */
 
 /**
@@ -12,14 +13,14 @@
 define('TAG1UPDATE_DEFAULT_URL', 'https://updates.tag1consulting.com/entity/d6lts_site');
 
 /**
- * Report changes at least once every hour.
+ * Report changes roughly once every hour. (1 hour minus ten minues)
  */
-define('TAG1UPDATE_REPORT_CHANGE_FREQUENCY', 3600);
+define('TAG1UPDATE_REPORT_CHANGE_FREQUENCY', 3000);
 
 /**
- * Report lack of changes at least once every day.
+ * Report lack of changes roughly once every day. (1 day minus ten minutes)
  */
-define('TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY', 86400);
+define('TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY', 85800);
 
 /**
  * Implementation of hook_help().
@@ -27,7 +28,7 @@ define('TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY', 86400);
 function tag1update_help($path) {
   switch ($path) {
     case 'admin/help#tag1update':
-      return '<p>' . t('Reports on your installed Drupal 6 modules to Tag1 Consulting so they can provide security updates backported from Drupal 7 and Drupal 8.') . '</p>';
+      return '<p>' . t('Reports on your installed Drupal 6 modules and themes to Tag1 Consulting so they can provide security updates backported from Drupal 7 and Drupal 8. This is part of a paid Drupal 6 Long Term Support service.') . '</p>';
   }
 }
 
@@ -45,8 +46,8 @@ function tag1update_menu() {
   $items = array();
 
   $items['admin/settings/tag1updates'] = array(
-    'title' => 'Tag1 Consulting Drupal 6 Updates',
-    'description' => 'Configure your website to talk to the Tag1 Consulting Drupal 6 update server.',
+    'title' => 'Tag1 Consulting Drupal 6 updates',
+    'description' => 'Configure your website to talk to the Tag1 Consulting update server for Drupal 6 Long Term Support.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('tag1update_admin_settings'),
     'access arguments' => array('administer tag1update'),
@@ -192,6 +193,7 @@ function tag1update_get_status() {
   $status = array(
     'type' => array(array('target_id' => 'd6lts_site')),
     'title' => array(array('value' => variable_get('site_name', 'Drupal'))),
+    'field_site_identifier' => array(array('value' => tag1update_get_site_identifier())),
     'field_base_url' => array(array('value' => $base_url)),
     'field_server_name' => array(array('value' => check_plain($_SERVER['SERVER_NAME']))),
     'field_server_address' => array(array('value' => check_plain($_SERVER['SERVER_ADDR']))),
@@ -209,6 +211,23 @@ function tag1update_get_status() {
   return $status;
 }
 
+/**
+ * Return a unique site identifier.
+ */
+function tag1update_get_site_identifier() {
+  $tag1update_siteid = variable_get('tag1update_siteid', NULL);
+
+  if (is_null($tag1update_siteid)) {
+    $tag1update_siteid = hash('sha256', mt_rand() . tag1update_get_enable_timestamp());
+    variable_set('tag1update_siteid', $tag1update_siteid);
+  }
+
+  return $tag1update_siteid;
+}
+
+/**
+ * Return a UNIX timestamp of when this module was enabled.
+ */
 function tag1update_get_enable_timestamp() {
   $tag1update_enable_timestamp = variable_get('tag1update_enable_timestamp', NULL);
 
@@ -260,10 +279,12 @@ function tag1update_next_update() {
 function tag1update_send_report() {
   $url = '';
 
-  // Prevent multiple threads from sending the update at the same time.
-  if (lock_acquire('tag1update_send_report', 60)) {
+  // The lock framework was added in Drupal 6.16 -- while Tag1 doesn't support
+  // such outdated versions of core, for now just skip locking and report.
+  // For recent versions of Drupal, prevent multiple threads from sending an
+  // update at the same time.
+  if (!function_exists('lock_acquire') || lock_acquire('tag1update_send_report', 60)) {
     $url = variable_get('tag1update_url', TAG1UPDATE_DEFAULT_URL);
-    watchdog('tag1update', t('POSTing status to %url', array('%url' => $url)), array(), WATCHDOG_INFO);
     $status = tag1update_get_status();
     // Encode json_data
     $status['field_json_data'] = array(array('value' => tag1update_json_encode_helper($status['field_json_data'][0]['value'])));
@@ -277,9 +298,11 @@ function tag1update_send_report() {
 
     if (isset($result->code) && $result->code >= 200 && $result->code < 300) {
       $result->success = TRUE;
+      watchdog('tag1update', t('Successfully sent data to %url', array('%url' => $url)), array(), WATCHDOG_INFO);
     }
     else {
       $result->success = FALSE;
+      watchdog('tag1update', t('Failed to send data to %url', array('%url' => $url)), array(), WATCHDOG_INFO);
     }
 
     if ($result->success == FALSE || variable_get('tag1update_debug', FALSE)) {
@@ -320,7 +343,9 @@ function tag1update_send_report() {
     else {
       watchdog('tag1update', t('Failed to send D6 LTS update to Tag1 Consulting.'));
     }
-    lock_release('tag1update_send_report');
+    if (function_exists('lock_release')) {
+      lock_release('tag1update_send_report');
+    }
   }
 
   return $result;
