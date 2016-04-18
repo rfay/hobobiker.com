@@ -1,4 +1,15 @@
-//$Id$
+CCK 6.x-2.x-dev
+===========
+
+Bugfixes:
+- #1401950 by KarenS, Add empty test module with dependency on schema to make
+  schema available to testbot.
+- #998494 by zhangtaihao: Fix Node Reference field always displaying 10 results
+  when using the Advanced View option (with Views 6.x-3.x)
+- #1423432 by sun: Fixed testInfo() methods throws PHP notices.
+- #1533506 by yched: Fixed field tokens not available in hook_update_N().
+- #1442886 by pdrake: Fixed fatal error "failed opening theme.inc" in some edge
+  cases.
 
 CCK 6.x-2.10
 ============
@@ -13,6 +24,9 @@ Features
 - #1008184 by merlinofchaos, bojanz, dereine, yched: Adapt to Views 3 "semantic views" feature (backwards compatible with Views 2)
 
 Bugfixes:
+- Fix warning: Creating default object from empty value in template_preprocess_content_display_overview_form() (line 134 of ..theme.inc).
+- #1063338 by DeFr: Fix undefined indexes for FIELD_NAME_rendered and others.
+- #696620 Make sure non-empty descriptions don't run through translator.
 - #863226 by KarenS: make sure we have a function that will return inactive instances when other instances of the same field are still active.
 - #887742 by yched: fix notices in _content_get_formatter() in some Views
 - #736440 by yched, dhthwy: fix memory leaks on long running migration scripts (e.g. migrate.module)

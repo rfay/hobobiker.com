@@ -1,8 +1,10 @@
-name = Number
-description = Defines numeric field types.
-dependencies[] = content
+name = Content Test
+description = Test module for CCK.
 package = CCK
 core = 6.x
+dependencies[] = schema
+hidden = TRUE
+files[] = content_test.module
 ; Information added by Drupal.org packaging script on 2015-06-17
 version = "6.x-2.10+21-dev"
 core = "6.x"

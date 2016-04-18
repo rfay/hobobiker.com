@@ -1,12 +1,11 @@
-; $Id$
 name = Content Copy
 description = Enables ability to import/export field definitions.
 dependencies[] = content
 package = CCK
 core = 6.x
 ; Information added by Drupal.org packaging script on 2015-06-17
-version = "6.x-2.10"
+version = "6.x-2.10+21-dev"
 core = "6.x"
 project = "cck"
-datestamp = "1434568159"
+datestamp = "1434568386"
 
