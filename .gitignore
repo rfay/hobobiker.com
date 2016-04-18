@@ -4,6 +4,7 @@ backup
 .project
 .settings
 sites/default/settings.php
+sites/default/settings.local.php
 files
 cache
 robots.txt
