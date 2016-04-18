@@ -1,0 +1,67 @@
+diff --git a/includes/handlers.inc b/includes/handlers.inc
+index 091e625..02a31c8 100644
+--- a/includes/handlers.inc
++++ b/includes/handlers.inc
+@@ -406,6 +406,10 @@ function set_relationship() {
+    * Add this handler into the query.
+    *
+    * If we were using PHP5, this would be abstract.
++   *
++   * @param bool $group_by
++   *   (optional) Whether the view is using an aggregation query. If you
++   *    override this method you can specify $group_by as optional parameter.
+    */
+   function query() { }
+ 
+diff --git a/modules/comment/views_plugin_row_comment_view.inc b/modules/comment/views_plugin_row_comment_view.inc
+index f3f58dc..8a21405 100644
+--- a/modules/comment/views_plugin_row_comment_view.inc
++++ b/modules/comment/views_plugin_row_comment_view.inc
+@@ -22,7 +22,7 @@ function options_form(&$form, &$form_state) {
+     );
+   }
+ 
+-  function pre_render($result) {
++  function pre_render(&$result) {
+     $cids = array();
+     $this->comments = array();
+ 
+diff --git a/plugins/views_plugin_display_attachment.inc b/plugins/views_plugin_display_attachment.inc
+index e59ba62..3096944 100644
+--- a/plugins/views_plugin_display_attachment.inc
++++ b/plugins/views_plugin_display_attachment.inc
+@@ -14,7 +14,7 @@
+  * @ingroup views_display_plugins
+  */
+ class views_plugin_display_attachment extends views_plugin_display {
+-  function option_definition () {
++  function option_definition() {
+     $options = parent::option_definition();
+ 
+     $options['attachment_position'] = array('default' => 'before');
+diff --git a/plugins/views_plugin_row.inc b/plugins/views_plugin_row.inc
+index 2fe3ae4..9af9daf 100644
+--- a/plugins/views_plugin_row.inc
++++ b/plugins/views_plugin_row.inc
+@@ -122,7 +122,7 @@ function query() {
+    * @param $result
+    *   The full array of results from the query.
+    */
+-  function pre_render($result) { }
++  function pre_render(&$result) { }
+ 
+   /**
+    * Render a row object. This usually passes through to a theme template
+diff --git a/plugins/views_plugin_style.inc b/plugins/views_plugin_style.inc
+index 39c4abb..4c1fc54 100644
+--- a/plugins/views_plugin_style.inc
++++ b/plugins/views_plugin_style.inc
+@@ -122,7 +122,7 @@ function build_sort_post() { }
+    * @param $result
+    *   The full array of results from the query.
+    */
+-  function pre_render($result) {
++  function pre_render(&$result) {
+     if (!empty($this->row_plugin)) {
+       $this->row_plugin->pre_render($result);
+     }
