@@ -1,0 +1,49 @@
+diff --git a/includes/content.admin.inc b/includes/content.admin.inc
+index e22c744..b1f0c4b 100644
+--- a/includes/content.admin.inc
++++ b/includes/content.admin.inc
+@@ -1294,7 +1294,8 @@ function content_field_edit_form_validate($form, &$form_state) {
+     elseif (!empty($form_values['default_value_widget'])) {
+       // Fields that handle their own multiple values may use an expected
+       // value as the top-level key, so just pop off the top element.
+-      $key = array_shift(array_keys($form_values['default_value_widget']));
++      $keys = array_keys($form_values['default_value_widget']);
++      $key = array_shift($keys);
+       $default_value = $form_values['default_value_widget'][$key];
+       $is_code = FALSE;
+       form_set_value(array('#parents' => array('default_value_php')), '', $form_state);
+diff --git a/includes/views/handlers/content_handler_field.inc b/includes/views/handlers/content_handler_field.inc
+index a905dde..9d25248 100644
+--- a/includes/views/handlers/content_handler_field.inc
++++ b/includes/views/handlers/content_handler_field.inc
+@@ -136,7 +136,7 @@ class content_handler_field extends views_handler_field_node {
+   /**
+    * Return DIV or SPAN based upon the field's element type.
+    */
+-  function element_type($none_supported = FALSE, $default_empty = FALSE) {
++  function element_type($none_supported = FALSE, $default_empty = FALSE, $inline = FALSE) {
+     // The 'element_type' property denotes Views 3.x ('semantic views'
+     // functionnality). If the property is set, and not set to '' ("default"),
+     // let the generic method handle the output.
+diff --git a/includes/views/handlers/content_handler_field_multiple.inc b/includes/views/handlers/content_handler_field_multiple.inc
+index 615182b..cb8827d 100644
+--- a/includes/views/handlers/content_handler_field_multiple.inc
++++ b/includes/views/handlers/content_handler_field_multiple.inc
+@@ -126,7 +126,7 @@ class content_handler_field_multiple extends content_handler_field {
+     $this->field_alias = $this->aliases['vid'];
+   }
+ 
+-  function pre_render($values) {
++  function pre_render(&$values) {
+     // If there are no values to render (displaying a summary, or query returned no results),
+     // or if this is not a grouped field, do nothing specific.
+     if (isset($this->view->build_info['summary']) || empty($values) || !$this->defer_query) {
+@@ -190,7 +190,7 @@ class content_handler_field_multiple extends content_handler_field {
+    * Fields rendered with the 'group multiple' option use <div> markers,
+    * and thus shouldn't be wrapped in a <span>.
+    */
+-  function element_type($none_supported = FALSE, $default_empty = FALSE) {
++  function element_type($none_supported = FALSE, $default_empty = FALSE, $inline = FALSE) {
+     // If this is not a grouped field, use the parent method.
+     if (!$this->defer_query) {
+       return parent::element_type($none_supported, $default_empty);
