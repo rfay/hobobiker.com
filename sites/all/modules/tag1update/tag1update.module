@@ -8,19 +8,19 @@
  */
 
 /**
+ * Tag1 API version.
+ */
+define('TAG1_API_VERSION', '2.0');
+
+/**
  * URL to check for updates.
  */
-define('TAG1UPDATE_DEFAULT_URL', 'https://updates.tag1consulting.com/entity/d6lts_site');
+define('TAG1UPDATE_URL', 'https://updates.tag1consulting.com/' . TAG1_API_VERSION .'/entity/d6lts_site');
 
 /**
- * Report changes roughly once every hour. (1 hour minus ten minues)
+ * Send heartbeat roughly once every day. (1 day minus ten minutes)
  */
-define('TAG1UPDATE_REPORT_CHANGE_FREQUENCY', 3000);
-
-/**
- * Report lack of changes roughly once every day. (1 day minus ten minutes)
- */
-define('TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY', 85800);
+define('TAG1UPDATE_HEARTBEAT_FREQUENCY', 85800);
 
 /**
  * Implementation of hook_help().
@@ -94,93 +94,9 @@ function tag1update_menu() {
  * Implementation of hook_cron().
  */
 function tag1update_cron() {
-  tag1update_update_status();
   $next_update = tag1update_next_update();
   if ($next_update <= 0) {
     tag1update_send_report();
-  }
-}
-
-/**
- * Collect details about enabled themes and modules.
- */
-function tag1update_update_status() {
-  if (variable_get('tag1update_report', 1)) {
-    // Build an array of all currently enabled modules.
-    $current = array();
-    $modules = module_rebuild_cache();
-    foreach ($modules as $name => $module) {
-      // We only care about enabled modules.
-      if ($module->status == 1) {
-        $current["$module->type:$module->name"] = array(
-          'name' => $module->name,
-          'type' => $module->type,
-          'info_name' => $module->info['name'],
-          'info_package' => $module->info['package'],
-          'info_version' => $module->info['version'],
-          'schema_version' => $module->schema_version,
-        );
-      }
-    }
-
-    // Add to the array all currently enabled themes.
-    $themes = list_themes();
-    foreach ($themes as $name => $theme) {
-      // We only caer about enabled themes.
-      if ($theme->status == 1) {
-        $current["$theme->type:$theme->name"] = array(
-          'name' => $theme->name,
-          'type' => $theme->type,
-          'info_name' => $theme->info['name'],
-          'info_package' => $theme->info['engine'],
-          'info_version' => $theme->info['version'],
-          'schema_version' => $theme->schema_version,
-        );
-      }
-    }
-
-    // Retrieve array describing all previously installed projects.
-    $old = array();
-    $result = db_query('SELECT name, type, info_name, info_package, info_version, schema_version FROM {tag1update}');
-    while ($project = db_fetch_array($result)) {
-      $type = $project['type'];
-      $name = $project['name'];
-      $old["$type:$name"] = $project;
-    }
-
-    $update = FALSE;
-    // See if anything else has changed.
-    foreach ($current as $key => $value) {
-      if (!isset($old["$key"])) {
-        // Something new has been enabled.
-        $update = TRUE;
-        db_query("INSERT INTO {tag1update} (name, type, info_name, info_package, info_version, schema_version) VALUES('%s', '%s', '%s', '%s', '%s', '%s')", $value['name'], $value['type'], $value['info_name'], $value['info_package'], $value['info_version'], $value['schema_version']);
-      }
-      else if ($value['info_version'] != $old["$key"]['info_version'] ||
-               $value['schema_version'] != $old["$key"]['schema_version']) {
-        // Something has changed.
-        $update = TRUE;
-        db_query("UPDATE {tag1update} SET info_name = '%s', info_package = '%s', info_version = '%s', schema_version = '%s' WHERE name = '%s' AND type = '%s'", $value['info_name'], $value['info_package'], $value['info_version'], $value['schema_version'], $value['name'], $value['type']);
-        unset($old["$key"]);
-      }
-      else {
-        // Nothing has changed.
-        unset($old["$key"]);
-      }
-    }
-    // Anything left has been disabled, remove.
-    foreach ($old as $key => $value) {
-      db_query("DELETE FROM {tag1update} WHERE name = '%s' AND type = '%s'", $value['name'], $value['type']);
-    }
-    if (!empty($old) || $update) {
-      if (!variable_get('tag1update_update', FALSE)) {
-        variable_set('tag1update_update', TRUE);
-      }
-    }
-  }
-  else {
-    // Be sure we're not collecting information when disabled.
-    db_query('DELETE FROM {tag1update}');
   }
 }
 
@@ -190,8 +106,14 @@ function tag1update_update_status() {
 function tag1update_get_status() {
   global $base_url;
 
+  if (!variable_get('tag1update_report', 1)) {
+    // Send no information to Tag1 if reporting is disabled.
+    return array();
+  }
+
   $status = array(
     'type' => array(array('target_id' => 'd6lts_site')),
+    'field_tag1_api_version' => array(array('value' => TAG1_API_VERSION)),
     'title' => array(array('value' => variable_get('site_name', 'Drupal'))),
     'field_site_identifier' => array(array('value' => tag1update_get_site_identifier())),
     'field_base_url' => array(array('value' => $base_url)),
@@ -202,9 +124,12 @@ function tag1update_get_status() {
     'field_last_update' => array(array('value' => time())),
     'field_enable_timestamp' => array(array('value' => tag1update_get_enable_timestamp())),
   );
-  $field_json_data = array();
-  $result = db_query('SELECT * FROM {tag1update}');
+  // We send the entire system table to make it possible to properly match
+  // all modules and themes with the proper upstream Drupal projects.
+  $result = db_query('SELECT * FROM {system}');
   while ($update = db_fetch_array($result)) {
+    // Include all comments from the info file, if any.
+    $update['info_comments'] = tag1update_load_info_comments($update['type'], $update['name']);
     $field_json_data[] = $update;
   }
   $status['field_json_data'] = array(array('value' => $field_json_data));
@@ -245,32 +170,41 @@ function tag1update_get_enable_timestamp() {
 function tag1update_next_update() {
   $last_update = variable_get('tag1update_last_update', 0);
   if ($last_update == 0) {
-    // No updates reported yet, report immediately.
+    // No updates reported yet, send first heartbeat.
     return 0;
   }
-
   $time_since_last_update = time() - $last_update;
+  return TAG1UPDATE_HEARTBEAT_FREQUENCY - $time_since_last_update;
+}
 
-  if (variable_get('tag1update_update', FALSE)) {
-    if ($time_since_last_update > TAG1UPDATE_REPORT_CHANGE_FREQUENCY) {
-      // We haven't reported in the last frequency, report immediately.
-      return 0;
-    }
-    else {
-      // We've reported recently, wait.
-      return TAG1UPDATE_REPORT_CHANGE_FREQUENCY - $time_since_last_update;
-    }
-  }
-  else {
-    if ($time_since_last_update > TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY) {
-      // We haven't reported in the last frequency, report immediately.
-      return 0;
-    }
-    else {
-      // We've reported recently, wait.
-      return TAG1UPDATE_REPORT_NOCHANGE_FREQUENCY - $time_since_last_update;
+/**
+ * Return an array of all comments in an extension info file.
+ */
+function tag1update_load_info_comments($type, $name) {
+  $comments = array();
+  $filename = drupal_get_path($type, $name) . "/$name.info";
+  if (file_exists($filename)) {
+    // Load the info file.
+    $data = file_get_contents($filename);
+    // Extract only the comments.
+    if (preg_match_all('@[^\s]*;[^\r\n]*$@mx', $data, $matches, PREG_SET_ORDER)) {
+      foreach ($matches as $match) {
+        $comments[] = $match[0];
+      }
     }
   }
+  return $comments;
+}
+
+/**
+ * Wrap lock_acquire() as it was only added in Drupal 6.16. Use it if available,
+ * otherwise don't lock.
+ */
+function tag1update_lock_acquire($tag) {
+  if (function_exists('lock_acquire')) {
+    return lock_acquire($tag);
+  }
+  return TRUE;
 }
 
 /**
@@ -279,12 +213,8 @@ function tag1update_next_update() {
 function tag1update_send_report() {
   $url = '';
 
-  // The lock framework was added in Drupal 6.16 -- while Tag1 doesn't support
-  // such outdated versions of core, for now just skip locking and report.
-  // For recent versions of Drupal, prevent multiple threads from sending an
-  // update at the same time.
-  if (!function_exists('lock_acquire') || lock_acquire('tag1update_send_report', 60)) {
-    $url = variable_get('tag1update_url', TAG1UPDATE_DEFAULT_URL);
+  if (tag1update_lock_acquire('tag1update_send_report')) {
+    $url = variable_get('tag1update_url', TAG1UPDATE_URL);
     $status = tag1update_get_status();
     // Encode json_data
     $status['field_json_data'] = array(array('value' => tag1update_json_encode_helper($status['field_json_data'][0]['value'])));
@@ -373,7 +303,6 @@ function tag1update_json_encode($var) {
   // does not support this parameter prior to PHP 5.3.0.  Use a helper instead.
   return tag1update_json_encode_helper($var);
 }
-
 
 /**
  * Borrowed from Drupal 7:

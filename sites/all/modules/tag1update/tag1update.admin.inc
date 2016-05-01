@@ -15,13 +15,6 @@ function tag1update_admin_settings() {
     '#description' => t('When checked, this module will send information about your enabled modules and themes to Tag1 Consulting as part of the D6 LTS service.'),
     '#default_value' => variable_get('tag1update_report', '1'),
   );
-  $form['tag1update_url'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Reporting URL'),
-    '#description' => t('The URL where information will be sent.'),
-    '#default_value' => variable_get('tag1update_url', TAG1UPDATE_DEFAULT_URL),
-    '#maxlength' => 255,
-  );
   $form['tag1update_token'] = array(
     '#type' => 'textfield',
     '#title' => t('Token'),
@@ -34,6 +27,9 @@ function tag1update_admin_settings() {
     '#title' => t('Advanced'),
     '#collapsible' => TRUE,
     '#collapsed' => !variable_get('tag1update_debug', FALSE),
+  );
+  $form['advanced']['tag1update_token'] = array(
+    '#value' => '<div class="container-inline"><span class="option">' . t('Site identifier') . '</span><br /><span class="description">' . variable_get('tag1update_siteid', '') . '</span></div>',
   );
   $form['advanced']['tag1update_debug'] = array(
     '#type' => 'checkbox',
@@ -50,7 +46,6 @@ function tag1update_admin_settings() {
  * Display the information that's being provided to Tag1 Consulting.
  */
 function tag1update_admin_review() {
-  tag1update_update_status();
   $status = tag1update_get_status();
 
   if (empty($status['field_json_data'])) {
@@ -60,22 +55,28 @@ function tag1update_admin_review() {
     $header = array(
       t('Name'),
       t('Type'),
-      t('Display name'),
-      t('Package'),
       t('Version'),
       t('Schema version'),
+      t('Enabled'),
+      t('Filename'),
     );
 
     $rows = array();
     $enabled = $status['field_json_data'][0]['value'];
     foreach ($enabled as $project) {
+      if (isset($project['info'])) {
+        $info = unserialize($project['info']);
+      }
+      else {
+        $info = array();
+      }
       $row = array(
         $project['name'],
         $project['type'],
-        $project['info_name'],
-        $project['info_package'],
-        $project['info_version'],
+        isset($info['version']) ? $info['version'] : t('undefined'),
         $project['schema_version'],
+        $project['status'],
+        $project['filename'],
       );
       $rows[] = $row;
     }
@@ -99,32 +100,27 @@ function tag1update_admin_review() {
  */
 function tag1update_admin_status() {
   $output = '';
-
-  if (variable_get('tag1update_update', FALSE)) {
-    $output .= '<p>' . t('Changes to report.') . '</p>';
-    $report_type = t('change report');
-  }
-  else {
-    $output .= '<p>' . t('No changes to report.') . '</p>';
-    $report_type = t('heartbeat');
-  }
-
   $next_update = tag1update_next_update();
-  if (!$next_update) {
-    $output .= '<p>' . t('The next @type will be sent to Tag1 the next time cron runs.', array('@type' => $report_type));
+  if ($next_update <= 0) {
+    $output .= '<p>' . t('A heartbeat will be sent to Tag1 the next time cron runs.');
   }
   else {
-    $output .= '<p>' . t('The next @type will be sent to Tag1 in @time.', array('@type' => $report_type, '@time' => format_interval($next_update)));
+    $output .= '<p>' . t('A heartbeat will be sent to Tag1 in @time.', array('@time' => format_interval($next_update)));
   }
   $output .= '&nbsp;&nbsp;&nbsp;' . l(t('Send manually'), 'admin/settings/tag1updates/status/manual') . '</p>';
 
   $last_update = variable_get('tag1update_last_update', 0);
   if (!$last_update) {
-    $output .= '<p>' . t('No update has ever been sent. Please be sure you have cron configured correctly.') . '</p>';
+    $output .= '<p>' . t('No heartbeat has ever been sent. Please be sure you have cron configured correctly.') . '</p>';
   }
   else {
-    $output .= '<p>' . t('The last update was sent @time ago.', array('@time' => format_interval(time() - $last_update))) . '</p>';
+    $time = time();
+    $output .= '<p>' . t('The last heartbeat was sent @time ago.', array('@time' => format_interval($time - $last_update))) . '</p>';
+    if (($time - $last_update) > TAG1UPDATE_HEARTBEAT_FREQUENCY * 2) {
+      drupal_set_message(t('No recent heartbeat has been sent. Please be sure you have cron configured correctly.'), 'error');
+    }
   }
+
 
   return $output;
 }

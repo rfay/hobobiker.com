@@ -1,12 +1,12 @@
 --------
 OVERVIEW
 --------
-This module sends information about your website to Tag1 Consulting who is
-providing you with Drupal 6 Long Term Support. They track which modules and
-themes you have enabled, watching for Drupal 7 and Drupal 8 releases of these
-projects, backporting any relevant security issues reported upstream. Once this
-module is properly installed and configured, Tag1 will notify you whenever
-security issues are found.
+This module sends information about your website to Tag1 Consulting, as they
+are providing you with Drupal 6 Long Term Support. It tracks which modules and
+themes you have in your codebase, watching for Drupal 7 and Drupal 8 releases
+of these projects, backporting any relevant security issues reported upstream.
+With this module properly installed and configured, Tag1 will notify you
+whenever security issues are found.
 
 Data is securely sent to Tag1 at least once every day. This requires that cron
 is configured on your website (https://www.drupal.org/cron), and that OpenSSL
@@ -32,32 +32,29 @@ support@tag1consulting.com.
   the 'Tag1 Consulting Drupal 6 update status' module.
 
 3. Configure the module.
-  Visit 'Administer › Site configuration › Tag1 Consulting Drupal 6 udpates' at
-  admin/settings/tag1updates and enter the following information, if not already
-  there:
-    Reporting URL: https://updates.tag1consulting.com/entity/d6lts_site
-    Token: {{enter the token provided by Tag1 Consulting}}
-  Click 'Save configuration'.
+  Visit 'Administer › Site configuration › Tag1 Consulting Drupal 6 updates' at
+  admin/settings/tag1updates and enter the token provided by Tag1 Consulting.
+  Then click 'Save configuration'.
 
 4. Test the module.
   Click the 'Review' tab (taking you to admin/settings/tag1updates/review) and
-  confirm it lists your enabled modules and themes. You can see exactly what
-  is sent to Tag1 Consulting by clicking the 'Raw data' fieldset at the
-  bottom of the page.
+  confirm it lists your modules and themes. You can see exactly what is sent to
+  Tag1 Consulting by clicking the 'Raw data' fieldset at the bottom of the page.
 
   Now, click the 'Status' tab (taking you to admin/settings/tag1updates/status)
-  and see that there are 'Changes to report'. You can wait for cron to run,
-  or click 'Send manually'.
+  to see when the next heartbeat will be sent to Tag1. We recommend you test
+  that everything is correctly configured the first time by clicking 
+  'Send manually'.
 
 ---------------
 TROUBLESHOOTING
 ---------------
-Be sure that you configured the Reporting URL and your Token correctly. If
-running a manual update generates an error, visit Recent log entries
-(admin/reports/dblog) and look for messages from the 'tag1update' module.
-If there's not enough information in the logs, go to the tag1updates
-configuration page (admin/settings/tag1updates), open the Advanced fieldset,
-and enable 'Debug logging'. Then go back to the 'Status' tab and try to
-'Send manually' again. Finally, review the Recent log entries again.
+Be sure that you configured your Token correctly (step #3 above). If running a
+manual update generates an error, visit Recent log entries (admin/reports/dblog)
+and look for messages from the 'tag1update' module. If there's not enough
+information in the logs, go to the tag1updates configuration page
+(admin/settings/tag1updates), open the Advanced fieldset, and enable 'Debug
+logging'. Then go back to the 'Status' tab and try to 'Send manually' again.
+Finally, review the Recent log entries again.
 
 If the problem is not obvious, email support@tag1consulting.com for help.

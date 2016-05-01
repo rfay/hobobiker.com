@@ -1,19 +1,9 @@
 <?php
 
 /**
- * Implementation of hook_install().
- */
-function tag1update_install() {
-  // Create table.
-  drupal_install_schema('tag1update');
-}
-
-/**
  * Implementation of hook_uninstall().
  */
 function tag1update_uninstall() {
-  // Remove table.
-  drupal_uninstall_schema('tag1update');
   // Clear any variables that might be in use
   $variables = array(
     'tag1update_debug',
@@ -23,8 +13,7 @@ function tag1update_uninstall() {
     'tag1update_report',
     'tag1update_token',
     'tag1update_url',
-    'tag1update_update',
-    'tag1update_uuid',
+    'tag1update_update', // no longer used
   );
   foreach ($variables as $variable) {
     variable_del($variable);
@@ -32,49 +21,12 @@ function tag1update_uninstall() {
 }
 
 /**
- * Implementation of hook_schema().
+ * Remove no longer used tag1update table.
  */
-function tag1update_schema() {
-  $schema['tag1update'] = array(
-    'fields' => array(
-      'name' => array(
-        'description' => 'The name of the item; e.g. node.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''),
-      'type' => array(
-        'description' => 'The type of the item, either module, theme, or theme_engine.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''),
-      'info_name' => array(
-        'description' => 'The name of the item according to its info file.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''),
-      'info_package' => array(
-        'description' => 'The package or basetheme of the item according to its info file.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''),
-      'info_version' => array(
-        'description' => 'The version of the item according to its info file.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''),
-      'schema_version' => array(
-        'description' => "The module's database schema version number. -1 if the module is not installed (its tables do not exist); 0 or the largest N of the module's hook_update_N() function that has either been run or existed when the module was first installed.",
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'size' => 'small'),
-      ),
-    'primary key' => array(array('type', 12), 'name'),
-  );
-  return $schema;
+function tag1update_update_0602() {
+  $ret = array();
+  db_drop_table($ret, 'tag1update');
+  // Be sure we're talking to the new URL.
+  variable_del('tag1update_url');
+  return $ret;
 }
