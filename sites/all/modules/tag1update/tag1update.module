@@ -111,15 +111,19 @@ function tag1update_get_status() {
     return array();
   }
 
+  $server_name = isset($_SERVER['SERVER_NAME']) ? check_plain($_SERVER['SERVER_NAME']) : '';
+  $server_addr = isset($_SERVER['SERVER_ADDR']) ? check_plain($_SERVER['SERVER_ADDR']) : '';
+  $php_self = isset($_SERVER['PHP_SELF']) ? check_plain($_SERVER['PHP_SELF']) : '';
+
   $status = array(
     'type' => array(array('target_id' => 'd6lts_site')),
     'field_tag1_api_version' => array(array('value' => TAG1_API_VERSION)),
     'title' => array(array('value' => variable_get('site_name', 'Drupal'))),
     'field_site_identifier' => array(array('value' => tag1update_get_site_identifier())),
     'field_base_url' => array(array('value' => $base_url)),
-    'field_server_name' => array(array('value' => check_plain($_SERVER['SERVER_NAME']))),
-    'field_server_address' => array(array('value' => check_plain($_SERVER['SERVER_ADDR']))),
-    'field_php_self' => array(array('value' => check_plain($_SERVER['PHP_SELF']))),
+    'field_server_name' => array(array('value' => $server_name)),
+    'field_server_address' => array(array('value' => $server_addr)),
+    'field_php_self' => array(array('value' => $php_self)),
     'field_php_version' => array(array('value' => phpversion())),
     'field_last_update' => array(array('value' => time())),
     'field_enable_timestamp' => array(array('value' => tag1update_get_enable_timestamp())),
@@ -212,6 +216,17 @@ function tag1update_lock_acquire($tag) {
  */
 function tag1update_send_report() {
   $url = '';
+
+  // Silently abort sending report if data collection is disabled.
+  if (!variable_get('tag1update_report', 1)) {
+    // Send no information to Tag1 if reporting is disabled.
+    return array();
+  }
+  // Abort sending report if token is not configured.
+  else if (variable_get('tag1update_token', '') == '') {
+    watchdog('tag1update', t('Token is required, aborted sending D6 LTS update.'));
+    return array();
+  }
 
   if (tag1update_lock_acquire('tag1update_send_report')) {
     $url = variable_get('tag1update_url', TAG1UPDATE_URL);

@@ -82,12 +82,13 @@ function tag1update_admin_review() {
     }
     $output = theme('table', $header, $rows);
 
+    $status['field_json_data'] = array(array('value' => tag1update_json_encode_helper($status['field_json_data'][0]['value'])));
     // Show the actual JSON that's being sent to Tag1 Consulting.
     $fieldset = array(
       '#title' => t('Raw data'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#value' => '<div class="container-inline">' . drupal_to_js($status) . '</div>',
+      '#value' => '<div class="container-inline">' . tag1update_json_encode_helper($status) . '</div>',
     );
     $output .= theme('fieldset', $fieldset);
 
