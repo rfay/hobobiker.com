@@ -23,6 +23,13 @@ define('TAG1UPDATE_URL', 'https://updates.tag1consulting.com/' . TAG1_API_VERSIO
 define('TAG1UPDATE_HEARTBEAT_FREQUENCY', 85800);
 
 /**
+ * Error codes.
+ */
+define('TAG1UPDATE_ERROR_DISABLED', 1);
+define('TAG1UPDATE_ERROR_NO_TOKEN', 2);
+define('TAG1UPDATE_ERROR_NOT_UPDATED', 3);
+
+/**
  * Implementation of hook_help().
  */
 function tag1update_help($path) {
@@ -104,18 +111,59 @@ function tag1update_cron() {
  * Return an array of all tracked data.
  */
 function tag1update_get_status() {
-  global $base_url;
+  global $base_url, $db_url;
+
+  $status = array();
+  $warning = '';
 
   if (!variable_get('tag1update_report', 1)) {
-    // Send no information to Tag1 if reporting is disabled.
-    return array();
+    $warning = t('No information will be sent to Tag1 until you enable reporting in the !configuration tab.', array('!configuration' => l(t('configuration'), 'admin/settings/tag1updates')));
+    $status['error'] = TAG1UPDATE_ERROR_DISABLED;
+  }
+  if (variable_get('tag1update_token', '') == '') {
+    if (!empty($warning)) {
+      $warning = t('No information will be sent to Tag1 until you enable reporting and configure your token in the !configuration tab.', array('!configuration' => l(t('configuration'), 'admin/settings/tag1updates')));
+    }
+    else {
+      $warning = t('No information will be sent to Tag1 until you configure your token in the !configuration tab.', array('!configuration' => l(t('configuration'), 'admin/settings/tag1updates')));
+      $status['error'] = TAG1UPDATE_ERROR_NO_TOKEN;
+    }
+  }
+  if (db_table_exists('tag1update')) {
+    drupal_set_message(t("Your database is out of date. You must run update.php or 'drush updb' before updates will be sent to Tag1 Consulting."), 'error');
+    $status['error'] = TAG1UPDATE_ERROR_NOT_UPDATED;
+  }
+
+  if (!empty($warning)) {
+    drupal_set_message($warning, 'warning');
   }
 
   $server_name = isset($_SERVER['SERVER_NAME']) ? check_plain($_SERVER['SERVER_NAME']) : '';
   $server_addr = isset($_SERVER['SERVER_ADDR']) ? check_plain($_SERVER['SERVER_ADDR']) : '';
   $php_self = isset($_SERVER['PHP_SELF']) ? check_plain($_SERVER['PHP_SELF']) : '';
 
-  $status = array(
+  // Pass along default theme information for optional dashboard display.
+  $default_theme = variable_get('theme_default', 'garland');
+  $default_theme_settings = theme_get_settings($default_theme);
+  $logo_path = $default_theme_settings['default_logo'] ? '' : $default_theme_settings['logo_path'];
+  $favicon_path = $default_theme_settings['default_favicon'] ? '' : $default_theme_settings['favicon_path'];
+
+  // A hash of the db_url helps identify different deployment instances.
+  if (is_array($db_url)) {
+    if (isset($db_url['default'])) {
+      $url_string = $db_url['default'];
+    }
+    else {
+      $url_string = array_pop($db_url);
+    }
+  }
+  else {
+    $url_string = $db_url;
+  }
+  // No passwords are sent, just a hash.
+  $db_url_hash = hash('sha1', $url_string);
+
+  $status += array(
     'type' => array(array('target_id' => 'd6lts_site')),
     'field_tag1_api_version' => array(array('value' => TAG1_API_VERSION)),
     'title' => array(array('value' => variable_get('site_name', 'Drupal'))),
@@ -125,6 +173,9 @@ function tag1update_get_status() {
     'field_server_address' => array(array('value' => $server_addr)),
     'field_php_self' => array(array('value' => $php_self)),
     'field_php_version' => array(array('value' => phpversion())),
+    'field_logo_path' => array(array('value' => $logo_path)),
+    'field_favicon_path' => array(array('value' => $favicon_path)),
+    'field_db_url_hash' => array(array('value' => $db_url_hash)),
     'field_last_update' => array(array('value' => time())),
     'field_enable_timestamp' => array(array('value' => tag1update_get_enable_timestamp())),
   );
@@ -206,9 +257,12 @@ function tag1update_load_info_comments($type, $name) {
  */
 function tag1update_lock_acquire($tag) {
   if (function_exists('lock_acquire')) {
-    return lock_acquire($tag);
+    $lock = lock_acquire($tag);
   }
-  return TRUE;
+  else {
+    $lock = TRUE;
+  }
+  return $lock;
 }
 
 /**
@@ -220,26 +274,35 @@ function tag1update_send_report() {
   // Silently abort sending report if data collection is disabled.
   if (!variable_get('tag1update_report', 1)) {
     // Send no information to Tag1 if reporting is disabled.
-    return array();
+    $result = new stdClass();
+    $result->error = TAG1UPDATE_ERROR_DISABLED;
+    return $result;
   }
   // Abort sending report if token is not configured.
-  else if (variable_get('tag1update_token', '') == '') {
-    watchdog('tag1update', t('Token is required, aborted sending D6 LTS update.'));
-    return array();
+  else if (variable_get('tag1update_token', '') === '') {
+    watchdog('tag1update', t('Token is required, aborted sending Drupal 6 Long Term Support update.'));
+    $result = new stdClass();
+    $result->error = TAG1UPDATE_ERROR_NO_TOKEN;
+    return $result;
+  }
+  else if (db_table_exists('tag1update')) {
+    watchdog('tag1update', t('Database has not been updated, aborted sending Drupal 6 Long Term Support update. Run update.php to fix.'));
+    $result = new stdClass();
+    $result->error = TAG1UPDATE_ERROR_NOT_UPDATED;
+    return $result;
   }
 
   if (tag1update_lock_acquire('tag1update_send_report')) {
     $url = variable_get('tag1update_url', TAG1UPDATE_URL);
     $status = tag1update_get_status();
     // Encode json_data
-    $status['field_json_data'] = array(array('value' => tag1update_json_encode_helper($status['field_json_data'][0]['value'])));
-
+    $status['field_json_data'] = array(array('value' => tag1update_json_encode($status['field_json_data'][0]['value'])));
 
     $headers = array(
       'Content-Type' => 'application/json',
       'Drupal-Auth-Token' => variable_get('tag1update_token', ''),
     );
-    $result = drupal_http_request($url, $headers, 'POST', tag1update_json_encode_helper($status));
+    $result = drupal_http_request($url, $headers, 'POST', tag1update_json_encode($status));
 
     if (isset($result->code) && $result->code >= 200 && $result->code < 300) {
       $result->success = TRUE;
@@ -282,7 +345,6 @@ function tag1update_send_report() {
 
     if ($result->success) {
       // We've reported all changes.
-      variable_del('tag1update_update');
       variable_set('tag1update_last_update', time());
     }
     else {

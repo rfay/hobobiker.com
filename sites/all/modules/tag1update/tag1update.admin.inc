@@ -12,13 +12,16 @@ function tag1update_admin_settings() {
   $form['tag1update_report'] = array(
     '#type' => 'checkbox',
     '#title' => t('Report enabled module information to Tag1 Consulting, Inc'),
-    '#description' => t('When checked, this module will send information about your enabled modules and themes to Tag1 Consulting as part of the D6 LTS service.'),
+    '#description' => t('When checked, this module will send information about your website to Tag1 Consulting as part of the Drupal 6 Long Term Support service.'),
     '#default_value' => variable_get('tag1update_report', '1'),
   );
+  if (variable_get('tag1update_report', '1') && variable_get('tag1update_token', '') === '') {
+    drupal_set_message('No information will be sent to Tag1 until you configure your token.', 'warning');
+  }
   $form['tag1update_token'] = array(
     '#type' => 'textfield',
     '#title' => t('Token'),
-    '#description' => t('Your secure login token for the Tag1 Drupal LTS website.'),
+    '#description' => t('Your secure login token for the Tag1 Drupal 6 Long Term Support website.'),
     '#default_value' => variable_get('tag1update_token', ''),
     '#maxlength' => 255,
   );
@@ -43,56 +46,64 @@ function tag1update_admin_settings() {
 }
 
 /**
+ * Some very simplistic token validation.
+ */
+function tag1update_admin_settings_validate(&$form, &$form_state) {
+  $token = $form_state['values']['tag1update_token'];
+  if (!empty($token)) {
+    $bad_token = preg_replace('/:/', '', $token);
+    if ($token == $bad_token) {
+      form_set_error('tag1update_token', t('Invalid token, it must contain at least one %colon (colon).', array('%colon' => ':')));
+    }
+  }
+}
+
+/**
  * Display the information that's being provided to Tag1 Consulting.
  */
 function tag1update_admin_review() {
   $status = tag1update_get_status();
 
-  if (empty($status['field_json_data'])) {
-    $output = t('No information is currently being shared with Tag1 Consulting.');
-  }
-  else {
-    $header = array(
-      t('Name'),
-      t('Type'),
-      t('Version'),
-      t('Schema version'),
-      t('Enabled'),
-      t('Filename'),
-    );
+  $header = array(
+    t('Name'),
+    t('Type'),
+    t('Version'),
+    t('Schema version'),
+    t('Enabled'),
+    t('Filename'),
+  );
 
-    $rows = array();
-    $enabled = $status['field_json_data'][0]['value'];
-    foreach ($enabled as $project) {
-      if (isset($project['info'])) {
-        $info = unserialize($project['info']);
-      }
-      else {
-        $info = array();
-      }
-      $row = array(
-        $project['name'],
-        $project['type'],
-        isset($info['version']) ? $info['version'] : t('undefined'),
-        $project['schema_version'],
-        $project['status'],
-        $project['filename'],
-      );
-      $rows[] = $row;
+  $rows = array();
+  $enabled = $status['field_json_data'][0]['value'];
+  foreach ($enabled as $project) {
+    if (isset($project['info'])) {
+      $info = unserialize($project['info']);
     }
-    $output = theme('table', $header, $rows);
-
-    $status['field_json_data'] = array(array('value' => tag1update_json_encode_helper($status['field_json_data'][0]['value'])));
-    // Show the actual JSON that's being sent to Tag1 Consulting.
-    $fieldset = array(
-      '#title' => t('Raw data'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-      '#value' => '<div class="container-inline">' . tag1update_json_encode_helper($status) . '</div>',
+    else {
+      $info = array();
+    }
+    $row = array(
+      $project['name'],
+      $project['type'],
+      isset($info['version']) ? $info['version'] : t('undefined'),
+      $project['schema_version'],
+      $project['status'],
+      $project['filename'],
     );
-    $output .= theme('fieldset', $fieldset);
-
+    $rows[] = $row;
   }
+  $output = theme('table', $header, $rows);
+
+  $status['field_json_data'] = array(array('value' => tag1update_json_encode($status['field_json_data'][0]['value'])));
+  // Show the actual JSON that's being sent to Tag1 Consulting.
+  $fieldset = array(
+    '#title' => t('Raw data'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#value' => '<div class="container-inline">' . tag1update_json_encode($status) . '</div>',
+  );
+  $output .= theme('fieldset', $fieldset);
+
   return $output;
 }
 
@@ -101,27 +112,33 @@ function tag1update_admin_review() {
  */
 function tag1update_admin_status() {
   $output = '';
-  $next_update = tag1update_next_update();
-  if ($next_update <= 0) {
-    $output .= '<p>' . t('A heartbeat will be sent to Tag1 the next time cron runs.');
-  }
-  else {
-    $output .= '<p>' . t('A heartbeat will be sent to Tag1 in @time.', array('@time' => format_interval($next_update)));
-  }
-  $output .= '&nbsp;&nbsp;&nbsp;' . l(t('Send manually'), 'admin/settings/tag1updates/status/manual') . '</p>';
 
-  $last_update = variable_get('tag1update_last_update', 0);
-  if (!$last_update) {
-    $output .= '<p>' . t('No heartbeat has ever been sent. Please be sure you have cron configured correctly.') . '</p>';
+  $status = tag1update_get_status();
+  if (isset($status['error'])) {
+    $output = t('No information is currently being shared with Tag1 Consulting.');
   }
   else {
-    $time = time();
-    $output .= '<p>' . t('The last heartbeat was sent @time ago.', array('@time' => format_interval($time - $last_update))) . '</p>';
-    if (($time - $last_update) > TAG1UPDATE_HEARTBEAT_FREQUENCY * 2) {
-      drupal_set_message(t('No recent heartbeat has been sent. Please be sure you have cron configured correctly.'), 'error');
+    $next_update = tag1update_next_update();
+    if ($next_update <= 0) {
+      $output .= '<p>' . t('A heartbeat will be sent to Tag1 the next time cron runs.');
+    }
+    else {
+      $output .= '<p>' . t('A heartbeat will be sent to Tag1 in @time.', array('@time' => format_interval($next_update)));
+    }
+    $output .= '&nbsp;&nbsp;&nbsp;' . l(t('Send manually'), 'admin/settings/tag1updates/status/manual') . '</p>';
+
+    $last_update = variable_get('tag1update_last_update', 0);
+    if (!$last_update) {
+      $output .= '<p>' . t('No heartbeat has ever been sent. Please be sure you have cron configured correctly.') . '</p>';
+    }
+    else {
+      $time = time();
+      $output .= '<p>' . t('The last heartbeat was sent @time ago.', array('@time' => format_interval($time - $last_update))) . '</p>';
+      if (($time - $last_update) > TAG1UPDATE_HEARTBEAT_FREQUENCY * 2) {
+        drupal_set_message(t('No recent heartbeat has been sent. Please be sure you have cron configured correctly.'), 'error');
+      }
     }
   }
-
 
   return $output;
 }
@@ -131,8 +148,18 @@ function tag1update_admin_status() {
  */
 function tag1update_admin_send_manually() {
   $result = tag1update_send_report();
+
   if ($result->success) {
     drupal_set_message('Module status reported to Tag1 Consulting.');
+  }
+  else if ($result->error === TAG1UPDATE_ERROR_DISABLED) {
+    drupal_set_message(t('Reporting is disabled. You can enable it in the Configuration tab.'), 'error');
+  }
+  else if ($result->error === TAG1UPDATE_ERROR_NO_TOKEN) {
+    drupal_set_message(t('Manual update aborted, you must first configure a token in the Configuration tab.'), 'error');
+  }
+  else if ($result->error === TAG1UPDATE_ERROR_NOT_UPDATED) {
+    drupal_set_message(t('Manual update aborted because your database is out of date.'), 'error');
   }
   else {
     drupal_set_message(t('Error %code: %message', array('%code' => isset($result->code) ? $result->code : 0, '%message' => $result->error)), 'error');
