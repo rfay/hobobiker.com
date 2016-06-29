@@ -1,0 +1,91 @@
+<?php
+
+function _tag1quo_varlist() {
+  // Return unprefixed list of variables
+  return array(
+    'debug',
+    'enable_timestamp',
+    'installed',
+    'last_update',
+    'report',
+    'siteid',
+    'token',
+    'url',
+    'update', // no longer used
+  );
+}
+/**
+ * Implementation of hook_uninstall().
+ */
+function tag1quo_uninstall() {
+  // Clear any variables that might be in use
+  $variables = _tag1quo_varlist();
+
+  foreach ($variables as $variable) {
+    variable_del("tag1quo_" . $variable);
+  }
+}
+
+/**
+ * Implements hook_install()
+ */
+function tag1quo_install() {
+  $variables = _tag1quo_varlist();
+
+  // Copy all existing variables from former tag1update module
+  foreach ($variables as $variable) {
+    $quo_var = variable_get('tag1quo_' . $variable, NULL);
+    $old_var = variable_get('tag1update_' . $variable, NULL);
+    if (empty($quo_var) && !empty($old_var)) {
+      variable_set('tag1quo_' . $variable, $old_var);
+    }
+  }
+
+  // Make sure any roles already granted 'administer tag1update' get
+  // 'administer tag1quo'.
+  $roles = user_roles(FALSE, 'administer tag1update');
+  foreach (array_keys($roles) as $rid) {
+    _userRoleGrantPermissions($rid, array('administer tag1quo'));
+  }
+
+  // Disable the old module
+  if (module_exists('tag1update')) {
+    module_disable(array('tag1update'));
+    drupal_uninstall_module('tag1update');
+  }
+
+  // Handle obsolete chores previously in tag1update_update_0602()
+  $ret = array();
+  if (db_table_exists('tag1update')) {
+    db_drop_table($ret, 'tag1update');
+  }
+
+  // Be sure we're talking to the new v2 URL, in case this is replacing a
+  // tag1update module which had not been previously updated.
+  variable_del('tag1quo_url');
+  watchdog('tag1quo', 'tag1quo_url variable was deleted, which may affect development environments');
+
+  // tag1update_siteid was not deleted in tag1update.install.
+  variable_del('tag1update_siteid');
+
+}
+
+/**
+ * Backport of D7 user_role_grant_permissions() from mollom d6 code
+ * http://api.drupalecommerce.org/api/misc/mollom!tests!mollom.test/function/MollomWebTestCase%3A%3AuserRoleGrantPermissions/6.x
+ *
+ * @param $rid
+ *   The user role ID to grant permissions to.
+ * @param $permissions
+ *   A list of permission names to grant to the role.
+ */
+function _userRoleGrantPermissions($rid, $permissions) {
+  $stored_permissions = db_result(db_query("SELECT perm FROM {permission} WHERE rid = %d", $rid));
+  $stored_permissions = array_flip(explode(', ', $stored_permissions));
+  $stored_permissions += array_flip($permissions);
+  $stored_permissions = implode(', ', array_keys($stored_permissions));
+  db_query("UPDATE {permission} SET perm = '%s' WHERE rid = %d", array(
+    $stored_permissions,
+    $rid,
+  ));
+}

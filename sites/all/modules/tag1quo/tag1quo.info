@@ -1,0 +1,11 @@
+name = Tag1 Quo
+description = Reports all installed themes and modules to Tag1 Consulting as part of the Tag1 Quo service.
+core = 6.x
+package = Tag1 Consulting
+
+; Information added by Drupal.org packaging script on 2016-06-27
+version = "6.x-1.0"
+core = "6.x"
+project = "tag1quo"
+datestamp = "1467049140"
+
