@@ -3,9 +3,9 @@ description = Reports all installed themes and modules to Tag1 Consulting as par
 core = 6.x
 package = Tag1 Consulting
 
-; Information added by Drupal.org packaging script on 2016-06-27
-version = "6.x-1.0"
+; Information added by Drupal.org packaging script on 2016-07-01
+version = "6.x-1.1"
 core = "6.x"
 project = "tag1quo"
-datestamp = "1467049140"
+datestamp = "1467336841"
 
