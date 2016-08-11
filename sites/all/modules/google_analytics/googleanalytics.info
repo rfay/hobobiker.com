@@ -3,9 +3,9 @@ description = Allows your site to be tracked by Google Analytics by adding a Jav
 core = 6.x
 package = Statistics
 
-; Information added by Drupal.org packaging script on 2014-11-29
-version = "6.x-4.1"
+; Information added by Drupal.org packaging script on 2016-08-09
+version = "6.x-4.3"
 core = "6.x"
 project = "google_analytics"
-datestamp = "1417276686"
+datestamp = "1470779941"
 
