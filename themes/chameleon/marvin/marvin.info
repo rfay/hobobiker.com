@@ -7,7 +7,7 @@ core = 6.x
 base theme = chameleon
 
 ; Information added by Drupal.org packaging script on 2016-02-24
-version = "6.38"
+version = "6.38-p1"
 project = "drupal"
 datestamp = "1456343372"
 
