@@ -3,11 +3,12 @@ description = Provide a UI for managing some Panels directly on the frontend, in
 package = "Panels"
 dependencies[] = panels
 dependencies[] = jquery_ui
+dependencies[] = jquery_update
 core = 6.x
 
-; Information added by drupal.org packaging script on 2013-10-01
-version = "6.x-3.10+3-dev"
+; Information added by Drupal.org packaging script on 2016-02-25
+version = "6.x-3.12-p1"
 core = "6.x"
 project = "panels"
-datestamp = "1380622007"
+datestamp = "1456375276"
 

@@ -177,6 +177,19 @@ class panels_renderer_standard {
   }
 
   /**
+   * Get the Panels storage oparation for a given renderer AJAX method.
+   *
+   * @param string $method
+   *   The method name.
+   *
+   * @return string
+   *   The Panels storage op.
+   */
+  function get_panels_storage_op_for_ajax($method) {
+    return 'read';
+  }
+
+  /**
    * Prepare the attached display for rendering.
    *
    * This is the outermost prepare method. It calls several sub-methods as part
@@ -422,9 +435,10 @@ class panels_renderer_standard {
     $path = file_create_path($filename);
     switch ($this->meta_location) {
       case 'standard':
-        if ($path) {
-          // Use CTools CSS add because it can handle temporary CSS in private
-          // filesystem.
+        if (file_check_location($filename, file_directory_path())) {
+          // If the file is located in the files directory, use
+          // ctools_css_add_css() because it can handle temporary CSS in the
+          // private filesystem.
           ctools_include('css');
           ctools_css_add_css($filename, $type, $media, $preprocess);
         }
