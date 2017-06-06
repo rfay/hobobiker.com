@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file hook_diff() implementations for CCK (especially fields).

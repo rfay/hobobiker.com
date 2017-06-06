@@ -1,3 +1,4 @@
+; $Id$
 name = Node Reference
 description = Defines a field type for referencing one node from another.
 dependencies[] = content
@@ -6,8 +7,8 @@ dependencies[] = optionwidgets
 package = CCK
 core = 6.x
 ; Information added by Drupal.org packaging script on 2015-06-17
-version = "6.x-2.10+21-dev"
+version = "6.x-2.10-p1"
 core = "6.x"
 project = "cck"
-datestamp = "1434568386"
+datestamp = "1434568159"
 

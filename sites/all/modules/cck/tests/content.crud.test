@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 // TODO:
 // - Test search indexing
@@ -20,7 +21,7 @@ class ContentCrudTestCase extends DrupalWebTestCase {
    */
   function setUp() {
     $args = func_get_args();
-    $modules = array_merge(array('content_test', 'content', 'schema', 'text'), $args);
+    $modules = array_merge(array('content', 'schema', 'text'), $args);
     call_user_func_array(array('parent','setUp'), $modules);
     module_load_include('inc', 'content', 'includes/content.crud');
   }
@@ -375,7 +376,7 @@ class ContentCrudTestCase extends DrupalWebTestCase {
 }
 
 class ContentCrudBasicTest extends ContentCrudTestCase {
-  public static function getInfo() {
+  function getInfo() {
     return array(
       'name' => t('CRUD - Basic API tests'),
       'description' => t('Tests the field CRUD (create, read, update, delete) API. <strong>Requires <a href="@schema_link">Schema module</a>.</strong>', array('@schema_link' => 'http://www.drupal.org/project/schema')),
@@ -431,7 +432,7 @@ class ContentCrudBasicTest extends ContentCrudTestCase {
 }
 
 class ContentCrudSingleToMultipleTest extends ContentCrudTestCase {
-  public static function getInfo() {
+  function getInfo() {
     return array(
       'name' => t('CRUD - Single to multiple'),
       'description' => t('Tests the field CRUD (create, read, update, delete) API by creating a single value field and changing it to a multivalue field, sharing it between several content types. <strong>Requires <a href="@schema_link">Schema module</a>.</strong>', array('@schema_link' => 'http://www.drupal.org/project/schema')),
@@ -506,7 +507,7 @@ class ContentCrudSingleToMultipleTest extends ContentCrudTestCase {
 }
 
 class ContentCrudMultipleToSingleTest extends ContentCrudTestCase {
-  public static function getInfo() {
+  function getInfo() {
     return array(
       'name' => t('CRUD - Multiple to single'),
       'description' => t('Tests the field CRUD (create, read, update, delete) API by creating a multivalue field and changing it to a single value field, sharing it between several content types. <strong>Requires <a href="@schema_link">Schema module</a>.</strong>', array('@schema_link' => 'http://www.drupal.org/project/schema')),
@@ -640,7 +641,7 @@ class ContentCrudMultipleToSingleTest extends ContentCrudTestCase {
 }
 
 class ContentUICrud extends ContentCrudTestCase {
-  public static function getInfo() {
+  function getInfo() {
     return array(
       'name' => t('Admin UI'),
       'description' => t('Tests the CRUD (create, read, update, delete) operations for content fields via the UI. <strong>Requires <a href="@schema_link">Schema module</a>.</strong>', array('@schema_link' => 'http://www.drupal.org/project/schema')),
@@ -885,7 +886,7 @@ class ContentUICrud extends ContentCrudTestCase {
 }
 
 class ContentOptionWidgetTest extends ContentCrudTestCase {
-  public static function getInfo() {
+  function getInfo() {
     return array(
       'name' => t('Option widgets'),
       'description' => t('Tests the optionwidgets.'),

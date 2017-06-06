@@ -1,4 +1,5 @@
 <?php
+// $Id$
 ?>
 <div>
   <?php print $help; ?>

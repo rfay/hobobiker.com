@@ -1,3 +1,4 @@
+// $Id$
 
 Drupal.behaviors.cckManageFields = function(context) {
   attachUpdateSelects(context);

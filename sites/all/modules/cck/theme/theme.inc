@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /**
  * @file
@@ -127,7 +128,6 @@ function template_preprocess_content_display_overview_form(&$vars) {
     $element = &$form[$key];
     $row = new stdClass();
     foreach (element_children($element) as $child) {
-      if (empty($row->{$child})) $row->{$child} = new stdClass();
       if (!array_key_exists('exclude', $element[$child])) {
         $row->{$child} = drupal_render($element[$child]);
       }
