@@ -416,7 +416,7 @@ class view extends views_db_object {
    */
   function _init_handler($key, $info) {
     // Load the requested items from the display onto the object.
-    $this->$key = $this->display_handler->get_handlers($key);
+    $this->$key = &$this->display_handler->get_handlers($key);
 
     // This reference deals with difficult PHP indirection.
     $handlers = &$this->$key;
@@ -1604,7 +1604,7 @@ class view extends views_db_object {
    */
   function destroy() {
     foreach (array_keys($this->display) as $display_id) {
-      if (isset($this->display[$display_id]->handler) && is_object($this->display[$display_id]->handler)) {
+      if (isset($this->display[$display_id]->handler)) {
         $this->display[$display_id]->handler->destroy();
         unset($this->display[$display_id]->handler);
       }

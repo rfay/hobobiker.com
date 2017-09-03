@@ -406,10 +406,6 @@ class views_handler extends views_object {
    * Add this handler into the query.
    *
    * If we were using PHP5, this would be abstract.
-   *
-   * @param bool $group_by
-   *   (optional) Whether the view is using an aggregation query. If you
-   *    override this method you can specify $group_by as optional parameter.
    */
   function query() { }
 

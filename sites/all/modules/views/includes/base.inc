@@ -42,7 +42,7 @@ class views_object {
    * Set default options on this object. Called by the constructor in a
    * complex chain to deal with backward compatibility.
    */
-  function options(&$options) { }
+  function options() { }
 
   /**
    * Set default options.
