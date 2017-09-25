@@ -8,3 +8,4 @@ sites/default/settings.local.php
 files
 cache
 robots.txt
+.tarballs
