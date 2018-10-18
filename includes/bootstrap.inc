@@ -667,7 +667,7 @@ function page_get_cache($status_only = FALSE) {
   }
   $cache = NULL;
 
-  if (!$user->uid && $_SERVER['REQUEST_METHOD'] == 'GET' && count(drupal_set_message()) == 0 && $_SERVER['SERVER_SOFTWARE'] !== 'PHP CLI') {
+  if (!$user->uid && $_SERVER['REQUEST_METHOD'] == 'GET' && !drupal_set_message() && $_SERVER['SERVER_SOFTWARE'] !== 'PHP CLI') {
     $cache = cache_get($base_root . request_uri(), 'cache_page');
 
     if (empty($cache)) {
@@ -1750,4 +1750,31 @@ function _drupal_parse_url($url) {
     unset($options['query']['q']);
   }
   return $options;
+}
+
+// Shim for ereg() family of functions for PHP 7+ where they don't exist.
+if (!function_exists('ereg')) {
+  function ereg($pattern, $subject, &$matches = array()) {
+    return preg_match('/' . $pattern . '/', $subject, $matches);
+  }
+
+  function eregi($pattern, $subject, &$matches = array()) {
+    return preg_match('/' . $pattern . '/i', $subject, $matches);
+  }
+
+  function ereg_replace($pattern, $replacement, $string) {
+    return preg_replace('/' . $pattern . '/', $replacement, $string);
+  }
+
+  function eregi_replace($pattern, $replacement, $string) {
+    return preg_replace('/' . $pattern . '/i', $replacement, $string);
+  }
+
+  function split($pattern, $subject, $limit = -1) {
+    return preg_split('/' . $pattern . '/', $subject, $limit);
+  }
+
+  function spliti($pattern, $subject, $limit = -1) {
+    return preg_split('/' . $pattern . '/i', $subject, $limit);
+  }
 }

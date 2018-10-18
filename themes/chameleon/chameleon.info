@@ -11,8 +11,8 @@ stylesheets[all][] = common.css
 version = VERSION
 core = 6.x
 
-; Information added by Drupal.org packaging script on 2016-02-24
-version = "6.38-p5"
+; Information added by Drupal 6 LTS vendors on 2018-10-17
+version = "6.46"
+core = "6.x"
 project = "drupal"
-datestamp = "1456343372"
-
+datestamp = "1539805293"
