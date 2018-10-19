@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * Implementation of hook_install().
+ */
+function mydropwizard_install() {
+  // Create cache table.
+  drupal_install_schema('mydropwizard');
+
+  // Copy variables from the update module.
+  $variables = array(
+    'check_frequency',
+    'notification_threshold',
+    'notify_emails',
+  );
+  foreach ($variables as $variable) {
+    if ($value = variable_get('update_' . $variable, NULL)) {
+      variable_set('mydropwizard_' . $variable, $value);
+    }
+  }
+
+  // Disable the update module.
+  module_disable(array('update'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function mydropwizard_uninstall() {
+  // Remove cache table.
+  drupal_uninstall_schema('mydropwizard');
+  // Clear any variables that might be in use
+  $variables = array(
+    'mydropwizard_check_frequency',
+    'mydropwizard_project_url',
+    'mydropwizard_statistics_url',
+    'mydropwizard_last_check',
+    'mydropwizard_notification_threshold',
+    'mydropwizard_notify_emails',
+    'mydropwizard_customer_key',
+  );
+  foreach ($variables as $variable) {
+    variable_del($variable);
+  }
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function mydropwizard_schema() {
+  $schema['cache_mydropwizard'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_mydropwizard']['description'] = 'Cache table for the Update module to store information about available releases, fetched from central server.';
+  return $schema;
+}
+
