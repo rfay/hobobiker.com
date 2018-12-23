@@ -1,0 +1,10 @@
+name = ImageAPI GD2
+description = Uses PHP's built-in GD2 image processing support.
+package = ImageCache
+core = 6.x
+
+; Information added by Drupal 6 LTS vendors on 2018-10-08
+version = "6.x-1.11"
+core = "6.x"
+project = "imageapi"
+datestamp = "1539023526"
