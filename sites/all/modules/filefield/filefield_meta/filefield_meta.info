@@ -1,0 +1,13 @@
+name = FileField Meta
+description = Add metadata gathering and storage to FileField.
+dependencies[] = filefield
+dependencies[] = getid3
+package = CCK
+core = 6.x
+php = 5.0
+
+; Information added by Drupal 6 LTS vendors on 2018-10-08
+version = "6.x-3.16"
+core = "6.x"
+project = "filefield"
+datestamp = "1539023276"
