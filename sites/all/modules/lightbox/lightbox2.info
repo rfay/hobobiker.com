@@ -1,0 +1,9 @@
+name = Lightbox2
+description = Enables Lightbox2 for Drupal
+core = 6.x
+
+; Information added by Drupal 6 LTS vendors on 2018-10-10
+version = "6.x-1.12"
+core = "6.x"
+project = "lightbox2"
+datestamp = "1539193524"
