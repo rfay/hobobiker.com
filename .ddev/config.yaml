@@ -2,7 +2,7 @@ APIVersion: v1.5.0
 name: hobobiker.com
 type: drupal6
 docroot: ""
-php_version: "7.0"
+php_version: "7.2"
 webserver_type: nginx-fpm
 router_http_port: "80"
 router_https_port: "443"
