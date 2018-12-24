@@ -6,9 +6,8 @@ dependencies[] = jquery_ui
 dependencies[] = jquery_update
 core = 6.x
 
-; Information added by Drupal.org packaging script on 2016-02-25
-version = "6.x-3.12-p1"
+; Information added by Drupal 6 LTS vendors on 2018-10-08
+version = "6.x-3.15"
 core = "6.x"
 project = "panels"
-datestamp = "1456375276"
-
+datestamp = "1539022969"
