@@ -58,6 +58,38 @@ function flickr_get_photo_width($id,$size) {
     return $width;
 }
 
+// Provide info about the widget for use in a filter
+function hobo_golden_imagefield_widget($element) {
+    drupal_add_css(drupal_get_path('module', 'imagefield') .'/imagefield.css');
+    $element['#id'] .= '-upload'; // Link the label to the upload field.
+//    devel_print_object($element);
+    return "HOBO GOLDEN fid=" . $element['fid']['#value'] . "description={$element['#value']['data']['description']}" . theme('form_element', $element, $element['#children']);
+}
+
+function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = NULL, $getsize = TRUE, $absolute = TRUE) {
+    // Check is_null() so people can intentionally pass an empty array of
+    // to override the defaults completely.
+    if (is_null($attributes)) {
+        $attributes = array('class' => 'imagecache imagecache-'. $presetname);
+    }
+    $ours = array(
+        'src' => imagecache_create_url($presetname, $path, FALSE, $absolute),
+        'alt' => $alt,
+        'title' => $title,
+    );
+    if ($getsize && ($image = image_get_info(imagecache_create_path($presetname, $path)))) {
+        $ours += array('width' => $image['width'], 'height' => $image['height']);
+    }
+
+    $div = "<div>";
+    $div .= '<img' . drupal_attributes($ours + $attributes) . '/>';
+    if (!empty($alt)) {
+        $div .= "<br>$alt</br>";
+    }
+    $div .= "</div>";
+    return $div;
+}
+
 // Add javascript for preload
 $toadd=path_to_theme() . '/jquery.preload/jquery.preload.js';
 $js = drupal_add_js($toadd,'theme');
