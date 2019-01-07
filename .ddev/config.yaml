@@ -1,5 +1,5 @@
-APIVersion: v1.5.0
-name: hobobiker.com
+APIVersion: v1.5.1
+name: hobobiker
 type: drupal6
 docroot: ""
 php_version: "7.2"
@@ -10,16 +10,15 @@ xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
 mariadb_version: "10.2"
-webcache_enabled: true
-provider: default
-
+webcache_enabled: false
+provider: drud-s3
 hooks:
-  post-start:
-    # - exec: bash -c "phpdismod mbstring && killall -1 php-fpm"
+  post-start: []
 
-# This config.yaml was created with ddev version v1.5.0 
-# webimage: drud/ddev-webserver:v1.5.0
-# dbimage: drud/ddev-dbserver:v1.5.0-10.2
+
+# This config.yaml was created with ddev version v1.5.1-9-g083e51e4 
+# webimage: drud/ddev-webserver:v1.5.1
+# dbimage: drud/ddev-dbserver:20190103_import-db-progress-10.2
 # dbaimage: drud/phpmyadmin:v1.5.0
 # bgsyncimage: drud/ddev-bgsync:v1.5.0
 # However we do not recommend explicitly wiring these images into the
