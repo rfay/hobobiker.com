@@ -23,6 +23,4 @@
  * - __description__: A description of the image, sometimes used as a caption.
  */
 ?>
-<div>Now going to test this FOR REAL in the theme
-<a rel="lightbox[group1][__description__<?php print $download_link ?>]" href="<?php print $linkurl ?>"><img src="<?php print $url ?>" alt="__alt__" title="__title__" class="imagecache-<?php print $image_preset_name ?><?php print $class ? ' ' . $class : '' ?>" /></a>
-</div>
+<!-- $linkurl --><div><a rel="lightbox[group1][__description__<?php print $download_link ?>]" href="<?php print $linkurl ?>"><img src="<?php print $url ?>" alt="__alt__" title="__title__" class="imagecache-<?php print $image_preset_name ?><?php print $class ? ' ' . $class : '' ?>" /></a></div>
