@@ -58,12 +58,17 @@ function flickr_get_photo_width($id,$size) {
     return $width;
 }
 
+
 // Provide info about the widget for use in a filter
 function hobo_golden_imagefield_widget($element) {
     drupal_add_css(drupal_get_path('module', 'imagefield') .'/imagefield.css');
     $element['#id'] .= '-upload'; // Link the label to the upload field.
-//    devel_print_object($element);
-    return "HOBO GOLDEN fid=" . $element['fid']['#value'] . "description={$element['#value']['data']['description']}" . theme('form_element', $element, $element['#children']);
+  if (!empty($element["#value"]["fid"])) {
+    $fid = $element['#value']['fid'];
+    $filepath = $element["#value"]["filepath"];
+    $desc = $element["#value"]["data"]["description"];
+  }
+  return "HOBO GOLDEN fid=$fid filepath=$filepath description='$desc' " . theme('form_element', $element, $element['#children']);
 }
 
 function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = NULL, $getsize = TRUE, $absolute = TRUE) {
