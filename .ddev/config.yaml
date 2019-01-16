@@ -1,4 +1,4 @@
-APIVersion: v1.5.1
+APIVersion: v1.5.1-6-g705696a0
 name: hobobiker
 type: drupal6
 docroot: ""
@@ -16,9 +16,9 @@ hooks:
   post-start: []
 
 
-# This config.yaml was created with ddev version v1.5.1-9-g083e51e4 
-# webimage: drud/ddev-webserver:v1.5.1
-# dbimage: drud/ddev-dbserver:20190103_import-db-progress-10.2
+# This config.yaml was created with ddev version v1.5.1-6-g705696a0 
+# webimage: drud/ddev-webserver:20190107_web_container_maint
+# dbimage: drud/ddev-dbserver:20190111_fix_toolbox_db_fail-10.2
 # dbaimage: drud/phpmyadmin:v1.5.0
 # bgsyncimage: drud/ddev-bgsync:v1.5.0
 # However we do not recommend explicitly wiring these images into the

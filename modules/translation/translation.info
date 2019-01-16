@@ -5,8 +5,8 @@ package = Core - optional
 version = VERSION
 core = 6.x
 
-; Information added by Drupal 6 LTS vendors on 2018-10-17
-version = "6.46"
+; Information added by Drupal 6 LTS vendors on 2019-01-16
+version = "6.49"
 core = "6.x"
 project = "drupal"
-datestamp = "1539805293"
+datestamp = "1547672891"
