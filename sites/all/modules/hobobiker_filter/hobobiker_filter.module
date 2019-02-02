@@ -1,6 +1,6 @@
 <?php
 
-
+// TODO: Update this with the final results
 function hobobiker_filter_tips($delta, $format, $long = FALSE)
 {
   switch ($delta) {
@@ -19,6 +19,7 @@ function hobobiker_filter_tips($delta, $format, $long = FALSE)
   }
 }
 
+// Implements hook_filter to provide photo stuff
 function hobobiker_filter($op, $delta = 0, $format = -1, $text = '')
 {
   if ($op == 'list') {
@@ -29,6 +30,7 @@ function hobobiker_filter($op, $delta = 0, $format = -1, $text = '')
     case 0:
       switch ($op) {
         case 'description':
+          // TODO: Update this with the real stuff
           return t('Allows you to Insert Hobobiker images: [hobobiker-photo:id=230452326,size=s] or [hobobiker-photoset:id=72157594262419167,size=m]');
 
         case 'no cache':
