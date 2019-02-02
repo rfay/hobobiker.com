@@ -1,0 +1,208 @@
+<?php
+
+
+function hobobiker_filter_tips($delta, $format, $long = FALSE)
+{
+  switch ($delta) {
+    case 0:
+      //TODO: Fix this up with an actual example
+      $output = t('Insert Hobobiker images: [hobobiker-photo:id=230452326,size=s] or [hobobiker-photoset:id=72157594262419167,size=m].');
+      if ($long) {
+        $output .= t('The size parameter can be one of the following:');
+        $items = array();
+        foreach (hobobiker_photo_sizes() as $key => $text) {
+          $items[] = "<code>$key</code> &mdash; (" . $text['label'] . ') ' . $text['description'];
+        }
+        $output .= theme('item_list', $items);
+      }
+      return $output;
+  }
+}
+
+function hobobiker_filter($op, $delta = 0, $format = -1, $text = '')
+{
+  if ($op == 'list') {
+    return array(0 => t('Hobobiker linker'));
+  }
+
+  switch ($delta) {
+    case 0:
+      switch ($op) {
+        case 'description':
+          return t('Allows you to Insert Hobobiker images: [hobobiker-photo:id=230452326,size=s] or [hobobiker-photoset:id=72157594262419167,size=m]');
+
+        case 'no cache':
+          // TODO: only return true when testing the filter
+          // return TRUE;
+          return FALSE;
+
+        case 'prepare':
+          return $text;
+
+        case 'process':
+          $text = preg_replace_callback('/\[hobophoto:(.+?)\]/', 'hobobiker_filter_callback_photo', $text);
+//            print theme('lightbox2_image', $item['filepath'], "alt from this", "title of this", $attributes);
+//
+//            print theme('imagecache', 'preset_namespace', $image_filepath, $alt, $title, $attributes);
+
+          return $text;
+      }
+      break;
+  }
+}
+
+/**
+ * Parse parameters to the filter from a format like:
+ * id=26159919@N00, size=m,show = 9, class=something,style=float:left;border:1px
+ * into an associative array with two sub-arrays. The first sub-array is
+ * parameters for the request, the second are HTML attributes (class and style).
+ */
+function hobobiker_filter_split_config($string)
+{
+  $config = array();
+  $attribs = array();
+  // Put each setting on its own line.
+  $string = str_replace(',', "\n", $string);
+  // Break them up around commas.
+  preg_match_all('/([a-zA-Z]+)=([-@0-9a-zA-Z:;]+)/', $string, $parts, PREG_SET_ORDER);
+  foreach ($parts as $part) {
+    // Normalize to lower case and remove extra spaces.
+    $name = strtolower(trim($part[1]));
+    $value = trim($part[2]);
+    if ($name == 'style' || $name == 'class') {
+      $attribs[$name] = $value;
+    } else {
+      $config[$name] = $value;
+    }
+  }
+  return array($config, $attribs);
+}
+
+/**
+ * Filter callback for a photo.
+ */
+function hobobiker_filter_callback_photo($matches)
+{
+  list($config, $attribs) = hobobiker_filter_split_config($matches[1]);
+
+  if (isset($config['id'])) {
+    if ($photo = hobobiker_photo_get_info($config['fid'])) {
+      return theme('hobobiker_filter_photo', $photo, $config['size'], $attribs);
+    }
+  }
+  return '';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function hobobiker_filter_theme()
+{
+  return array(
+    'hobobiker_filter_photo' => array(
+      'arguments' => array('p', 'size', 'attribs'),
+    ),
+  );
+}
+
+// function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = NULL, $getsize = TRUE, $absolute = TRUE) {
+// function theme_lightbox2_formatter_imagefield($element) {
+
+function theme_hobobiker_filter_photo($p, $size, $attribs)
+{
+  $rel = "lightbox[group1][" . $attribs["caption"] . "]";
+  $href = $p['uri'];
+  // Todo: Make preset configurable
+  $markup = theme('imagecache', '240x180', $p["xxx"], $attribs["alt"], $attribs['title'], TRUE, false);
+  return $markup;
+//  return <a rel="lightbox[group1][Mom in chair]" href="/files/2018-12-24%2020.25.21_0.jpg"><img src="/files/imagecache/240x180/2018-12-24%2020.25.21_0.jpg" alt="try dosomething here"  class="imagecache-240x180 float-right-landscape" /></a>
+
+}
+
+//
+//function theme_hobobiker_photo($photo, $size = NULL, $format = NULL, $attributes = NULL) {
+//  // Get 'class' and 'rel' link attributes to trigger an overlay browser.
+//  $class = variable_get('flickr_class', '');
+//  $rel = variable_get('flickr_rel', '');
+//  // URL of the image to open to enlarge.
+//  $url = flickr_photo_img($photo, variable_get('flickr_opening_size', ''), $format);
+//  // The image as HTML to render.
+//  $img = flickr_img($photo, $size, $attributes);
+//  // URL of the image to display.
+//  $img_url = flickr_photo_img($photo, $size);
+//  // If the image is a square we know the width (avoids to make a request).
+//  switch ($size) {
+//    case 's':
+//      $width = '75';
+//      break;
+//
+//    case 'q':
+//      $width = '150';
+//      break;
+//  }
+//  // If it is not a square.
+//  if (!isset($width)) {
+//    // Get the real width of the image.
+//    list($width) = getimagesize($img_url);
+//  }
+//  // URL of the photo page on Flickr.
+//  $photo_url = flickr_photo_page_url($photo['owner'], $photo['id']);
+//  // Get the Flickr image title for set data or the photo itself. Sanatize.
+//  $title = is_array($photo['title']) ? str_replace('"', "'", strip_tags($photo['title']['_content'])) : $photo['title'];
+//  $info = flickr_photo_get_info($photo['id']);
+//  // Use title if description does not exist, else sanitize the description.
+//  $description = !empty($info['description']['_content']) ? str_replace('"', "'", htmlspecialchars_decode(strip_tags($info['description']['_content']))) : $title;
+//  // Real name if it exists or go with the username. Link to Flickr user page.
+//  $username = !empty($info['owner']['realname']) ? l($info['owner']['realname'], 'https://www.flickr.com/photos/' . $info['owner']['nsid'], array('attributes' => array('title' => t('View user on Flickr.'), 'target' => '_blank'))) : l($info['owner']['username'], 'https://www.flickr.com/photos/' . $info['owner']['nsid'], array('attributes' => array('title' => t('View user on Flickr.'), 'target' => '_blank')));
+//  // The date an image was taken formatted as 'time ago'.
+//  $taken = isset($info['dates']['taken']) ? format_interval(time() - strtotime($info['dates']['taken']), 1) . ' ' . t('ago') : '';
+//  // A bunch of geo data.
+//  $neighbourhood = isset($info['location']['neighbourhood']['_content']) ? strip_tags($info['location']['neighbourhood']['_content']) . ', ' : '';
+//  $locality = isset($info['location']['locality']['_content']) ? strip_tags($info['location']['locality']['_content']) . ', ' : '';
+//  $region = isset($info['location']['region']['_content']) ? strip_tags($info['location']['region']['_content']) . ', ' : '';
+//  $country = isset($info['location']['country']['_content']) ? strip_tags($info['location']['country']['_content']) : '';
+//  $location = !empty($country) ? ' ' . t('at') . ' ' . $neighbourhood . $locality . $region . $country : '';
+//  // Compose extra Flickr info as HTML to render.
+//  $metadata = '<br />' . $taken . $location . ' ' . t('by') . ' ' . $username;
+//  // Image width < 100 px is too small for most titles. Can be set differently.
+//  $credit = $width < variable_get('flickr_title_suppress_on_small', '100') ? t('Flickr') : $title;
+//  // Image width < 150 px is too small for extra info. Can be set differently.
+//  $metadatacaption = $width < variable_get('flickr_metadata_suppress_on_small', '150') ? '' : $metadata;
+//  // Determine what info goes with the enlarged version of the image.
+//  $overlay = variable_get('flickr_info_overlay', array(
+//    'title' => 'title',
+//    'metadata' => 'metadata',
+//    'description' => 'description',
+//  ));
+//  $overlaytitle = (gettype($overlay['title']) == 'integer') ? '' : $title . ' - ';
+//  $metadata = (gettype($overlay['metadata']) == 'integer') ? '' : $metadata . ' - ';
+//  $description = (gettype($overlay['description']) == 'integer' || $overlaytitle == $description . ' - ') ? '' : $description;
+//  $overlayhtml = $overlaytitle . $metadata . $description;
+//  // If 'class' or 'rel' attribute are defined (overlay browser), use a caption.
+//  if (variable_get('flickr_class', '') == NULL && variable_get('flickr_rel', '') == NULL) {
+//    // Final step when NO overlay browser is used that generates the image that
+//    // links to the Flickr page to comply with the TOS of Flickr.
+//    return l($img, $photo_url, array(
+//      'attributes' => array('title' => $title),
+//      'absolute' => TRUE,
+//      'html' => TRUE,
+//    ));
+//  }
+//  else {
+//    // Final step when an overlay browser is used that generates the image with
+//    // a link to the bigger version and a link to the Flickr page under it to
+//    // comply with the TOS of Flickr.
+//    return '<span class="flickr-wrap">' . l($img, $url, array(
+//        'attributes' => array(
+//          'title' => $overlayhtml,
+//          'class' => $class,
+//          'rel' => $rel),
+//        'html' => TRUE,
+//      )) . '<span class="flickr-credit" style="width: ' . ($width - variable_get('flickr_caption_padding', '0')) . 'px;">' . l($credit, $photo_url, array(
+//        'attributes' => array(
+//          'title' => t('View on Flickr. To enlarge click image.'),
+//          'target' => '_blank',
+//        ),
+//        'html' => TRUE)) . $metadatacaption . '</span></span>';
+//  }
+//}

@@ -1,0 +1,6 @@
+name = Hobobiker Filter
+description = An input filter to insert images.
+package = Hobobiker
+core = 6.x
+
+
