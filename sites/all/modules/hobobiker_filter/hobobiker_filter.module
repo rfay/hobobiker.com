@@ -1,6 +1,6 @@
 <?php
 
-function hobobiker_filter_tips($delta, $format, $long = FALSE)
+function hobobiker_filter_filter_tips($delta, $format, $long = FALSE)
 {
   switch ($delta) {
     case 0:
