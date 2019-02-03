@@ -1,4 +1,4 @@
-APIVersion: v1.5.1-6-g705696a0
+APIVersion: v1.5.1.1-40-gceffdc8d
 name: hobobiker
 type: drupal6
 docroot: ""
@@ -11,16 +11,17 @@ additional_hostnames: []
 additional_fqdns: []
 mariadb_version: "10.2"
 webcache_enabled: false
-provider: drud-s3
+nfs_mount_enabled: true
+provider: default
 hooks:
   post-start: []
 
 
-# This config.yaml was created with ddev version v1.5.1-6-g705696a0 
-# webimage: drud/ddev-webserver:20190107_web_container_maint
-# dbimage: drud/ddev-dbserver:20190111_fix_toolbox_db_fail-10.2
-# dbaimage: drud/phpmyadmin:v1.5.0
-# bgsyncimage: drud/ddev-bgsync:v1.5.0
+# This config.yaml was created with ddev version v1.5.1.1-40-gceffdc8d 
+# webimage: drud/ddev-webserver:20190116_update_web_versions_drush
+# dbimage: drud/ddev-dbserver:20190124_sql_triggers-10.2
+# dbaimage: drud/phpmyadmin:v1.5.2
+# bgsyncimage: drud/ddev-bgsync:v1.5.2
 # However we do not recommend explicitly wiring these images into the
 # config.yaml as they may break future versions of ddev.
 # You can update this config.yaml using 'ddev config'.

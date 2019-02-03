@@ -71,10 +71,10 @@ function hobo_golden_imagefield_widget($element) {
   return "HOBO GOLDEN fid=$fid filepath=$filepath description='$desc' " . theme('form_element', $element, $element['#children']);
 }
 
-function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = NULL, $getsize = TRUE, $absolute = TRUE) {
+function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = [], $getsize = TRUE, $absolute = TRUE) {
     // Check is_null() so people can intentionally pass an empty array of
     // to override the defaults completely.
-    if (is_null($attributes)) {
+    if (empty($attributes)) {
         $attributes = array('class' => 'imagecache imagecache-'. $presetname);
     }
     $ours = array(
@@ -89,7 +89,7 @@ function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $att
     $div = "<div>";
     $div .= '<img' . drupal_attributes($ours + $attributes) . '/>';
     if (!empty($alt)) {
-        $div .= "<br>$alt</br>";
+        $div .= "<br />$alt<br />";
     }
     $div .= "</div>";
     return $div;
