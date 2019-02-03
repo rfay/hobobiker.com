@@ -68,7 +68,7 @@ function hobo_golden_imagefield_widget($element) {
     $filepath = $element["#value"]["filepath"];
     $desc = $element["#value"]["data"]["description"];
   }
-  return "HOBO GOLDEN fid=$fid filepath=$filepath description='$desc' " . theme('form_element', $element, $element['#children']);
+  return "[hobophoto:path=$filepath,caption=$desc]" . theme('form_element', $element, $element['#children']);
 }
 
 function hobo_golden_imagecache($presetname, $path, $alt = '', $title = '', $attributes = [], $getsize = TRUE, $absolute = TRUE) {
