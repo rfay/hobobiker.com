@@ -1,5 +1,5 @@
 name = Hobobiker Filter
-description = An input filter to insert images.
+description = An input filter to insert images like [hobophoto:path=sites/default/files/somepic.jpg,orientation=portrait,caption=some caption]
 package = Hobobiker
 core = 6.x
 
