@@ -92,7 +92,7 @@ $database = getenv('DDEV_MYSQL_DATABASE');
 $username = getenv('DDEV_MYSQL_USER');
 $password = getenv('DDEV_MYSQL_PASSWORD');
 $host = getenv('DDEV_MYSQL_HOST');
-$db_url = 'mysql://$username:$password@$host/$database';
+$db_url = "mysql://$username:$password@$host/$database";
 $db_prefix = '';
 
 /**
