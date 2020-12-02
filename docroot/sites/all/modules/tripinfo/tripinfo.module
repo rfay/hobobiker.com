@@ -72,7 +72,7 @@ function tripinfo_list($startdate, $enddate) {
 
 
 function tripinfo_gmap($kmlfile) {
-  $google_map_location = "https://maps.googleapis.com/maps/api/js?sensor=false&key=" . variable_get('googlemap_api_key', '0');
+  $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
   drupal_set_html_head("<script src='$google_map_location'  type='text/javascript'></script>");
 
   drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_filtermap.js");
@@ -242,7 +242,7 @@ function tripinfo_gen_gmap($text) {
   $overlays = $text[1];
   $kmlfile = preg_replace('/,.*$/', '', $overlays);
 
-  $google_map_location = "https://maps.googleapis.com/maps/api/js?sensor=false&key=" . variable_get('googlemap_api_key', '0');
+  $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
 
   $output .= <<<ENDOUTPUT
 <?php
