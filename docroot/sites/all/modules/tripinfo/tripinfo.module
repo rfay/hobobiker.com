@@ -124,7 +124,7 @@ function tripinfo_item($date, $startdate, $enddate) {
   $gpxfname = "files/gps/$fulldate.gpx";
   $kmlfname = "files/gps/$fulldate.kml";
   $profile_fname = "files/gps/$fulldate.png";
-  $kmlurl = "http://www.hobobiker.com/$kmlfname";
+  $kmlurl = "/$kmlfname";
 
   $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
   $when = strftime("%B %d, %Y", $whentime);

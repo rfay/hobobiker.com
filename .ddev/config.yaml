@@ -11,6 +11,7 @@ additional_fqdns: []
 mariadb_version: "10.2"
 provider: default
 use_dns_when_possible: true
+timezone: America/Denver
 
 
 # This config.yaml was created with ddev version v1.14.2-2-g70a2fb64

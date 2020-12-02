@@ -3,9 +3,9 @@ backup
 .buildpath
 .project
 .settings
-sites/default/settings.php
-sites/default/settings.local.php
-files
+/docroot/sites/default/settings.php
+/docrootsites/default/settings.local.php
+/docroot/sites/default/files
 cache
 robots.txt
 .tarballs
