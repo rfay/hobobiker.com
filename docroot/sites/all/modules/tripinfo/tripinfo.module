@@ -121,9 +121,9 @@ function tripinfo_item($date, $startdate, $enddate) {
 
   $fulldate = sprintf("%04d%02d%02d", $row->year, $row->month, $row->day);
 
-  $gpxfname = "files/gps/$fulldate.gpx";
-  $kmlfname = "files/gps/$fulldate.kml";
-  $profile_fname = "files/gps/$fulldate.png";
+  $gpxfname = "sites/default/files/gps/$fulldate.gpx";
+  $kmlfname = "sites/default/files/gps/$fulldate.kml";
+  $profile_fname = "sites/default/files/gps/$fulldate.png";
   $kmlurl = "/$kmlfname";
 
   $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
