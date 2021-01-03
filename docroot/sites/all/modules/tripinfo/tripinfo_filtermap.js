@@ -15,11 +15,11 @@ function showmap() {
 
   var map = new google.maps.Map(document.getElementById("filtermap"), mapOptions);
   // The kmlfile must be internet-reachable, so for local debugging, point it to hobobiker.com
-  // var kmlfile = "https://hobobiker.com" + Drupal.settings.tripinfo.kmlfile;
-  var kmlfile = Drupal.settings.tripinfo.kmlfile;
+    // See tripinfo_gen_gmap
+  var kmlurl = Drupal.settings.tripinfo.kmlurl;
 
-    var geoxml = new google.maps.KmlLayer({
-      url: kmlfile,
+  var geoxml = new google.maps.KmlLayer({
+      url: kmlurl,
       map: map
   });
 }

@@ -71,7 +71,7 @@ function tripinfo_list($startdate, $enddate) {
 }
 
 
-function tripinfo_gmap($kmlfile) {
+function tripinfo_gmap($kmlurl) {
   $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
   drupal_set_html_head("<script src='$google_map_location'  type='text/javascript'></script>");
 
@@ -81,10 +81,10 @@ function tripinfo_gmap($kmlfile) {
   $output .= "<div style='height:500px;width:100%'><div class='mapholder' id='mapholder' style='width:100%;height:100%'>
 	 <div class='filtermap' id='filtermap' style='width:100%;height:100%;border:2px solid black'></div>";
 
-  $settings['tripinfo'] = array('kmlfile' => $kmlfile);
+  $settings['tripinfo'] = array('kmlurl' => $kmlurl);
   drupal_add_js($settings, 'setting');
 
-  $output .= l("Explore in Google Earth", $kmlfile) . "</div></div>";
+  $output .= l("Explore in Google Earth", $kmlurl) . "</div></div>";
 
   return $output;
 }
@@ -124,9 +124,15 @@ function tripinfo_item($date, $startdate, $enddate) {
   $gpxfname = "sites/default/files/gps/$fulldate.gpx";
   $kmlfname = "sites/default/files/gps/$fulldate.kml";
   $profile_fname = "sites/default/files/gps/$fulldate.png";
-  $kmlurl = "/$kmlfname";
+  $kmlurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" + $kmlfname;
 
-  $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
+  // For local debugging, use hobobiker.com directly
+  if ($_SERVER[HTTP_HOST] == "hobobiker.ddev.site") {
+      $kmlurl = "https://hobobiker.com/$kmlfname";
+  }
+
+
+    $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
   $when = strftime("%B %d, %Y", $whentime);
 
   $page .= ($tripinfo_nav = tripinfo_navigation($date, $startdate, $enddate));
@@ -244,11 +250,14 @@ function tripinfo_gen_gmap($text) {
 
   $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
 
+  $kmlurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" + $kmlfile;
+  // For local debugging, use
+   $kmlurl = "https://hobobiker.com/$kmlfile";
   $output .= <<<ENDOUTPUT
 <?php
   drupal_set_html_head("<script src='$google_map_location'  type='text/javascript'></script>");
   drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_filtermap.js");
-  \$settings['tripinfo'] = array('kmlfile' => '$kmlfile');
+  \$settings['tripinfo'] = array('kmlurl' => '$kmlurl');
   drupal_add_js(\$settings, 'setting');
 ?>
 ENDOUTPUT;
