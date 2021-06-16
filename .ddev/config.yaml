@@ -10,15 +10,15 @@ additional_hostnames: []
 additional_fqdns: []
 mariadb_version: "10.2"
 mysql_version: ""
-provider: default
 use_dns_when_possible: true
 timezone: America/Denver
 composer_version: ""
+web_environment: []
 
 
-# This config.yaml was created with ddev version v1.17.0-alpha2
-# webimage: drud/ddev-webserver:20201229_php7.4
-# dbimage: drud/ddev-dbserver-mariadb-10.3:20201210_gotip_arm64
+# This config.yaml was created with ddev version v1.17.5-51-g8074d8e0
+# webimage: drud/ddev-webserver:20210502_penyaskito_xhprof
+# dbimage: drud/ddev-dbserver-mariadb-10.3:v1.17.3
 # dbaimage: phpmyadmin:5
 # However we do not recommend explicitly wiring these images into the
 # config.yaml as they may break future versions of ddev.
@@ -57,6 +57,11 @@ composer_version: ""
 # "ddev xdebug" to enable xdebug and "ddev xdebug off" to disable it work better,
 # as leaving xdebug enabled all the time is a big performance hit.
 
+# xhprof_enabled: false  # Set to true to enable xhprof and "ddev start" or "ddev restart"
+# Note that for most people the commands
+# "ddev xhprof" to enable xhprof and "ddev xhprof off" to disable it work better,
+# as leaving xhprof enabled all the time is a big performance hit.
+
 # webserver_type: nginx-fpm  # or apache-fpm
 
 # timezone: Europe/Berlin
@@ -65,7 +70,7 @@ composer_version: ""
 # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 # For example Europe/Dublin or MST7MDT
 
-# composer_version: "2"
+# composer_version: ""
 # if composer_version:"" it will use the current ddev default composer release.
 # It can also be set to "1", to get most recent composer v1
 # or "2" for most recent composer v2.
@@ -155,8 +160,13 @@ composer_version: ""
 
 # disable_settings_management: false
 # If true, ddev will not create CMS-specific settings files like
-# Drupal's settings.php/settings.ddev.php or TYPO3's AdditionalSettings.php
+# Drupal's settings.php/settings.ddev.php or TYPO3's AdditionalConfiguration.php
 # In this case the user must provide all such settings.
+
+# You can inject environment variables into the web container with:
+# web_environment: 
+# - SOMEENV=somevalue
+# - SOMEOTHERENV=someothervalue
 
 # no_project_mount: false
 # (Experimental) If true, ddev will not mount the project into the web container;
@@ -164,8 +174,6 @@ composer_version: ""
 # This is to enable experimentation with alternate file mounting strategies.
 # For advanced users only!
 
-# provider: default # Currently either "default" or "pantheon"
-#
 # Many ddev commands can be extended to run tasks before or after the
 # ddev command is executed, for example "post-start", "post-import-db",
 # "pre-composer", "post-composer"
