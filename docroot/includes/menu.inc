@@ -385,7 +385,8 @@ function _menu_load_objects(&$item, &$map) {
           // 'load arguments' in the hook_menu() entry, but they need
           // some processing. In this case the $function is the key to the
           // load_function array, and the value is the list of arguments.
-          list($function, $args) = each($function);
+          $args = current($function);
+          $function = key($function);
           $load_functions[$index] = $function;
 
           // Some arguments are placeholders for dynamic items to process.
@@ -1006,11 +1007,24 @@ function menu_tree_check_access(&$tree, $node_links = array()) {
     // Use db_rewrite_sql to evaluate view access without loading each full node.
     $nids = array_keys($node_links);
     $placeholders = '%d'. str_repeat(', %d', count($nids) - 1);
-    $result = db_query(db_rewrite_sql("SELECT n.nid FROM {node} n WHERE n.status = 1 AND n.nid IN (". $placeholders .")"), $nids);
+    // When a menu administrator who we know has permission to see unpublished
+    // nodes is administering the menu, included the unpublished nodes in the
+    // tree, with a special flag so that the Menu module can label them.
+    // Otherwise, exclude these nodes from the tree.
+    if (!empty($GLOBALS['menu_admin']) && user_access('bypass node access')) {
+      $sql = "SELECT n.nid, n.status FROM {node} n WHERE n.nid IN (". $placeholders .")";
+    }
+    else {
+      $sql = "SELECT n.nid FROM {node} n WHERE n.status = 1 AND n.nid IN (". $placeholders .")";
+    }
+    $result = db_query(db_rewrite_sql($sql), $nids);
     while ($node = db_fetch_array($result)) {
       $nid = $node['nid'];
       foreach ($node_links[$nid] as $mlid => $link) {
         $node_links[$nid][$mlid]['access'] = TRUE;
+        if (isset($node['status'])) {
+          $node_links[$nid][$mlid]['node_unpublished'] = !$node['status'];
+        }
       }
     }
   }
@@ -1560,7 +1574,9 @@ function menu_set_active_trail($new_trail = NULL) {
     }
 
     $tree = menu_tree_page_data(menu_get_active_menu_name());
-    list($key, $curr) = each($tree);
+
+    $curr = current($tree);
+    next($tree);
 
     while ($curr) {
       // Terminate the loop when we find the current path in the active trail.
@@ -1574,7 +1590,8 @@ function menu_set_active_trail($new_trail = NULL) {
           $trail[] = $curr['link'];
           $tree = $curr['below'] ? $curr['below'] : array();
         }
-        list($key, $curr) = each($tree);
+        $curr = current($tree);
+        next($tree);
       }
     }
     // Make sure the current page is in the trail (needed for the page title),
