@@ -1,0 +1,3 @@
+# Install a working version of drush
+RUN cd /tmp && curl -LO --fail https://ftp.drupal.org/files/projects/drush-7.x-5.9.tar.gz && cd /usr/local && tar -xzf /tmp/drush-7.x-5.9.tar.gz && rm -f /tmp/drush-7.x-5.9.tar.gz && ln -sf /usr/local/drush/drush /usr/local/bin/drush
+RUN chmod -R ugo+w /usr/local/drush

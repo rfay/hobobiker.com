@@ -15,9 +15,11 @@ use_dns_when_possible: true
 timezone: America/Denver
 composer_version: ""
 web_environment: []
-nodejs_version: "16"
-
-# Key features of DDEV's config.yaml:
+working_dir:
+    web: /var/www/html/docroot
+hooks:
+  post-start:
+    - exec: "ln -sf /usr/local/drush/drush /usr/local/bin/drush"
 
 # name: <projectname> # Name of the project, automatically provides
 #   http://projectname.ddev.site and https://projectname.ddev.site
