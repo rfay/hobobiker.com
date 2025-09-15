@@ -61,12 +61,19 @@ There is no code to change, but we have to detect the needed flickr photos and d
 
 ### Files Created
 
-#### Core Migration Script
-- **`docroot/flickr_migration.php`** - Main migration script with full functionality
+#### Core Migration Scripts
+- **`docroot/flickr_migration.php`** - Main migration script for `[flickr-photo:...]` tags
   - Downloads original quality images with descriptive filenames
   - Updates database content to use hobobiker_filter format
   - Includes error handling and progress reporting
   - Supports `--dry-run` and `--limit=N` options
+
+- **`docroot/migrate_flickr_images.php`** - Direct image migration script for `<img src="static.flickr.com">` links
+  - Downloads images from direct Flickr URLs in HTML content
+  - Removes Flickr wrapper links and updates img src attributes to local files
+  - Uses Drupal node_save() for proper cache clearing
+  - Supports `--dry-run`, `--limit=N`, and `--exclude-content-types=type1,type2` options
+  - Provides post-processing node list for manual cache clearing if needed
 
 #### Test and Support Files
 - **`test_migration.sh`** - Safe testing workflow script
@@ -109,16 +116,56 @@ ddev export-db --file=backup_before_migration.sql.gz   # Create backup
 ddev exec php flickr_migration.php --limit=2           # Test on 2 nodes
 ```
 
-#### Full Migration
+#### Full Migration Process
+
+**Step 1: Filter Tag Migration**
 ```bash
 # Create backup
 ddev export-db --file=backup_full_migration.sql.gz
 
-# Run complete migration (all 276 nodes)
+# Run complete migration (all 276 nodes with [flickr-photo:...] tags)
 ddev exec php flickr_migration.php
 
 # Restore if needed
 ddev import-db --file=backup_full_migration.sql.gz
+```
+
+**Step 2: Direct Image Migration**
+```bash
+# Test direct image migration
+ddev exec php migrate_flickr_images.php --dry-run --limit=5
+
+# Run limited test
+ddev exec php migrate_flickr_images.php --limit=2
+
+# Run full direct image migration (for <img src="static.flickr.com"> links)
+ddev exec php migrate_flickr_images.php
+
+# Exclude specific content types if needed (e.g., audio/podcast nodes)
+ddev exec php migrate_flickr_images.php --exclude-content-types=audio
+```
+
+**Step 3: Post-Processing (if needed)**
+
+If images don't display correctly after migration, the script provides edit URLs for manual cache clearing:
+```bash
+# The migration script outputs something like:
+# Node URLs to manually edit/save if images don't display:
+#   https://hobobiker.ddev.site/node/223/edit - Made it to Manchester
+#   https://hobobiker.ddev.site/node/330/edit - Biking from Quebec, Canada to Vermont, USA
+
+# For each URL, simply:
+# 1. Open the edit URL in your browser
+# 2. Click "Save" without making changes
+# 3. This triggers Drupal's cache clearing for that node
+```
+
+**Step 4: Verify Complete Migration**
+```bash
+# Check for any remaining Flickr references
+ddev mysql -e "SELECT COUNT(*) as remaining_flickr_tags FROM node_revisions WHERE body LIKE '%flickr-photo%' OR body LIKE '%static.flickr.com%';"
+
+# Should return 0 when migration is complete
 ```
 
 ### Technical Implementation Details

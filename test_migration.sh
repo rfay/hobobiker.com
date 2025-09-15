@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 echo "Testing Flickr Migration Process"
