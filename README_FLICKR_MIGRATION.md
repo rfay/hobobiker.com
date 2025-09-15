@@ -160,12 +160,31 @@ If images don't display correctly after migration, the script provides edit URLs
 # 3. This triggers Drupal's cache clearing for that node
 ```
 
-**Step 4: Verify Complete Migration**
-```bash
-# Check for any remaining Flickr references
-ddev mysql -e "SELECT COUNT(*) as remaining_flickr_tags FROM node_revisions WHERE body LIKE '%flickr-photo%' OR body LIKE '%static.flickr.com%';"
+**Step 4: Clean Up Remaining Gallery Links**
 
-# Should return 0 when migration is complete
+After migration, there may be a few nodes with thickbox gallery links that still reference Flickr for full-size images. These don't break functionality but should be cleaned up manually:
+
+```bash
+# Check for remaining static.flickr.com references
+ddev mysql -e "SELECT nr.nid, nr.title FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%static.flickr.com%';"
+
+# Example remaining nodes to clean up manually:
+# - https://hobobiker.ddev.site/node/4319/edit - "Greetings from Patagonia!"
+# - https://hobobiker.ddev.site/node/4327/edit - "Biking the Seven Lakes (Siete Lagos) District in Patagonia"
+# - https://hobobiker.ddev.site/node/4328/edit - "Hola desde La Patagonia"
+```
+
+For each node, edit and remove the thickbox wrapper:
+- **Before**: `<a class="thickbox" href="https://farm4.static.flickr.com/...jpg"><img src="sites/default/files/...jpg" /></a>`
+- **After**: `<img src="sites/default/files/...jpg" />`
+
+**Step 5: Verify Complete Migration**
+```bash
+# Check for any remaining Flickr references (should return 0)
+ddev mysql -e "SELECT COUNT(*) as remaining_static_flickr FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%static.flickr.com%';"
+
+# Check overall Flickr references (caption links are OK, just static.flickr.com should be 0)
+ddev mysql -e "SELECT COUNT(*) as flickr_photo_tags FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%flickr-photo%';"
 ```
 
 ### Technical Implementation Details

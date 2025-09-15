@@ -65,8 +65,8 @@ function get_flickr_images($pdo, $limit = null, $exclude_types = array()) {
         // Extract Flickr image URLs from both body and teaser fields
         $content_to_search = $row['body'] . ' ' . $row['teaser'];
         
-        // Match Flickr image URLs
-        preg_match_all('/https?:\/\/static\.flickr\.com\/[^"\'>\s]+\.jpg/i', $content_to_search, $matches);
+        // Match Flickr image URLs (includes farm1.static.flickr.com, farm2.static.flickr.com, etc.)
+        preg_match_all('/https?:\/\/(?:farm\d+\.)?static\.flickr\.com\/[^"\'>\s]+\.jpg/i', $content_to_search, $matches);
         
         foreach ($matches[0] as $image_url) {
             if (!isset($flickr_images[$image_url])) {
