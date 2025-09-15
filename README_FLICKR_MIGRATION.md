@@ -1,5 +1,25 @@
 # Flickr to Local Photo Migration
 
+## Prerequisites
+
+Before running the migration, ensure the hobobiker_filter is properly configured:
+
+1. **Enable hobobiker_filter in Input Formats**
+   - Navigate to: `admin/settings/filters` (Admin → Site configuration → Input formats)
+   - For each input format that will display migrated content (especially "Flickr with full html and linebreaker"):
+     - Edit the input format
+     - Enable the "hobobiker_filter" module
+     - Save the configuration
+
+2. **Verify Input Format Usage**
+   - Check which input format your nodes use: `ddev mysql -e "SELECT nid, format FROM node_revisions WHERE nid IN (1152, 1179);"`
+   - Ensure those formats have hobobiker_filter enabled
+   - The migration converts `[flickr-photo:...]` to `[hobophoto:...]` tags, which require hobobiker_filter to render properly
+
+3. **Test hobobiker_filter Functionality**
+   - Create a test node with: `[hobophoto:path=sites/default/files/test.jpg,orientation=landscape,caption=Test Image]`
+   - Verify it renders correctly before running full migration
+
 ## Original Problem Statement
 
 This is hobobiker.com, a very old Drupal 6 website about a bike tour. It's mostly driven by a database.

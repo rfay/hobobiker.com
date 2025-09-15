@@ -1,15 +1,20 @@
 <?php
 /**
  * Streamlined Flickr to Local Photo Migration Script
- * Usage: php flickr_migration.php [--dry-run] [--limit=N]
+ * Usage: php flickr_migration.php [--dry-run] [--limit=N] [--exclude-content-types=type1,type2]
  */
 
 // Parse command line arguments
 $dry_run = in_array('--dry-run', $argv);
 $limit = null;
+$exclude_types = array();
 foreach ($argv as $arg) {
     if (strpos($arg, '--limit=') === 0) {
         $limit = (int)substr($arg, 8);
+    }
+    if (strpos($arg, '--exclude-content-types=') === 0) {
+        $types_string = substr($arg, 24);
+        $exclude_types = array_map('trim', explode(',', $types_string));
     }
 }
 
@@ -28,18 +33,31 @@ try {
 /**
  * Extract all unique Flickr photo IDs from the database
  */
-function get_flickr_photo_ids($pdo, $limit = null) {
-    $sql = "SELECT nid, vid, title, body FROM node_revisions WHERE body LIKE '%flickr-photo%'";
+function get_flickr_photo_ids($pdo, $limit = null, $exclude_types = array()) {
+    $sql = "SELECT nr.nid, nr.vid, nr.title, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
+    
+    // Add content type exclusions
+    if (!empty($exclude_types)) {
+        $placeholders = str_repeat('?,', count($exclude_types) - 1) . '?';
+        $sql .= " AND n.type NOT IN ($placeholders)";
+    }
+    
     if ($limit) {
         $sql .= " LIMIT $limit";
     }
     
-    $stmt = $pdo->query($sql);
+    if (!empty($exclude_types)) {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($exclude_types);
+    } else {
+        $stmt = $pdo->query($sql);
+    }
     $flickr_ids = array();
     
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Extract all flickr-photo tags from this node's body
-        preg_match_all('/\[flickr-photo:([^]]+)\]/', $row['body'], $matches);
+        // Extract all flickr-photo tags from both body and teaser fields
+        $content_to_search = $row['body'] . ' ' . $row['teaser'];
+        preg_match_all('/\[flickr-photo:([^]]+)\]/', $content_to_search, $matches);
         
         foreach ($matches[1] as $index => $tag_content) {
             // Parse the tag content (e.g., "id=441185766,size=m")
@@ -233,8 +251,9 @@ function download_flickr_photo($flickr_id, $target_path) {
 /**
  * Update node content to use hobobiker_filter instead of flickr_filter
  */
-function update_node_content($pdo, $nid, $vid, $old_body, $flickr_mappings, $actual_filenames, $dry_run = false) {
+function update_node_content($pdo, $nid, $vid, $old_body, $old_teaser, $flickr_mappings, $actual_filenames, $dry_run = false) {
     $new_body = $old_body;
+    $new_teaser = $old_teaser;
     $changes_made = false;
     
     foreach ($flickr_mappings as $flickr_id => $usages) {
@@ -249,7 +268,9 @@ function update_node_content($pdo, $nid, $vid, $old_body, $flickr_mappings, $act
                 // [flickr-photo:id=441185766,size=m] -> [hobophoto:path=sites/default/files/441185766_descriptive_name.jpg,orientation=landscape,caption=]
                 $new_tag = "[hobophoto:path={$local_path},orientation=landscape,caption=]";
                 
+                // Replace in both body and teaser
                 $new_body = str_replace($old_tag, $new_tag, $new_body);
+                $new_teaser = str_replace($old_tag, $new_tag, $new_teaser);
                 $changes_made = true;
                 echo "    Converting: $old_tag -> $new_tag\n";
             }
@@ -257,17 +278,21 @@ function update_node_content($pdo, $nid, $vid, $old_body, $flickr_mappings, $act
     }
     
     if ($changes_made && !$dry_run) {
-        $stmt = $pdo->prepare("UPDATE node_revisions SET body = ? WHERE nid = ? AND vid = ?");
-        $stmt->execute([$new_body, $nid, $vid]);
-        echo "    ✓ Updated node $nid (vid $vid) in database\n";
+        $stmt = $pdo->prepare("UPDATE node_revisions SET body = ?, teaser = ? WHERE nid = ? AND vid = ?");
+        $stmt->execute([$new_body, $new_teaser, $nid, $vid]);
+        echo "    ✓ Updated node $nid (vid $vid) body and teaser in database\n";
     }
     
     return $changes_made;
 }
 
 // Main execution
+if (!empty($exclude_types)) {
+    echo "Excluding content types: " . implode(', ', $exclude_types) . "\n";
+}
+
 echo "Step 1: Extracting Flickr photo IDs from database...\n";
-$flickr_mappings = get_flickr_photo_ids($pdo, $limit);
+$flickr_mappings = get_flickr_photo_ids($pdo, $limit, $exclude_types);
 echo "Found " . count($flickr_mappings) . " unique Flickr photos\n\n";
 
 if ($dry_run) {
@@ -310,15 +335,27 @@ echo "\nStep 3: Updating database content...\n";
 $update_count = 0;
 
 // Get all nodes that need updating
-$sql = "SELECT DISTINCT nid, vid, body FROM node_revisions WHERE body LIKE '%flickr-photo%'";
+$sql = "SELECT DISTINCT nr.nid, nr.vid, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
+
+// Add content type exclusions
+if (!empty($exclude_types)) {
+    $placeholders = str_repeat('?,', count($exclude_types) - 1) . '?';
+    $sql .= " AND n.type NOT IN ($placeholders)";
+}
+
 if ($limit) {
     $sql .= " LIMIT $limit";
 }
 
-$stmt = $pdo->query($sql);
+if (!empty($exclude_types)) {
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($exclude_types);
+} else {
+    $stmt = $pdo->query($sql);
+}
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo "Processing node {$row['nid']} (vid {$row['vid']})...\n";
-    if (update_node_content($pdo, $row['nid'], $row['vid'], $row['body'], $flickr_mappings, $actual_filenames, $dry_run)) {
+    if (update_node_content($pdo, $row['nid'], $row['vid'], $row['body'], $row['teaser'], $flickr_mappings, $actual_filenames, $dry_run)) {
         $update_count++;
     }
 }
