@@ -34,7 +34,7 @@ try {
  * Extract all unique Flickr photo IDs from the database
  */
 function get_flickr_photo_ids($pdo, $limit = null, $exclude_types = array()) {
-    $sql = "SELECT nr.nid, nr.vid, nr.title, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
+    $sql = "SELECT nr.nid, nr.vid, nr.title, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
     
     // Add content type exclusions
     if (!empty($exclude_types)) {
@@ -334,8 +334,8 @@ foreach ($flickr_mappings as $flickr_id => $usages) {
 echo "\nStep 3: Updating database content...\n";
 $update_count = 0;
 
-// Get all nodes that need updating
-$sql = "SELECT DISTINCT nr.nid, nr.vid, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
+// Get all nodes that need updating (latest revision only)
+$sql = "SELECT nr.nid, nr.vid, nr.body, nr.teaser FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE (nr.body LIKE '%flickr-photo%' OR nr.teaser LIKE '%flickr-photo%')";
 
 // Add content type exclusions
 if (!empty($exclude_types)) {
