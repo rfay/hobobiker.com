@@ -258,3 +258,123 @@ return $filename . '_' . $clean_title . '.jpg';
 - Rate limiting (1 second delay) to be respectful to Flickr servers
 
 This migration successfully transforms the hobobiker.com site from external Flickr dependency to a fully self-contained photo archive while improving file organization and image quality.
+
+---
+
+## Production Deployment Checklist
+
+### Prerequisites
+1. **Fresh database**: Get clean copy from upstream/production
+2. **Fresh files**: Sync current files from upstream/production
+3. **Backup**: Create full backup before migration
+4. **Test environment**: Complete migration in development first
+
+### Step-by-Step Production Migration
+
+#### Phase 1: Environment Setup
+```bash
+# 1. Get fresh database from upstream
+ddev import-db --file=production_database.sql.gz
+
+# 2. Sync fresh files from upstream
+rsync -av production:/path/to/files/ docroot/sites/default/files/
+
+# 3. Create pre-migration backup
+ddev export-db --file=backup_before_production_migration.sql.gz
+tar -czf backup_files_before_migration.tar.gz docroot/sites/default/files/
+```
+
+#### Phase 2: Run Migration Scripts
+```bash
+# 4. Run flickr-photo tag migration (276 nodes)
+ddev exec php flickr_migration.php
+
+# 5. Run direct image migration (69 nodes with static.flickr.com)
+ddev exec php migrate_flickr_images.php
+```
+
+#### Phase 3: Post-Migration Fixes
+
+**Step 6: Re-save nodes if images don't display**
+```bash
+# The migration scripts output node edit URLs like:
+# https://hobobiker.ddev.site/node/223/edit - Made it to Manchester
+# https://hobobiker.ddev.site/node/330/edit - Biking from Quebec, Canada to Vermont, USA
+
+# For each URL that has display issues:
+# 1. Open the edit URL in browser
+# 2. Click "Save" without making changes  
+# 3. This triggers Drupal's cache clearing for that node
+```
+
+**Step 7: Clean up remaining gallery links**
+```bash
+# Check for remaining static.flickr.com references
+ddev mysql -e "SELECT nr.nid, nr.title FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%static.flickr.com%';"
+
+# Manually edit these nodes (typically 3-5 nodes):
+# - https://hobobiker.ddev.site/node/4319/edit - "Greetings from Patagonia!"
+# - https://hobobiker.ddev.site/node/4327/edit - "Biking the Seven Lakes District"  
+# - https://hobobiker.ddev.site/node/4328/edit - "Hola desde La Patagonia"
+
+# Remove thickbox wrappers:
+# Before: <a class="thickbox" href="https://farm4.static.flickr.com/...jpg"><img src="sites/default/files/...jpg" /></a>
+# After:  <img src="sites/default/files/...jpg" />
+```
+
+#### Phase 4: Verification
+```bash
+# 8. Verify migration completion
+ddev mysql -e "SELECT COUNT(*) as remaining_static_flickr FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%static.flickr.com%';"
+# Should return: 0
+
+ddev mysql -e "SELECT COUNT(*) as flickr_photo_tags FROM node_revisions nr JOIN node n ON nr.nid = n.nid AND nr.vid = n.vid WHERE nr.body LIKE '%flickr-photo%';"  
+# Should return: 0
+
+# 9. Test critical pages
+# - Check homepage: https://hobobiker.ddev.site/
+# - Test blog posts with images
+# - Verify triplog entries display correctly
+```
+
+#### Phase 5: Production Deployment
+```bash
+# 10. Export migrated database
+ddev export-db --file=migrated_production_database.sql.gz
+
+# 11. Package migrated files
+tar -czf migrated_files.tar.gz docroot/sites/default/files/
+
+# 12. Deploy to production
+# - Upload migrated database
+# - Upload migrated files directory
+# - Import database on production
+# - Extract files on production
+# - Clear production caches
+
+# 13. Production verification
+# - Test image display on live site
+# - Verify no broken Flickr dependencies
+# - Check site performance
+```
+
+### Migration Results Expected
+- **276 [flickr-photo:...] tags** → **[hobophoto:...] tags**
+- **93+ downloaded images** from static.flickr.com
+- **69 nodes updated** with local image paths
+- **0 remaining critical Flickr dependencies**
+- **Fully self-contained photo archive**
+
+### Rollback Plan
+```bash
+# If issues occur, restore from backup:
+ddev import-db --file=backup_before_production_migration.sql.gz
+tar -xzf backup_files_before_migration.tar.gz
+```
+
+### Success Criteria
+- ✅ All blog images display correctly
+- ✅ No broken image links
+- ✅ Site loads without Flickr dependencies  
+- ✅ Photo captions and layouts preserved
+- ✅ Search and navigation still functional
