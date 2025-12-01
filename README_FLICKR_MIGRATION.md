@@ -1,5 +1,9 @@
 # Flickr to Local Photo Migration
 
+## Edit/TODO 2025-12-01
+
+* It turns out that many, many nodes have `<img src="https://static.flickr.com/....jpg"` links in them, in addition to the `[flickr-photo:...]` tags.
+
 ## Prerequisites
 
 Before running the migration, ensure the hobobiker_filter is properly configured:
