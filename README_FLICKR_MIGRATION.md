@@ -2,7 +2,15 @@
 
 ## Edit/TODO 2025-12-01
 
-* It turns out that many, many nodes have `<img src="https://static.flickr.com/....jpg"` links in them, in addition to the `[flickr-photo:...]` tags.
+* There were many items with `img src="sites/default/files...` that needed to be `img src="/sites/default/files...` (missing leading slash). I fixed those manually in the database with:
+  ```sql
+  ddev mysql -e "
+  UPDATE node_revisions
+  SET body = REPLACE(body, 'img src=\"sites/default', 'img src=\"/sites/default')
+  WHERE body LIKE '%img src=\"sites/default%';
+"
+  ```
+ 
 
 ## Prerequisites
 
