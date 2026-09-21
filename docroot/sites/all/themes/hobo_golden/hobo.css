@@ -73,21 +73,6 @@ div flickrfloat objectwrapper {
 }
 
 
-/** Simplemenu fixes **/
-#forsimplemenu {
-  width: 100%;
-  float: left;
-}
-
-ul#simplemenu {
-	background:#ddd;
-	color:#333;
-	position:static;  /* this can come out when my patch to simplemenu for IE6 goes in */
-}
-ul#simplemenu li.leaf a {
-	background-color: #ddd;
-}
-
 /** Links fixes **/
 ul.menu a {
   text-decoration: none;

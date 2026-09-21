@@ -1,0 +1,172 @@
+/* ----------------------------------------------------------------------
+   Main navigation: click-to-toggle, works the same with mouse or touch.
+   Replaces the Simplemenu/Superfish hover-flyout menu.
+   ---------------------------------------------------------------------- */
+
+#main-nav {
+  background: #A46B34;
+  border-top: solid 2px #fff;
+  clear: both;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 120%;
+  position: relative;
+  width: 100%;
+}
+
+/* Hamburger toggle: hidden on wide screens, shown on narrow ones */
+.nav-toggle {
+  background: #A46B34;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  display: none;
+  font: inherit;
+  padding: 0.6em 1em;
+  text-align: left;
+  width: 100%;
+}
+
+.nav-toggle-icon {
+  display: inline-block;
+  height: 0.9em;
+  margin-right: 0.5em;
+  position: relative;
+  top: -0.1em;
+  vertical-align: middle;
+  width: 1.2em;
+}
+
+.nav-toggle-icon,
+.nav-toggle-icon:before,
+.nav-toggle-icon:after {
+  border-top: 2px solid #fff;
+}
+
+.nav-toggle-icon:before,
+.nav-toggle-icon:after {
+  content: "";
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.nav-toggle-icon:before {
+  top: 0.35em;
+}
+
+.nav-toggle-icon:after {
+  top: 0.7em;
+}
+
+#main-nav-menu ul.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#main-nav-menu li {
+  margin: 0;
+  position: relative;
+}
+
+#main-nav-menu > ul.menu > li {
+  display: block;
+}
+
+#main-nav-menu a {
+  background-color: #A46B34;
+  border-left: 6px solid #A46B34;
+  color: #fff;
+  display: block;
+  padding: 0.4em 2.2em 0.3em 0.6em;
+  text-decoration: none;
+}
+
+#main-nav-menu > ul.menu > li > a:hover,
+#main-nav-menu > ul.menu > li.nav-open > a {
+  background: #764413;
+  border-left-color: #ccc;
+}
+
+/* The small expand/collapse control added by nav.js to items with children */
+.submenu-toggle {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.2em;
+}
+
+.submenu-toggle:after {
+  content: "\25BE"; /* ▾ */
+}
+
+.submenu-toggle[aria-expanded="true"]:after {
+  content: "\25B4"; /* ▴ */
+}
+
+/* Submenus are closed by default; nav.js toggles "nav-open" on the <li> */
+#main-nav-menu li.expanded > ul.menu {
+  display: none;
+}
+
+#main-nav-menu li.expanded.nav-open > ul.menu {
+  display: block;
+}
+
+/* ---- Wide screens: click-opened flyout submenus ---- */
+@media (min-width: 48em) {
+  #main-nav-menu > ul.menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #main-nav-menu li.expanded > ul.menu {
+    background: #A46B34;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    left: 0;
+    min-width: 14em;
+    position: absolute;
+    top: 100%;
+    z-index: 500;
+  }
+
+  /* Third level and deeper open to the side instead of further down */
+  #main-nav-menu li.expanded li.expanded > ul.menu {
+    left: 100%;
+    top: 0;
+  }
+
+  #main-nav-menu li.expanded li > a {
+    border-left: 0;
+  }
+}
+
+/* ---- Narrow screens: hamburger-gated, full-width accordion ---- */
+@media (max-width: 47.99em) {
+  .nav-toggle {
+    display: block;
+  }
+
+  #main-nav-menu {
+    display: none;
+  }
+
+  #main-nav.nav-open #main-nav-menu {
+    display: block;
+  }
+
+  #main-nav-menu li.expanded li {
+    padding-left: 1em;
+  }
+
+  #main-nav-menu a {
+    border-left: 0;
+  }
+}

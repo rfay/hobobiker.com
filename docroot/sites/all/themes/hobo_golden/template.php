@@ -4,6 +4,17 @@
  * Hobobiker extensions to the theme
  */
 
+/**
+ * Render the full "menu-menu" tree as a plain nested <ul>, click-to-toggle
+ * on the front end (see nav.js/nav.css). Replaces the Simplemenu/Superfish
+ * hover-flyout markup, which is JS-only and won't migrate to a new platform.
+ */
+function hobo_golden_nav_menu() {
+  $tree = menu_tree_all_data('menu-menu');
+  $output = menu_tree_output($tree);
+  return '<div id="main-nav-menu">'. $output .'</div>';
+}
+
 
 function hobo_golden_flickr_filter_photo($p, $size = NULL, $attribs = NULL) {
   
