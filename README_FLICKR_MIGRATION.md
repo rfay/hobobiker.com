@@ -1,5 +1,7 @@
 # Flickr to Local Photo Migration
 
+## THIS MIGRATION was completed in 2025-12, this file is here as historical document.
+
 ## Edit/TODO 2025-12-01
 
 * There were many items with `img src="sites/default/files...` that needed to be `img src="/sites/default/files...` (missing leading slash). I fixed those manually in the database with:
