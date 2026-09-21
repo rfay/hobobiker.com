@@ -3,8 +3,6 @@ type: drupal6
 docroot: docroot
 php_version: "7.3"
 webserver_type: nginx-fpm
-router_http_port: "80"
-router_https_port: "443"
 xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
@@ -19,7 +17,8 @@ working_dir:
     web: /var/www/html/docroot
 hooks:
   post-start:
-    - exec: "ln -sf /usr/local/drush/drush /usr/local/bin/drush"
+    # Use ancient drush 
+    - exec: "ln -sf /usr/local/bin/drush ~/.local/bin/drush"
 
 # name: <projectname> # Name of the project, automatically provides
 #   http://projectname.ddev.site and https://projectname.ddev.site
