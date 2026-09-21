@@ -9,3 +9,7 @@ backup
 cache
 robots.txt
 .tarballs
+
+/.ddev/docker-compose.coder-describe.yaml
+/.vscode
+/.ddev/config.coder.yaml
