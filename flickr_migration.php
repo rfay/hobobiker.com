@@ -1,6 +1,28 @@
 <?php
 /**
  * Streamlined Flickr to Local Photo Migration Script
+ *
+ * HISTORICAL. This migration was completed in 2025-12; see README_FLICKR_MIGRATION.md.
+ * It is kept for reference only and finds 0 photos to process on the current database.
+ *
+ * Moved out of docroot/ in 2026-09 because it was reachable over HTTP. It reads
+ * --dry-run from $argv, which is undefined under the web SAPI, so an HTTP request
+ * left $dry_run = false and ran the download-and-UPDATE path unguarded.
+ *
+ * MOVING IT BROKE THE PATHS. Two things are relative to where it runs:
+ *
+ *   1. $target_dir = 'sites/default/files' (and the glob() near it) resolve against
+ *      the current working directory, so it must run with CWD = docroot/.
+ *   2. The PDO DSN uses host 'db', which only resolves inside the ddev web container.
+ *
+ * So it must now be run as:
+ *
+ *   ddev exec -d /var/www/html/docroot php ../flickr_migration.php --dry-run
+ *
+ * Running it as `php flickr_migration.php` from the project root will connect to
+ * nothing and write images to the wrong place. If you ever need it to be
+ * location-independent, add `chdir(__DIR__ . '/docroot');` below instead.
+ *
  * Usage: php flickr_migration.php [--dry-run] [--limit=N] [--exclude-content-types=type1,type2]
  */
 
