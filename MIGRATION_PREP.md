@@ -10,6 +10,82 @@ review of this site done 2026-09-21.
 
 # Part 1 — Preparing any website for migration
 
+## Asking for the review
+
+This document came out of a one-paragraph prompt. It's worth recording both what that
+prompt got right and what it left to the agent's discretion, because several of the
+most valuable findings were luck rather than instruction.
+
+**The original prompt:**
+
+```
+This old Drupal 6 site will be migrated to another CMS or to static html.
+Review the site content and navigation for serious problems that may not be
+able to be migrated, like weird JS behaviors, etc.
+```
+
+**What it got right.** It named the destination ("another CMS or to static html"),
+which is what makes a "problem" definable at all — a Flash embed is fatal for a static
+capture and merely ugly for a CMS-to-CMS move. It gave a concrete example of the kind
+of failure it cared about, which sets the altitude better than an abstract request for
+"issues". And it was short, which left room to follow the evidence.
+
+**What it left to chance.** It didn't mention that the site was running locally with
+database access, so a literal-minded agent might have read only source files. It asked
+for "serious problems" without asking for evidence, which invites confident prose over
+counts and IDs. It anchored on JS behaviors, but the real blockers here were
+render-time PHP and a permission setting. Most importantly, it only pointed at content
+that *breaks* — the two largest findings (447 invisible comments, 85 empty nodes) were
+content that renders *cleanly as nothing*, and those only surfaced because the agent
+chose to look in that direction.
+
+**An improved version**, general enough to paste at any old site:
+
+```
+This is <site>, an old <platform> site that I'm going to migrate to
+<another CMS / static HTML>. It's running locally and you have shell and
+database access. This is a read-only review — don't change anything.
+
+Review the site for problems that will not survive that migration, and report
+them with evidence: counts, page/node IDs, and the query or URL you got them
+from. Prefer checking to assuming. Don't tell me how this platform usually
+behaves; tell me how this install actually behaves.
+
+Look in both directions:
+
+- Content that is generated rather than stored — macros and shortcodes,
+  embedded server-side code, input filters, template-built listings, and
+  on-demand thumbnails. A database export misses all of it.
+- Content that is stored but never renders — hidden by a permission, a publish
+  flag, or a module that was uninstalled years ago. A crawl misses all of it,
+  and it returns HTTP 200, so nothing looks wrong.
+
+Also check: dead client-side tech (Flash, old embed formats, third-party
+widgets, hover-only menus, JS that loads but is never used); referenced assets
+that are missing; internal links and menu items that 404 or point at
+unpublished content; external links that are dead; and any credentials sitting
+in the database or config files.
+
+Crawl the whole site logged out and compare that against the database — every
+published item should have a non-trivial rendered page. Anything empty is a
+problem I haven't found yet.
+
+Finish with a prioritized list: hard blockers, silent-data-loss risks, things
+already broken on the live site, and cosmetic cleanup. For each, say what the
+fix is and whether it belongs before or after the migration. Tell me plainly
+what checked out fine, too, so I know what I don't have to worry about.
+```
+
+The changes that matter most: stating that the site is running and read-only, demanding
+evidence instead of assertions, naming the stored-but-invisible direction explicitly,
+asking for the logged-out crawl to be diffed against the database, and asking for a
+clean bill of health on the things that turned out fine. That last one is easy to skip
+and genuinely useful — knowing all 103 image macros resolve is worth as much as knowing
+which ones don't.
+
+For a longer, more prescriptive version of the same request, see
+[the full audit prompt](#full-audit-prompt) below.
+
 ## The core principle
 
 **Migrate what the site *renders*, not what is *stored*.**
@@ -95,10 +171,12 @@ For each group of content: **migrate / pre-render then migrate / rewrite / archi
 delete**. Write the decision down. Don't discover mid-migration that you have 80 blank
 pages and no plan for them.
 
-## Reusable AI prompt
+## Full audit prompt
 
-Point an AI coding agent at a local copy of the site (running, with database access)
-and give it this:
+The prompt above is the one to reach for first. This is the same request in expanded,
+checklist form — useful when you want the agent to work through the areas
+systematically rather than follow its nose, or when you're handing the job to a
+less capable model that benefits from being told exactly what to enumerate.
 
 ```
 You are auditing an old, database-driven website that I intend to migrate to a
