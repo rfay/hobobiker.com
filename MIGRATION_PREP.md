@@ -560,3 +560,33 @@ Worth stating explicitly, because they're the usual suspects and they check out 
   now has nothing to do. See `README_FLICKR_MIGRATION.md`.
 - **`nav.js` is already migration-ready** — plain HTML/CSS/JS, click-to-toggle, no
   jQuery, no hover dependency. It will carry over unchanged.
+
+## G. Notes toward the Drupal 11 migration
+
+**The site is frozen.** Hobobiker hasn't had any new content in 15 years and is
+unlikely to ever have any more. This changes the calculus on several of the "pre-render
+vs. rewrite vs. drop" decisions above: since nothing will be edited or added again,
+techniques that only work for a one-time, static recreation of the existing content
+(hand-fixing a table, hardcoding a value, flattening a macro to plain HTML once and
+throwing away the mechanism that generated it) are all fair game. There's no need to
+preserve editability or re-buildability for content that will never be re-built.
+
+**Where it's reasonable to keep similar features.** For a Drupal 11 target specifically
+(as opposed to static HTML), it's reasonable to recreate the same content types
+(`triplog`, `blog`, `story`, etc.) rather than collapsing everything into a generic
+page type, and to recreate something like the `hobobiker_filter` / `[hobophoto:...]`
+mechanism (A3) for presenting groups of images, rather than converting every macro
+instance to raw `<img>` markup by hand. See `README_FLICKR_MIGRATION.md` for the
+history of how `hobobiker_filter` came to replace the old Flickr-dependent filter, and
+how its `[hobophoto:path=...,orientation=...,caption=...]` syntax works — that's the
+filter a D11 equivalent would need to reproduce or emulate.
+
+**Tripinfo (A1/A2) is the exception, not a pattern to preserve.** The `tripinfo` input
+filter and `tripinfo_table()` PHP are the one piece of render-time magic that's
+reasonable to eliminate outright rather than reimplement. Since the site is frozen,
+there's no future need for the live, queryable mileage/elevation tables — crawling the
+~15 route pages once, capturing the rendered HTML table output, and pasting it into
+each node as a static Drupal 11 node body is simpler and lower-risk than porting the
+custom PHP/filter chain to a new platform. The per-day `tripinfo_item` link targets
+(A2) would need the same treatment: either flattened to plain text or pre-rendered as
+their own static nodes.
