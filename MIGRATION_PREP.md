@@ -43,8 +43,10 @@ chose to look in that direction.
 
 ```
 This is <site>, an old <platform> site that I'm going to migrate to
-<another CMS / static HTML>. It's running locally and you have shell and
-database access. This is a read-only review — don't change anything.
+<another CMS / static HTML>. You're working on a disposable local copy: the
+database and files restore from a dump with one command, and nothing here
+reaches production. You have shell and database access. This pass is a
+read-only review, though — don't change anything yet.
 
 Review the site for problems that will not survive that migration, and report
 them with evidence: counts, page/node IDs, and the query or URL you got them
@@ -98,6 +100,87 @@ export the `body` column you will get macros and template stubs, not content.
 The corollary is equally important: **some stored content never renders**, because a
 permission, a publish flag, or a missing module hides it. A crawl-based migration
 loses that silently. So you need *both* views of the site and you need to diff them.
+
+## Make the work re-runnable
+
+**Migrate with scripts, not with edits.**
+
+The migration will take more passes than you expect. You will find a bug in the macro
+converter after it has already rewritten 900 items. You will discover a content type
+you forgot. The live site may keep changing while you work. Each of those is cheap if
+the transformation is a script you re-run from a clean restore, and expensive if it was
+a sequence of individual edits.
+
+So the unit of work is a script, not a change:
+
+- **Always transform from a pristine restore**, never from the database's current
+  state. `restore dump -> run transforms in order -> crawl -> verify` should be one
+  command you can run from scratch at any time. That is far simpler to reason about
+  than making every script idempotent against a half-mutated database.
+- **Never have the agent hand-edit content item by item.** "Fix the 11 YouTube embeds"
+  should produce a script that rewrites every old-style embed it finds — not 11
+  individual edits. A script is reviewable, re-runnable, and tells you when it hits 12
+  or 9 instead of 11.
+- **Make every script report a count.** A converter that changed 103 items yesterday
+  and 0 today is telling you something broke upstream. Counts are the cheapest
+  regression test available.
+- **Script the verification too.** The dead-link check, the missing-asset check, the
+  every-published-page-renders-non-empty check: all re-runnable, all cheap to repeat
+  after every pass. Nothing in Part 2 of this document required a human to look at a
+  page.
+- **Keep the transforms in version control** next to this document, so the migration is
+  reproducible by someone else, and by you after you have forgotten how it worked.
+
+The payoff lands at cutover. When you are ready to go live you restore *current*
+production data, run the same pipeline unchanged, and ship — instead of redoing months
+of hand work against fresher content.
+
+## Setting up an agent to do the work
+
+### Give it a disposable copy, and say so
+
+Set up a local copy whose state you can restore with one command (`ddev import-db`,
+`docker compose down -v && ./restore.sh`, whatever fits). Verify the restore actually
+works before you start — an untested backup is not a backup. Reproducible matters more
+than merely disposable: you need to get back to a known state after a bad run, not just
+throw the current one away.
+
+Then **tell the agent that is what it is working on.** Put it in the prompt:
+
+```
+You are working on a disposable local copy of this site. The database and files
+restore from a dump with a single command, nothing here can reach production,
+and I can rebuild the whole thing from scratch. Destructive changes are fine and
+expected - bulk UPDATEs, deleting content, rewriting bodies in place. Work
+directly rather than asking me to confirm each one.
+```
+
+This is worth stating for a practical reason. An agent that has not been told the blast
+radius will reasonably treat a bulk `UPDATE` across 900 rows as something to check with
+you about first — and will keep checking, every pass. Describing the environment
+accurately lets it work at the right pace.
+
+The obvious caveat: only say it when it is true. If the checkout carries production
+credentials, or the container can route to the production database, it is not a
+disposable copy and should not be described as one.
+
+### Permission prompts
+
+Coding agents ask before running commands they have not been allowed. During a long
+transformation loop — or a live demo — that becomes constant interruption.
+
+- **For ongoing work**, the better fix is a narrow allowlist in `.claude/settings.json`
+  covering the commands you actually repeat: your database client, your crawler, your
+  test runner. You keep the confirmation step for everything you did not anticipate.
+- **For a demo or a throwaway loop**, `claude --dangerously-skip-permissions` removes
+  the prompts entirely. The name is accurate — it drops the confirmation step for
+  everything, destructive commands included. That is a reasonable trade when the blast
+  radius genuinely is the disposable copy described above, and a bad idea anywhere
+  else. Do not run it in a directory holding production credentials, or in a container
+  with a route to production.
+
+The ordering matters: establish the disposable, restorable copy first, *then* remove
+the guardrails. The flag is tolerable because of that setup, not on its own.
 
 ## Preparation checklist
 
@@ -170,6 +253,11 @@ public, and rotate anything real.
 For each group of content: **migrate / pre-render then migrate / rewrite / archive /
 delete**. Write the decision down. Don't discover mid-migration that you have 80 blank
 pages and no plan for them.
+
+### 11. Build the pipeline before you transform anything
+Set up the restore-transform-crawl-verify loop as one command *before* you write your
+first converter. See "Make the work re-runnable" above. Retrofitting this after you
+have hand-edited a few hundred items means redoing them.
 
 ## Full audit prompt
 
@@ -526,6 +614,10 @@ database dumps there are safe.)
 
 ## E. Suggested order of work
 
+0. **Set up the re-runnable pipeline first.** A one-command restore of this database
+   plus a scripted transform-crawl-verify loop, before any content is changed. Every
+   step below should be a script committed to this repo, not a hand-edit. See "Make the
+   work re-runnable" in Part 1.
 1. **Decide the fate of the 85 empty nodes** (B2) and the 18 unpublished book nodes
    (B3). Delete or publish. Don't migrate blanks.
 2. **Decide about comments** (B1). If keeping them, grant anonymous `access comments`
