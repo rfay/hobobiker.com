@@ -44,19 +44,3 @@ files_pull_command:
     rsync -avz "${filesurl}" .
   service: web
 
-# Pushing a database or files to a production environment can be dangerous and not recommended.
-# This example is not very dangerous because it's not actually deploying the
-# files. But if the db were deployed on production it would overwrite
-# the current db or files there.
-db_push_command:
-  command: |
-    # set -x   # You can enable bash debugging output by uncommenting
-    set -eu -o pipefail
-    mysqldump db | gzip >/var/www/html/.ddev/.downloads/db_push.sql.gz
-    rsync -avz /var/www/html/.ddev/.downloads/db_push.sql.gz "${dburl}"
-
-files_push_command:
-  command: |
-    # set -x   # You can enable bash debugging output by uncommenting
-    set -eu -o pipefail
-    rsync -az "${DDEV_FILES_DIR}/" "${filesurl}/"
