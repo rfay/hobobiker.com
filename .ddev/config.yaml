@@ -1,4 +1,3 @@
-name: hobobiker
 type: drupal6
 docroot: docroot
 php_version: "7.3"
