@@ -1,0 +1,386 @@
+{
+  "title": "Route | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Route",
+  "contentFound": true,
+  "lines": [
+    "Our Actual Route",
+    "By rfay - Posted on September 13th, 2005",
+    "Tagged: Route",
+    "Here's what we did with our actual route:",
+    "Manchester, NH around several circles visiting relatives and going to a family reunion, then heading north to Dover, NH",
+    "Dover, NH north to Gorham, NH over Evans Notch",
+    "Gorham, NH up to Magog, Quebec and back down to West Barnet, VT",
+    "West Barnet, VT down to Canaan, NH",
+    "Georges Mills, NH to Manchester, NH to complete the loop.",
+    "Our last night out we stayed with Nancy's brother Dan near Canaan, which was too far to make Manchester in one day and still get our bikes packed. So Dan's friend Todd kindly gave us about a 30 mile headstart by driving us with our bikes to Georges Mills, which also gave us a more pleasant route."
+  ],
+  "images": [
+    {
+      "src": "/files/maps/NewEnglandRoute/Overview.gif",
+      "name": "overview.gif",
+      "alt": ""
+    },
+    {
+      "src": "/misc/feed.png",
+      "name": "feed.png",
+      "alt": "Syndicate content"
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "our_actual_route",
+      "text": "Our Actual Route"
+    },
+    {
+      "internal": true,
+      "key": "new_england/route",
+      "text": "Route"
+    },
+    {
+      "internal": true,
+      "key": "files/maps/NewEnglandRoute/ManchesterToDover",
+      "text": "Manchester, NH around several circles"
+    },
+    {
+      "internal": true,
+      "key": "files/maps/NewEnglandRoute/Dover to Gorham",
+      "text": "Dover, NH north to Gorham, NH"
+    },
+    {
+      "internal": true,
+      "key": "files/maps/NewEnglandRoute/Gorham to West Barnet",
+      "text": "Gorham, NH up to Magog, Quebec and back down to West Barnet, VT"
+    },
+    {
+      "internal": true,
+      "key": "files/maps/NewEnglandRoute/West Barnet to Canaan, NH",
+      "text": "West Barnet, VT down to Canaan, NH"
+    },
+    {
+      "internal": true,
+      "key": "files/maps/NewEnglandRoute/Georges Mills to Manchester",
+      "text": "Georges Mills, NH to Manchester, NH"
+    },
+    {
+      "internal": true,
+      "key": "taxonomy/term/19/all/feed",
+      "text": ""
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [],
+    "internalNonOk": [
+      {
+        "key": "files/maps/NewEnglandRoute/Dover to Gorham",
+        "status": 404
+      },
+      {
+        "key": "files/maps/NewEnglandRoute/Georges Mills to Manchester",
+        "status": 404
+      },
+      {
+        "key": "files/maps/NewEnglandRoute/Gorham to West Barnet",
+        "status": 404
+      },
+      {
+        "key": "files/maps/NewEnglandRoute/ManchesterToDover",
+        "status": 404
+      },
+      {
+        "key": "files/maps/NewEnglandRoute/West Barnet to Canaan, NH",
+        "status": 404
+      }
+    ]
+  }
+}

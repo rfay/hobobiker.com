@@ -1,0 +1,377 @@
+{
+  "title": "First impressions of Argentina | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "First impressions of Argentina",
+  "contentFound": true,
+  "lines": [
+    "By nancy - Posted on November 3rd, 2008",
+    "Tagged: Inuvik to Ushuaia",
+    "• Argentina",
+    "Now that we have been in Argentina for a bit over a week, I have noticed some differences I would like to share. Wine flows more freely than water and is way cheaper than bottled water. I haven't really found good wine since the USA so this land of wine and honey is a great place to buy very good wine at a fantastic price. I wish I knew which wine vineyards are the best. (If you have a recommendation of some of the better wines let me know.)",
+    "Water can be drunk directly from the tap all over Argentina! No more buying plastic bottles of water and adding to the world's plastic waste.",
+    "We have entered into the land of refrigerators so we can buy cold cuts and cheeses, and refrigerated yogurts. We are now preparing sandwiches for lunch instead of the lunch specials or menu del día found in most of Latin America. The lunch specials usually consisted of rice, french fries, yucca, chicken or beef with a soup as an appetizer with rice, potato, stock and some kind of chicken or beef all for an amazing price of a dollar or two. Argentina's lunch specials are far more expensive than we've had in the rest of South America, at 3 or 4 dollars. They eat around 2:00pm, take 3 hours off and then start the evening feasting and entertainment around 9:00. We went out for dinner the other night to have our first Argentinan steak. At 8:15 we were the first ones in the restaurant that night and they had to turn on the lights for us. Most Argentinans eat dinner about 9 o´clock or 10 o´clock at night. There are more people roaming the street at midnight than at 5pm.",
+    "Other differences are the bathrooms. They have flushing ones with water. The kind you push down on the handle and the water disappears and fills up with clean water again. There are toilet paper and soap in some of the rest rooms. Also all the hotels have bidets and a separate toilet. We have found warm water for showers in all the hotels we have stayed in so far. The hotels cost have been about $12 to $15 on average.",
+    "Finally, since so many Argentinans are of European descent, we can't spot the gringos! I started talking to a guy in shorts the other day in English, just because he looked like a gringo. But he was a local!",
+    "The one bad thing that is hard to adjust to is the smoking of cigarettes. It is everywhere. In the hotels, Internet cafes, restaurants, streets. It is really disappointing. The wasted butts are everywhere, on the computer tables, in the urinals, in the streets. It seems where there is more money, there is more spending on more vices.",
+    "There are more bookstores and newspapers. Less music in the streets. There are larger box stores and less sales by individuals trying to sell an armful items or a sack of fruits or vegetables. I do not hear all the laughing I heard north of the border. People take themselves more seriously or are more into their heads.",
+    "It feels like a European country and very different from the rest of the countries in Latin America we have visited.",
+    "nancy's blog"
+  ],
+  "images": [
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/3002295675_Cacti_everywhere_Valley_of_Humahuaca.jpg",
+      "name": "3002295675_cacti_everywhere_valley_of_humahuaca.jpg",
+      "alt": ""
+    },
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/3003343606_the_cathedral_in_Salta_Argentina.jpg",
+      "name": "3003343606_the_cathedral_in_salta_argentina.jpg",
+      "alt": ""
+    },
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/3002514489_bike_in_Salta_Argentina.jpg",
+      "name": "3002514489_bike_in_salta_argentina.jpg",
+      "alt": ""
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": true,
+      "key": "taxonomy/term/72",
+      "text": "Argentina"
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/3002295675_Cacti_everywhere_Valley_of_Humahuaca.jpg",
+      "text": ""
+    },
+    {
+      "internal": false,
+      "key": "http://en.wikipedia.org/wiki/Bidet",
+      "text": "bidets"
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/3003343606_the_cathedral_in_Salta_Argentina.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/3002514489_bike_in_Salta_Argentina.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "blog/nancy",
+      "text": "nancy's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "nancy's blog",
+        "key": "blog/nancy"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://en.wikipedia.org/wiki/Bidet"
+    ],
+    "internalNonOk": []
+  }
+}

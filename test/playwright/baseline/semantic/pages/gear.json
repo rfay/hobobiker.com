@@ -1,0 +1,416 @@
+{
+  "title": "Our bike touring gear | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Our bike touring gear",
+  "contentFound": true,
+  "lines": [
+    "By nancy - Posted on December 17th, 2007",
+    "Tagged: Inuvik to Ushuaia",
+    "• Gear",
+    "Click on the picture for a larger view",
+    "Lots of people ask what bikes we used for the trip, so here they are.",
+    "We both used Specialized Stumpjumpers with front shocks, trekking handling bars with extenders, Old Man Mountain racks, Ortlieb panniers, kickstand, wide touring tires from Continental and 36 spoke wheels.",
+    "In Peru, Randy switched from panniers to a BOB trailer. See the update and the picture on the right.",
+    "We both started out with Brooks saddles but both of us switched to various version of the Terry Liberator Y - we never did get comfortable with the Brooks saddles, despite waiting thousands of miles and the rave recommendations of so many people. Neither one of us use clipless pedals - we just use regular shoes with flat pedals. We always wear a helmet and use a marvellous helmet mounted rear view mirror. We ride with riding shorts for comfort.",
+    "We carried a full set of camping gear including tent, sleeping bags, mattress', pillow, silk sheet liners, cooking gear, gas for the cooking stove, ultralight cooking stove, water filter, two cameras, off and on a computer, headlamps, books, writing material. Nancy carried a travel watercolor kit and a block of watercolor paper. And enough clothes to ride and live in for three days. We also have rain gear and sun hats and sun screen. We carry our personal bathing gear including battery operated tooth brushes. And a small first aid kit. Randy has an altimeter to check out the distance and amount of climbing we do each day.",
+    "We sometimes (usually) feel we carry to much, so we are always evaluating what is truly required for bicycle touring. And we keep carrying too much. Our gear is made for the long haul and is solid but we are always searching for the right combination of gear. Randy fully loaded bike weighs about 100 pounds and Nancy's about 80 lbs depending how much water and food is required and available services.",
+    "Our biggest decision right now is whether we're going to leave the computer at home...",
+    "If you have any questions, send us an email or start a discussion forum.",
+    "Also, we've started a Bike maintenance log so you can see what experience we've had with the equipment.",
+    "And you can see all our \"Gear\" articles here.",
+    "nancy's blog"
+  ],
+  "images": [
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/489196796_Randys_bike_and_gear.jpg",
+      "name": "489196796_randys_bike_and_gear.jpg",
+      "alt": ""
+    },
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/489222677_Nancys_bike_and_gear.jpg",
+      "name": "489222677_nancys_bike_and_gear.jpg",
+      "alt": ""
+    },
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/2785036866_On_private_road_to_Chiquicara.jpg",
+      "name": "2785036866_on_private_road_to_chiquicara.jpg",
+      "alt": ""
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": true,
+      "key": "inuvik_to_denver/gear",
+      "text": "Gear"
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/489196796_Randys_bike_and_gear.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/489222677_Nancys_bike_and_gear.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/2785036866_On_private_road_to_Chiquicara.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "node/4227",
+      "text": "the update"
+    },
+    {
+      "internal": false,
+      "key": "http://www.rei.com/product/685053",
+      "text": "Terry Liberator Y"
+    },
+    {
+      "internal": false,
+      "key": "http://www.amazon.com/Bike-Peddler-Original-Eyeglass-Rectangle/dp/B000CSQWWA",
+      "text": "marvellous helmet mounted rear view mirror"
+    },
+    {
+      "internal": true,
+      "key": "contact",
+      "text": "send us an email"
+    },
+    {
+      "internal": true,
+      "key": "forum",
+      "text": "forum"
+    },
+    {
+      "internal": true,
+      "key": "bike_maintenance_log",
+      "text": "Bike maintenance log"
+    },
+    {
+      "internal": true,
+      "key": "adventures/inuvik_to_denver/gear",
+      "text": "here"
+    },
+    {
+      "internal": true,
+      "key": "blog/nancy",
+      "text": "nancy's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "nancy's blog",
+        "key": "blog/nancy"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://www.amazon.com/Bike-Peddler-Original-Eyeglass-Rectangle/dp/B000CSQWWA",
+      "http://www.rei.com/product/685053"
+    ],
+    "internalNonOk": [
+      {
+        "key": "forum",
+        "status": 404
+      }
+    ]
+  }
+}

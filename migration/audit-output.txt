@@ -1,0 +1,236 @@
+
+## Nodes by type and status
+
+type	published	unpublished	total
+triplog	549	0	549
+blog	328	14	342
+wp	138	0	138
+story	111	2	113
+acidfree	77	0	77
+page	29	6	35
+book	0	18	18
+audio	10	0	10
+image	8	0	8
+forum	4	0	4
+(empty type)	0	1	1
+poll	1	0	1
+
+## Comments by status (Drupal 6: 0 = published, 1 = unpublished) and whether comments can render
+
+status	comments	nodes
+0	169	86
+1	278	68
+module	enabled
+comment	0
+role	has_access_comments
+anonymous user	0
+authenticated user	0
+administrator	0
+author	0
+non-authenticated user	0
+translator	0
+nid	published_comments
+4123	21
+3880	10
+4339	10
+4291	8
+1064	8
+
+## Input formats: filters and live nodes per format
+
+format	name	filters
+1	Filtered HTML	filter:0,filter:1,filter:3
+2	PHP code	php:0
+3	Full HTML-No Restrictions	filter:3
+5	HTML with line breaks	filter:1,filter:3
+6	Wiki	liquid_filters:0
+7	HTML (full) with Gmap	gmap:0,filter:3
+8	Full html with email obfuscation	gtspam:0,filter:3
+9	Tripinfo Google Map	tripinfo:0,php:0
+10	Flickr with full html and linebreaker	hobobiker_filter:0,flickr:0,filter:1,filter:3
+11	Flickr with full html	hobobiker_filter:0,flickr:0,filter:3
+format	live_nodes
+0	191
+1	104
+2	4
+3	791
+5	12
+8	1
+9	13
+10	121
+11	18
+module	enabled	in_system_table
+filter	1	1
+php	1	1
+flickr	1	1
+gmap	0	1
+gtspam	0	1
+hobobiker_filter	1	1
+liquid_filters	0	1
+tripinfo	1	1
+
+## Render-time code: PHP-evaluating formats (2 = PHP code, 9 = tripinfo emits PHP)
+
+format	nids	n
+2	3802,4196,4197,4281	4
+9	3801,3988,4003,4004,4010,4011,4012,4013,4015,4129,4223,4311,4312	13
+live_bodies_with_php_tag
+15
+nodes_calling_tripinfo_table	n
+3801,3802,3988,4004,4010,4011,4012,4013,4015,4129,4196,4197,4223,4311,4312	15
+
+## Macros
+
+macro	live_nodes	instances
+hobophoto	117	421.0000
+multisource	13	13.0000
+flickr-photo/photoset	0	NULL
+
+## Embedded client-side tech in live bodies
+
+<object	9	3862,3907,3976,3986,4024,4163,4248,4342,4343
+<embed	10	3862,3907,3976,3986,3996,4024,4163,4248,4342,4343
+youtube.com/v/	9	3862,3907,3976,3986,4024,4163,4248,4342,4343
+<script	4	3804,4008,4033,4057
+<iframe	11	3801,3999,4008,4015,4033,4057,4129,4196,4197,4255,4345
+document.write	1	3804
+slide.com	0	NULL
+show.swf	0	NULL
+1pixelout	0	NULL
+
+## Stored-but-blank: published nodes with an empty body, by type, and the modules behind them
+
+type	empty_body
+acidfree	77
+poll	1
+triplog	89
+module	enabled
+book	1
+acidfree	0
+forum	0
+image_gallery	0
+image	0
+poll	1
+audio	1
+content	1
+table_name
+audio
+content_type_triplog
+
+## Unpublished content and menu links that point at it
+
+type	nids
+	2307
+blog	3799,3800,3803,3889,4000,4001,4002,4006,4007,4016,4100,4213,4299,4336
+book	334,335,336,339,1290,1291,1292,1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303
+page	206,215,216,1064,4005,4111
+story	2,51
+menu_name	link_path	link_title
+menu-menu	node/3799	Photos
+menu-menu	node/3799	Photos
+menu-menu	node/3799	Photos
+primary-links	node/3799	Photos
+menu-menu	node/3800	Photos
+menu-menu	node/3803	Photos
+primary-links	node/206	Email List
+menu-menu	node/215	Photos
+menu-menu	node/216	Photos
+what	n
+book-toc-334 links to unpublished nodes	18
+
+## URL aliases
+
+aliases	node_aliases	other_aliases
+1657	1536	121
+nodes_with_more_than_one_alias
+25
+src_kind	n
+blog	5
+gsitemap	1
+pathauto	2
+podcast	1
+taxonomy	110
+user	2
+
+## Menus
+
+menu_name	links	visible
+admin_menu	343	343
+book-toc-334	18	18
+menu-menu	77	74
+navigation	355	84
+primary-links	8	8
+
+## Files table vs disk
+
+files rows: 44, missing on disk: 24
+missing fids: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 
+files on disk under sites/default/files: 2898
+file names with spaces: 179
+file names with non-ASCII characters: 0
+docroot/files entries (old path used by some bodies): 0
+
+## Own-domain references hardcoded in live bodies
+
+bare_domain_nodes	www_nodes	ddev_host_nodes
+11	29	0
+
+## Secrets present in the variable table (names only)
+
+name
+flickr_api_key
+flickr_api_secret
+flickr_auth_token
+googleanalytics_account
+googlemap_api_key
+smtp_debugging
+smtp_from
+smtp_fromname
+smtp_host
+smtp_hostbackup
+smtp_library
+smtp_on
+smtp_password
+smtp_port
+smtp_protocol
+smtp_username
+tag1quo_token
+user_mail_password_reset_body
+user_mail_password_reset_subject
+
+## Leftover scripts in the docroot (HTTP status from inside the container)
+
+404 flickr_migration.php
+200 phpinfo.php
+200 migrate_flickr_images.php
+200 simple_migration_test.php
+200 test_single_photo.php
+200 bookmarks.html
+
+## Spot checks over HTTP (anonymous)
+
+200 /
+403 /node/206
+403 /node/334
+200 /node/4196
+200 /node/4123
+200 /node/227
+200 /big_trip_mexico_route
+404 /big_trip_mexico_photos
+404 /thanks
+200 /tripinfo_item
+tripinfo_item links on /node/4196: 23
+<tr> rows on /node/4196: 24
+comment markup on /node/4123 (21 stored comments): 0
+
+## Secrets: which credential variables hold a non-empty value (lengths only, never values)
+
+name	serialized_length
+flickr_api_key	40
+flickr_api_secret	24
+flickr_auth_token	42
+googlemap_api_key	47
+smtp_host	24
+smtp_password	58
+smtp_username	33
+tag1quo_token	45

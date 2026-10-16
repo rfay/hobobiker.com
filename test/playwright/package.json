@@ -1,0 +1,15 @@
+{
+  "name": "hobobiker-migration-tests",
+  "private": true,
+  "description": "Migration tests for hobobiker.com, built on site-migration-kit (vendored in ./kit)",
+  "type": "module",
+  "scripts": {
+    "manifest": "node scripts/generate-manifest.mjs",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "cheerio": "^1.2.0"
+  }
+}

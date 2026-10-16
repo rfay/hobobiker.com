@@ -1,0 +1,4 @@
+site-migration-kit
+ref:    hobobiker-rehearsal-fixes
+commit: 8010d41983169f1f3861ecb7276f1cd75f496bda
+vendored by scripts/vendor-into.sh -- do not edit this directory; change the kit and vendor again.

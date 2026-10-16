@@ -1,0 +1,369 @@
+{
+  "title": "What we're doing in our daily work | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "What we're doing in our daily work",
+  "contentFound": true,
+  "lines": [
+    "By rfay - Posted on July 23rd, 2007",
+    "Tagged: Inuvik to Ushuaia",
+    "• Friendship Bridge",
+    "• Kiva",
+    "As you know, we're spending some time in Guatemala as \"Kiva Fellows\", working with the excellent Microcredit organization Friendship Bridge. Here's what we've been doing so far.",
+    "During the week, we go to a village every morning and meet with one of the women who are the workhorses of Friendship Bridge, the \"facilitators\". These are the women who form the credit groups and know all of FB's clients. The facilitator will take us to one of more of the clients' homes and may stay with us or may deliver us over to the women. We then sit down and chat with as many as six or seven families, one at a time, about their business, their life, and what they're doing with their loan.",
+    "But some background: Many of the women don't speak Spanish. There are 22 different Mayan languages spoken in Guatemala, and in some of these areas Spanish is not even a second language, it's a foreign language. And of course Spanish is not our native tongue. So sometimes there's a lot of interpreting to do. Somebody has to bridge it, sometimes the facilitator, sometimes a husband or cousin. And don't you think it's a little strange having a middle-aged gringo couple come up the path to your house to ask how you're using your loan? And how are we supposed to explain to them that their picture and their story is going up on Kiva's website to help fund their loans, when they have no idea what a website or the internet is? (Some women do understand, but the eyes of the majority glaze over when we talk about the \"Internet\" and a \"website\").",
+    "We try to start by introducing ourselves, how old we are, about our bike trip, how many kids we have, etc. Then we ask them to tell us something about their business, how it got started, etc. Then we pump them with a pile of other questions about the family and the business. Finally, we take some digital photos of them in their business environment, which may be a loom, a store, or a pigpen. In the end, we come away feeling like we understand something. Sometimes what we understand is that they're living a pretty rough life.",
+    "At the end of the day we go back to the hotel and gather our notes and our interview sheets and write up the profiles for the women before we forget what we're about. We try to pick out a good picture before we forget what face goes with what name.",
+    "At the end of the week or two weeks we might spend a whole day uploading all the profiles and pictures to the Kiva.org site. Friday we uploaded 38 profiles that will raise new loan funds for 38 women. It's pretty exciting stuff.",
+    "By the way, you might get a chance to invest in one of these loans if you go to Kiva.org, click on \"Lend\" and select \"Central America\" for the region. You can look all the current Friendship Bridge loans that are needing to be funded - often they're already funded, so just go to Kiva and fund somebody else!",
+    "You can also browse through all stories of the Friendship Bridge women even though they're already funded.",
+    "rfay's blog"
+  ],
+  "images": [
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/872793702_Dolores_Lopez.jpg",
+      "name": "872793702_dolores_lopez.jpg",
+      "alt": ""
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": true,
+      "key": "taxonomy/term/39",
+      "text": "Friendship Bridge"
+    },
+    {
+      "internal": true,
+      "key": "taxonomy/term/69",
+      "text": "Kiva"
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/872793702_Dolores_Lopez.jpg",
+      "text": ""
+    },
+    {
+      "internal": false,
+      "key": "http://www.kiva.org/app.php?page=businesses&queryString=friendship+bridge&status=fundRaising&gender=All&sectors%5B%5D=All&regions%5B%5D=Central+America&sortBy=Popularity",
+      "text": "all the current Friendship Bridge loans that are needing to be funded"
+    },
+    {
+      "internal": false,
+      "key": "http://www.kiva.org/app.php?page=businesses&queryString=friendship+bridge&status=All&gender=All&sectors%5B%5D=All&regions%5B%5D=Central+America&sortBy=Popularity",
+      "text": "browse through all stories of the Friendship Bridge women"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "rfay's blog",
+        "key": "blog/rfay"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://www.kiva.org/app.php?page=businesses&queryString=friendship+bridge&status=All&gender=All&sectors%5B%5D=All&regions%5B%5D=Central+America&sortBy=Popularity",
+      "http://www.kiva.org/app.php?page=businesses&queryString=friendship+bridge&status=fundRaising&gender=All&sectors%5B%5D=All&regions%5B%5D=Central+America&sortBy=Popularity"
+    ],
+    "internalNonOk": []
+  }
+}

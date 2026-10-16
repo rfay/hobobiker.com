@@ -1,0 +1,362 @@
+{
+  "title": "Bike Maintenance Log | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Bike Maintenance Log",
+  "contentFound": true,
+  "lines": [
+    "By rfay - Posted on July 27th, 2008",
+    "Tagged: Inuvik to Ushuaia",
+    "• Gear",
+    "Several of you bike touring people have asked us about bike maintenance and the problems we've had, so we decided to put together a log.",
+    "July 2006: Cassiar Highway. Broken spoke and wobbly wheel on Randy's drive side of rear wheel. We broke the Hyper-Cracker tool (that takes the cassette off) in a hailstorm trying to use it. Took us 300 miles to get to a place with a tool to take it off, but we made it.",
+    "September 2006: New tires in Victoria, BC.",
+    "October 2006: California: Spoke nipple broke through rim on Randy's rear wheel. Got a new wheel built, hoping for the best.",
+    "January 2007: New bottom bracket for Randy's bike. New drive train, cables, housing, tires (Continental TravelContact), touring handlebars, many other things before starting out. We also had to buy a replacement set of Old Man Mountain racks for Randy's bike because the 5000 miles of the trip so far had created big abrasions in the (aluminum) racks. Old Man Mountain gave us the new racks at cost.",
+    "February 2007: Randy's new rear wheel (from California) failed in Tucson. It was a fancy downhill rim, too. We'll never use another Mavic rim of any type for bike touring.",
+    "April 2007: Randy gave up on the fancy Brooks saddle (never did get comfortable) and got a new one, Terry touring saddle that seems to be OK.",
+    "May 2007: New chains and cassettes on Oaxaca, Mexico.",
+    "January 2008: New chains in Guatemala.",
+    "January 2008: Nancy's seatpost clamp failed in Honduras. A good little back-alley bike mechanic used the remaining parts to build something that carried us through to Tegucigalpa, where we were able to get a good seatpost clamp.",
+    "April 2008: New drivetrain and new Continental TravelContact tires in Panama City. We've been using these since Arizona and like them a lot, but they don't last for as many miles as we'd like.",
+    "May 2008: Randy's rear rim finally got to failure in Colombia (had been threatening since Guatemala). Wheel rebuild with an AlexRims rim cost a total of US$25. Hope it holds up!",
+    "June 2008: Nancy gave up on her Brooks Saddle in Quito and went with the Terry saddle. Never quite got comfortable.",
+    "July 2008: Randy's Old Man Mountain racks are again (Cuenca, Ecuador) showing amazing signs of wear. On closer inspection, we find that the abrasion has broken all the way through to the inside of the tube. A trip to a welder ought to fix it... but the day after the welder touched it the tube broke. Now it's held together with pipe clamps.",
+    "August 2008: New racks on both bikes, provided per warranty by Old Man Mountain. Randy switches to the BOB trailer after the rack abrasion and break problem. Note that Old Man Mountain was kind enough to replace our worn racks for free and without complaint.",
+    "August 2008: Both bikes get a full going over by Lucho in Trujillo, with bearings lubed, wheels trued, etc. Nancy gets a new Vuelta rear rim on her back wheel in Huaraz, as the old rim was getting quite worn. (It's not nearly as hard to get a wheel build here as in the US. You go into a shop. If they have a rim you can live with they build it for you, in an hour or so. And charge maybe $5 for the build.) But Randy removes the rear rack to install the BOB trailer.",
+    "September 2008: Got rear axle cones adjusted in Ayacucho, Peru, as they were a bit loose.",
+    "September 2008: New Continental TravelContact tires installed in Cuzco, Peru. (We had brought them back with us to Trujillo, Peru and mailed them to the South American Explorers Club in Cuzco).",
+    "October 2008: Full maintenance of our Fox front shocks in La Paz, Bolivia. Nancy's had ceased to hold air. Gravity Assisted Mountain Biking has an incredible shop and lots of parts and support, and English-speakers. An amazing shop, the fanciest we've seen in Latin America. Highly recommended. You can contact them in advance by email if you need them to obtain parts.",
+    "rfay's blog"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": true,
+      "key": "inuvik_to_denver/gear",
+      "text": "Gear"
+    },
+    {
+      "internal": true,
+      "key": "node/4227",
+      "text": "switches to the BOB trailer"
+    },
+    {
+      "internal": false,
+      "key": "http://gravitybolivia.com",
+      "text": "Gravity Assisted Mountain Biking"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "rfay's blog",
+        "key": "blog/rfay"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://gravitybolivia.com"
+    ],
+    "internalNonOk": []
+  }
+}

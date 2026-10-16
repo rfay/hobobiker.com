@@ -1,0 +1,24 @@
+{
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed fails. Add an entry only for a decision a human made, with a reason, scoped as narrowly as the reason (path, kind, equals/regex, target). Empty means: the target must reproduce everything the baseline recorded.",
+  "entries": [
+    {
+      "path": "*",
+      "kind": "visible",
+      "regex": "^(Feel free to email|If you have any questions or comments feel free to email|Please enjoy your visit and if you have any questions or comments feel free to email|Send us an email at) \\.$",
+      "reason": "Not a migration difference: a baseline limitation. The address is written by document.write() (email obfuscation, 21 occurrences), so the HTML extractor records the sentence with a hole and the browser shows the full address. The address itself is in no baseline. Kit gap: script-built text. See DISCOVERIES.md and migration/REHEARSAL.md."
+    },
+    {
+      "path": "*",
+      "kind": "access",
+      "match": "got 404",
+      "target": "static",
+      "reason": "Decision 2026-10-15 (rfay): a static archive contains no unpublished pages, so they answer 404; a missing page is as private as a 403. Applies only when MIGRATION_TARGET=static; a Drupal 11 target is still held to 403. A leak (got 200) still fails."
+    },
+    {
+      "path": "*",
+      "kind": "menu",
+      "regex": "^bookNav: .* -> /tripinfo_item/",
+      "reason": "Decision 2026-10-15 (rfay): tripinfo_item day pages count only where something links to them (the route tables); their prev/next links are not followed and need not be kept, because they walk every day of every trip regardless of the route (9,738 pages; see DISCOVERIES.md). The Up link (/tripinfo/...) is still required."
+    }
+  ]
+}

@@ -1,0 +1,427 @@
+{
+  "title": "Trip Blog | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Trip Blog",
+  "contentFound": true,
+  "lines": [
+    "Our Sweden week's trip",
+    "By rfay - Posted on September 2nd, 2010",
+    "Tagged: Inuvik to Ushuaia",
+    "We'll try to write a bit more later, but here's a quick glance at the delightful Sweden trip from the last week:",
+    "View Larger Map",
+    "rfay's blog",
+    "New (free) E-Book on Cycling Bolivia",
+    "By rfay - Posted on September 28th, 2010",
+    "Tagged: Inuvik to Ushuaia",
+    "• Bolivia",
+    "Wow, I just got an email about an incredible new information source about cycling in Bolivia. Excellent, detailed, with great references to other info sources. If you want your wanderlust to kick in or you're interested in Bolivia, Cycling South-west Bolivia at http://www.tour.tk/.",
+    "rfay's blog",
+    "« first",
+    "‹ previous",
+    "…",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "node/4345",
+      "text": "Our Sweden week's trip"
+    },
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": false,
+      "key": "http://maps.google.com/maps?f=d&source=embed&saddr=malmo+sweden&daddr=55.57941,12.91724+to:Trelleborg,+Sweden+to:55.34441,13.2928+to:Ystad,+Sweden+to:55.39407,14.17521+to:55.508066,14.334281+to:Simrishamn,+Sweden+to:55.65737,14.23178+to:55.97771,14.27236+to:56.01036,14.43698+to:S%C3%B6lvesborg,+Sweden&hl=en&geocode=FYNwUAMdV2LGACn_kcR0pQVTRjHliEi93wWp0w%3BFRITUAMd-BnFACnN4jsu96ZTRjHxVNgHeJABEw%3BFfL1TAMd68TIACl_nO-gG2VRRjHkT3VBbdFZRQ%3BFRp9TAMdANXKACkvGrVsinpTRjExgkUIeJABEw%3BFTXRTQMdh1jTACkdSbUKUn1URjGduGOlInwSWQ%3BFRY_TQMd6kvYACnL5iETnV9URjGB_UMIeJABEw%3BFWL8TgMdSbnaACm_PRBicltURjFBsF8QeJABEw%3BFYm5TwMdNPbaAClPPhdtukRURjGIcQecaHEmcg%3BFZpDUQMd5CjZACn7g31EBWpURjGRCkwIeJABEw%3BFe4mVgMdaMfZAClf97w-3BtURjFBSUkIeJABEw%3BFXimVgMddErcACld8UgQYR9URjGhqEgIeJABEw%3BFepKVwMdunDeACnrdEpQpSBURjE9edu7Tn0nMw&mra=dpe&mrcr=3&mrsp=9&sz=11&via=1,3,5,6,8,9,10&dirflg=w&sll=55.971109,14.263687&sspn=0.162924,0.676346&ie=UTF8&ll=55.78584,13.666992&spn=1.081077,2.334595&z=8",
+      "text": "View Larger Map"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    },
+    {
+      "internal": true,
+      "key": "node/4348",
+      "text": "New (free) E-Book on Cycling Bolivia"
+    },
+    {
+      "internal": true,
+      "key": "inuvik_to_ushuaia",
+      "text": "Inuvik to Ushuaia"
+    },
+    {
+      "internal": true,
+      "key": "taxonomy/term/71",
+      "text": "Bolivia"
+    },
+    {
+      "internal": false,
+      "key": "http://www.tour.tk/pdf/cycling-southwest-bolivia.pdf",
+      "text": "Cycling South-west Bolivia"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order",
+      "text": "« first"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=16",
+      "text": "‹ previous"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=9",
+      "text": "10"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=10",
+      "text": "11"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=11",
+      "text": "12"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=12",
+      "text": "13"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=13",
+      "text": "14"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=14",
+      "text": "15"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=15",
+      "text": "16"
+    },
+    {
+      "internal": true,
+      "key": "blog_in_order?page=16",
+      "text": "17"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://maps.google.com/maps?f=d&source=embed&saddr=malmo+sweden&daddr=55.57941,12.91724+to:Trelleborg,+Sweden+to:55.34441,13.2928+to:Ystad,+Sweden+to:55.39407,14.17521+to:55.508066,14.334281+to:Simrishamn,+Sweden+to:55.65737,14.23178+to:55.97771,14.27236+to:56.01036,14.43698+to:S%C3%B6lvesborg,+Sweden&hl=en&geocode=FYNwUAMdV2LGACn_kcR0pQVTRjHliEi93wWp0w%3BFRITUAMd-BnFACnN4jsu96ZTRjHxVNgHeJABEw%3BFfL1TAMd68TIACl_nO-gG2VRRjHkT3VBbdFZRQ%3BFRp9TAMdANXKACkvGrVsinpTRjExgkUIeJABEw%3BFTXRTQMdh1jTACkdSbUKUn1URjGduGOlInwSWQ%3BFRY_TQMd6kvYACnL5iETnV9URjGB_UMIeJABEw%3BFWL8TgMdSbnaACm_PRBicltURjFBsF8QeJABEw%3BFYm5TwMdNPbaAClPPhdtukRURjGIcQecaHEmcg%3BFZpDUQMd5CjZACn7g31EBWpURjGRCkwIeJABEw%3BFe4mVgMdaMfZAClf97w-3BtURjFBSUkIeJABEw%3BFXimVgMddErcACld8UgQYR9URjGhqEgIeJABEw%3BFepKVwMdunDeACnrdEpQpSBURjE9edu7Tn0nMw&mra=dpe&mrcr=3&mrsp=9&sz=11&via=1,3,5,6,8,9,10&dirflg=w&sll=55.971109,14.263687&sspn=0.162924,0.676346&ie=UTF8&ll=55.78584,13.666992&spn=1.081077,2.334595&z=8",
+      "http://maps.google.com/maps?f=d&source=s_d&saddr=malmo+sweden&daddr=55.57941,12.91724+to:Trelleborg,+Sweden+to:55.34441,13.2928+to:Ystad,+Sweden+to:55.39407,14.17521+to:55.508066,14.334281+to:Simrishamn,+Sweden+to:55.65737,14.23178+to:55.97771,14.27236+to:56.01036,14.43698+to:S%C3%B6lvesborg,+Sweden&hl=en&geocode=FYNwUAMdV2LGACn_kcR0pQVTRjHliEi93wWp0w%3BFRITUAMd-BnFACnN4jsu96ZTRjHxVNgHeJABEw%3BFfL1TAMd68TIACl_nO-gG2VRRjHkT3VBbdFZRQ%3BFRp9TAMdANXKACkvGrVsinpTRjExgkUIeJABEw%3BFTXRTQMdh1jTACkdSbUKUn1URjGduGOlInwSWQ%3BFRY_TQMd6kvYACnL5iETnV9URjGB_UMIeJABEw%3BFWL8TgMdSbnaACm_PRBicltURjFBsF8QeJABEw%3BFYm5TwMdNPbaAClPPhdtukRURjGIcQecaHEmcg%3BFZpDUQMd5CjZACn7g31EBWpURjGRCkwIeJABEw%3BFe4mVgMdaMfZAClf97w-3BtURjFBSUkIeJABEw%3BFXimVgMddErcACld8UgQYR9URjGhqEgIeJABEw%3BFepKVwMdunDeACnrdEpQpSBURjE9edu7Tn0nMw&mra=dpe&mrcr=3&mrsp=9&sz=11&via=1,3,5,6,8,9,10&dirflg=w&sll=55.971109,14.263687&sspn=0.162924,0.676346&ie=UTF8&ll=55.78584,13.666992&spn=1.081077,2.334595&z=8&output=embed",
+      "http://www.tour.tk/pdf/cycling-southwest-bolivia.pdf"
+    ],
+    "internalNonOk": []
+  }
+}

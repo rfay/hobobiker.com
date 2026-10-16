@@ -1,0 +1,31 @@
+{
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails the suite. Each entry is a decision a human made, not a way to silence a failure; give a reason.",
+  "entries": [
+    {
+      "path": "content/some-page",
+      "kind": "lines",
+      "match": "Log in to post comments",
+      "reason": "Comments are intentionally dropped from the static export."
+    },
+    {
+      "path": "*",
+      "kind": "access",
+      "match": "got 404",
+      "target": "static",
+      "reason": "A static archive has no unpublished pages; a missing page is as private as a 403. Applies only when MIGRATION_TARGET=static."
+    },
+    {
+      "path": "*",
+      "kind": ["lines", "visible", "order"],
+      "equals": "Search",
+      "target": "static",
+      "reason": "The search block (a form) was removed because it cannot work on a static site; this is its heading. `equals` matches the whole line, so no other line is hidden."
+    },
+    {
+      "path": "*",
+      "kind": "menu",
+      "match": "breadcrumb",
+      "reason": "Static export has no breadcrumb trail."
+    }
+  ]
+}

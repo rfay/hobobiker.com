@@ -1,0 +1,520 @@
+{
+  "title": "Hobobiker Trip Details | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Hobobiker Trip Details",
+  "contentFound": true,
+  "lines": [
+    "2008-05-25 to 2008-07-13",
+    "Here is detailed information about our trip. For each day's",
+    "ride we have a map, gpx and kml files, and an elevation profile.",
+    "If you find that this isn't up-to-date or you want something that's",
+    "not here, please send us an email and we'll try to get it for you.",
+    "Ride",
+    "date",
+    "miles/km",
+    "Elev ft/mt",
+    "Ipiales, Colombia to Tulcán, Ecuador",
+    "2008-05-25",
+    "17/27",
+    "1679/518",
+    "Tulcán to Ambuquí, Ecuador",
+    "2008-05-26",
+    "54/87",
+    "3015/931",
+    "Ambuquí to Otavalo, Ecuador",
+    "2008-05-27",
+    "39/63",
+    "3943/1217",
+    "Otavalo to Cayambe",
+    "2008-05-28",
+    "20/32",
+    "2070/639",
+    "Cayambe to Quito, Ecuador",
+    "2008-05-29",
+    "51/82",
+    "4258/1314",
+    "Quito to Machachi",
+    "2008-06-15",
+    "27/44",
+    "1827/564",
+    "Machachi to Pujilí, Ecuador",
+    "2008-06-16",
+    "42/68",
+    "2326/718",
+    "Baños to Puyo",
+    "2008-06-21",
+    "40/65",
+    "1443/445",
+    "Puyo to Pastaza River",
+    "2008-06-22",
+    "43/69",
+    "1742/538",
+    "Pastaza River to Macas, Ecuador",
+    "2008-06-23",
+    "38/61",
+    "2595/801",
+    "Macas to Sucua",
+    "2008-06-24",
+    "15/24",
+    "488/151",
+    "Sucúa to Méndez",
+    "2008-06-25",
+    "33/53",
+    "728/225",
+    "Méndez to KM 37 from Méndez",
+    "2008-06-26",
+    "23/37",
+    "5754/1776",
+    "KM37 past Mendéz to Palmas, Ecuador",
+    "2008-06-27",
+    "40/65",
+    "6200/1914",
+    "Palmas to Paute, Ecuador",
+    "2008-06-28",
+    "25/40",
+    "2238/691",
+    "Paute to Cuenca, Ecuador",
+    "2008-06-29",
+    "25/40",
+    "1492/460",
+    "Cuenca to Oña, Ecuador",
+    "2008-07-03",
+    "61/98",
+    "5918/1827",
+    "Oña, Ecuador to Saraguro, Ecuador",
+    "2008-07-04",
+    "23/37",
+    "3579/1105",
+    "Saraguro to Loja, Ecuador",
+    "2008-07-05",
+    "38/61",
+    "2818/870",
+    "Loja to Vilcabamba",
+    "2008-07-07",
+    "30/48",
+    "2578/796",
+    "Vilcabamba to High Camp in Podocampus National Park above Valladolid",
+    "2008-07-10",
+    "29/47",
+    "6049/1867",
+    "High Camp to Palanda by bike then Zumba by bus",
+    "2008-07-11",
+    "50/81",
+    "5500/1698",
+    "Zumba, Ecuador to Namballe, Peru",
+    "2008-07-12",
+    "21/34",
+    "2490/769"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-25/2008-05-25/2008-07-13",
+      "text": "Ipiales, Colombia to Tulcán, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-26/2008-05-25/2008-07-13",
+      "text": "Tulcán to Ambuquí, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-27/2008-05-25/2008-07-13",
+      "text": "Ambuquí to Otavalo, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-28/2008-05-25/2008-07-13",
+      "text": "Otavalo to Cayambe"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-29/2008-05-25/2008-07-13",
+      "text": "Cayambe to Quito, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-15/2008-05-25/2008-07-13",
+      "text": "Quito to Machachi"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-16/2008-05-25/2008-07-13",
+      "text": "Machachi to Pujilí, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-21/2008-05-25/2008-07-13",
+      "text": "Baños to Puyo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-22/2008-05-25/2008-07-13",
+      "text": "Puyo to Pastaza River"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-23/2008-05-25/2008-07-13",
+      "text": "Pastaza River to Macas, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-24/2008-05-25/2008-07-13",
+      "text": "Macas to Sucua"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-25/2008-05-25/2008-07-13",
+      "text": "Sucúa to Méndez"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-26/2008-05-25/2008-07-13",
+      "text": "Méndez to KM 37 from Méndez"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-27/2008-05-25/2008-07-13",
+      "text": "KM37 past Mendéz to Palmas, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-28/2008-05-25/2008-07-13",
+      "text": "Palmas to Paute, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-06-29/2008-05-25/2008-07-13",
+      "text": "Paute to Cuenca, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-03/2008-05-25/2008-07-13",
+      "text": "Cuenca to Oña, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-04/2008-05-25/2008-07-13",
+      "text": "Oña, Ecuador to Saraguro, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-05/2008-05-25/2008-07-13",
+      "text": "Saraguro to Loja, Ecuador"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-07/2008-05-25/2008-07-13",
+      "text": "Loja to Vilcabamba"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-10/2008-05-25/2008-07-13",
+      "text": "Vilcabamba to High Camp in Podocampus National Park above Valladolid"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-11/2008-05-25/2008-07-13",
+      "text": "High Camp to Palanda by bike then Zumba by bus"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-07-12/2008-05-25/2008-07-13",
+      "text": "Zumba, Ecuador to Namballe, Peru"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}
