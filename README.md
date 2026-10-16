@@ -18,7 +18,7 @@ git clone https://github.com/rfay/hobobiker.com
 
 ## User-generated files (sites/default/files) and sanitized database
 
-The files and a sanitized database are at <https://github.com/rfay/hobobiker-assets/releases/tag/v1.0>
+The files and a sanitized database are at <https://github.com/rfay/hobobiker-assets/releases/tag/v1.1>
 
 You can import these with standard `ddev import-db` and `ddev import-files` commands.
 
