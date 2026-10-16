@@ -10,8 +10,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 db=.tarballs/db.sql.zst
+# Like any `ddev import-files` archive, files.tar holds the *contents* of the upload directory
+# (sites/default/files), not a top-level files/ directory. Create one with:
+#   tar -cf .tarballs/files.tar -C docroot/sites/default/files .
 files=.tarballs/files.tar
-files_dir=docroot/sites/default/files
 
 [ -f "$db" ] || { echo "Missing $db" >&2; exit 1; }
 
@@ -21,8 +23,8 @@ ddev import-db --file="$db"
 if [ "${1:-}" != "--db-only" ]; then
   [ -f "$files" ] || { echo "Missing $files" >&2; exit 1; }
   echo "Restoring files from $files"
-  rm -rf "$files_dir"
-  tar -xf "$files" -C docroot/sites/default
+  # Replaces the upload directory (it does not merge), so files deleted since the snapshot do not survive.
+  ddev import-files --source="$files"
 fi
 
 # Drupal 6 caches rendered output in the database; a restored dump may carry stale cache rows.
