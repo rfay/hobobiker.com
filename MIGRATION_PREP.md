@@ -6,6 +6,37 @@ new CMS or to static HTML.
 Part 1 is generic and reusable on any site. Part 2 is the specific findings from a
 review of this site done 2026-09-21.
 
+## Starting prompt: building the tests (Road Test session)
+
+The live series begins with this prompt. Everything after the prompt is background for it.
+
+```
+This is a disposable local copy of hobobiker.com, an old Drupal 6 site. We want
+to test-migrate it to two targets: static HTML and Drupal 11. Before we migrate
+anything, we need a definition of the site as it is now, and tests that can
+verify both targets against that definition. That is this session's whole job.
+No migration happens yet.
+
+- This project is the source. It is a copy: the database and files restore from
+  a pristine snapshot with one command, and nothing here can reach production.
+  AGENTS.md has the details and the rules.
+- The site is at https://hobobiker-copy.ddev.site and at the Coder URL
+  https://hobobiker-copy--remotework--rfay.coder.ddev.com. Make requests from
+  inside the container.
+- You can review the database with `ddev mysql`.
+- The rules and strategies for this phase are in ~/workspace/site-migration-kit
+  (https://github.com/rfay/site-migration-kit). Read them. This is the first
+  session: we are building the guardrails that later sessions must pass.
+- This file (MIGRATION_PREP.md) is an earlier audit and strategy guide. It is
+  useful but dated 2026-09-21, so check its claims against this copy.
+- Work from evidence: counts, node IDs, and the query or URL each one came from.
+  Look in both directions: content generated at render time (a database export
+  misses it) and content stored but never rendered (a crawl misses it).
+- Reproduce the site, don't repair it. Record what you find in DISCOVERIES.md.
+
+Read, ask questions, and make a plan for this session before changing anything.
+```
+
 ---
 
 # Part 1 — Preparing any website for migration
