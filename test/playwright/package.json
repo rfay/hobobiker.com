@@ -1,0 +1,14 @@
+{
+  "name": "hobobiker-migration-tests",
+  "private": true,
+  "type": "module",
+  "description": "Migration baseline and tests for hobobiker.com. The kit/ directory is vendored from site-migration-kit; do not edit it here.",
+  "scripts": {
+    "manifest": "node scripts/generate-manifest.mjs",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "cheerio": "^1.2.0"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Dover to Gorham",
+  "primaryHeading": "",
+  "contentFound": true,
+  "lines": [
+    "Dover to Gorham",
+    "Copyright © 1988-2003 Microsoft Corp. and/or its suppliers. All rights reserved. http://www.microsoft.com/mappoint",
+    "© Copyright 2002 by Geographic Data Technology, Inc. All rights reserved.",
+    "© 2002 Navigation Technologies. All rights reserved. This data includes information taken with permission from Canadian authorities © 1991-2002 Government of Canada (Statistics Canada and/or Geomatics Canada), all rights reserved."
+  ],
+  "images": [
+    {
+      "src": "Dover to Gorham_files/image_map.gif",
+      "name": "image_map.gif",
+      "alt": "Dover to Gorham"
+    }
+  ],
+  "links": [],
+  "menus": {},
+  "regions": {},
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

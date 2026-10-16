@@ -1,0 +1,557 @@
+{
+  "title": "Hobobiker Trip Details | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Hobobiker Trip Details",
+  "contentFound": true,
+  "lines": [
+    "Hobobiker Trip Details",
+    "2008-04-14 to 2008-05-25",
+    "Here is detailed information about our trip. For each day's",
+    "ride we have a map, gpx and kml files, and an elevation profile.",
+    "If you find that this isn't up-to-date or you want something that's",
+    "not here, please send us an email and we'll try to get it for you.",
+    "Ride",
+    "date",
+    "miles/km",
+    "Elev ft/mt",
+    "Cartagena to Maria La Baja, Colombia",
+    "2008-04-16",
+    "47/76",
+    "900/278",
+    "Maria La Baja to Toluviejo",
+    "2008-04-17",
+    "53/85",
+    "839/259",
+    "Toluviejo to Lorica, Colombia",
+    "2008-04-18",
+    "46/74",
+    "629/194",
+    "Lorica to Montería, Colombia",
+    "2008-04-19",
+    "39/63",
+    "42/13",
+    "Montería to Buenaventura",
+    "2008-04-21",
+    "52/84",
+    "1305/403",
+    "Buenaventura to El Jardín de Cáceres",
+    "2008-04-22",
+    "50/81",
+    "997/308",
+    "El Jardín to Puerto Valdivia",
+    "2008-04-23",
+    "46/74",
+    "1230/380",
+    "Puerto Valdivia to Alto de las Ventanas, Colombia",
+    "2008-04-24",
+    "23/37",
+    "6017/1857",
+    "Alto de las Ventanas to Yarumal",
+    "2008-04-25",
+    "15/24",
+    "1958/604",
+    "Yarumal to Don Matias",
+    "2008-04-26",
+    "47/76",
+    "4104/1267",
+    "Don Matias to Medellín, Colombia",
+    "2008-04-27",
+    "33/53",
+    "1249/385",
+    "Medellín to La Pintada",
+    "2008-05-01",
+    "50/81",
+    "3973/1226",
+    "La Pintada to La Manuela",
+    "2008-05-02",
+    "60/97",
+    "3766/1162",
+    "La Manuela to Manizales",
+    "2008-05-03",
+    "15/24",
+    "3497/1079",
+    "Manizales to Armenia, Colombia",
+    "2008-05-05",
+    "62/100",
+    "5006/1545",
+    "Armenia to Salento",
+    "2008-05-06",
+    "28/45",
+    "2736/844",
+    "Armenia to Armenia, Colombia",
+    "2008-05-07",
+    "13/21",
+    "580/179",
+    "Armenia to Buga La Grande",
+    "2008-05-08",
+    "45/73",
+    "1528/472",
+    "Buga la Grande to Cali, Colombia",
+    "2008-05-09",
+    "80/129",
+    "784/242",
+    "Cali to Peaje Tunia",
+    "2008-05-13",
+    "55/89",
+    "4344/1341",
+    "Peaje Tunia to Popayan, Colombia",
+    "2008-05-14",
+    "32/52",
+    "2191/676",
+    "Popayan to San Agustin, Colombia",
+    "2008-05-16",
+    "1/2",
+    "0/0",
+    "Popayan to Mojarras",
+    "2008-05-19",
+    "77/124",
+    "4826/1490",
+    "Mojarras to El Tablon",
+    "2008-05-20",
+    "39/63",
+    "4310/1330",
+    "El Tablon to Chachagui",
+    "2008-05-21",
+    "27/44",
+    "4438/1370",
+    "Chachagui to Pasto, Colombia",
+    "2008-05-22",
+    "17/27",
+    "3057/944",
+    "Pasto to Ipiales, Colombia",
+    "2008-05-24",
+    "48/77",
+    "6351/1960"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-16/2008-04-14/2008-05-25",
+      "text": "Cartagena to Maria La Baja, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-17/2008-04-14/2008-05-25",
+      "text": "Maria La Baja to Toluviejo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-18/2008-04-14/2008-05-25",
+      "text": "Toluviejo to Lorica, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-19/2008-04-14/2008-05-25",
+      "text": "Lorica to Montería, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-21/2008-04-14/2008-05-25",
+      "text": "Montería to Buenaventura"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-22/2008-04-14/2008-05-25",
+      "text": "Buenaventura to El Jardín de Cáceres"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-23/2008-04-14/2008-05-25",
+      "text": "El Jardín to Puerto Valdivia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-24/2008-04-14/2008-05-25",
+      "text": "Puerto Valdivia to Alto de las Ventanas, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-25/2008-04-14/2008-05-25",
+      "text": "Alto de las Ventanas to Yarumal"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-26/2008-04-14/2008-05-25",
+      "text": "Yarumal to Don Matias"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-04-27/2008-04-14/2008-05-25",
+      "text": "Don Matias to Medellín, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-01/2008-04-14/2008-05-25",
+      "text": "Medellín to La Pintada"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-02/2008-04-14/2008-05-25",
+      "text": "La Pintada to La Manuela"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-03/2008-04-14/2008-05-25",
+      "text": "La Manuela to Manizales"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-05/2008-04-14/2008-05-25",
+      "text": "Manizales to Armenia, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-06/2008-04-14/2008-05-25",
+      "text": "Armenia to Salento"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-07/2008-04-14/2008-05-25",
+      "text": "Armenia to Armenia, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-08/2008-04-14/2008-05-25",
+      "text": "Armenia to Buga La Grande"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-09/2008-04-14/2008-05-25",
+      "text": "Buga la Grande to Cali, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-13/2008-04-14/2008-05-25",
+      "text": "Cali to Peaje Tunia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-14/2008-04-14/2008-05-25",
+      "text": "Peaje Tunia to Popayan, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-16/2008-04-14/2008-05-25",
+      "text": "Popayan to San Agustin, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-19/2008-04-14/2008-05-25",
+      "text": "Popayan to Mojarras"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-20/2008-04-14/2008-05-25",
+      "text": "Mojarras to El Tablon"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-21/2008-04-14/2008-05-25",
+      "text": "El Tablon to Chachagui"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-22/2008-04-14/2008-05-25",
+      "text": "Chachagui to Pasto, Colombia"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-05-24/2008-04-14/2008-05-25",
+      "text": "Pasto to Ipiales, Colombia"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

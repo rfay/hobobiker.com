@@ -1,0 +1,23 @@
+{
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. At the Part 1 freeze the only entries are known limits of the suite itself; no migration has happened yet.",
+  "entries": [
+    {
+      "path": "*",
+      "kind": "visible",
+      "regex": "^(.*[Ff]eel free to email|Send us an email at) \\.$",
+      "reason": "Suite limit, not a site change: an e-mail address written by document.write() (node 3804 and the 'feel free to email' line on 19 listing and teaser pages). The HTML baseline records the line with a hole; a real browser shows the filled-in address, so the line never matches in the visible tier. Semantic still requires the line. No tier checks the address itself (DISCOVERIES.md)."
+    },
+    {
+      "path": "*",
+      "kind": "visible",
+      "regex": "^‹ .*Up.*›$",
+      "reason": "Suite limit, not a site change: the tripinfo_item prev / Up / next pager is three <a> elements with no whitespace between them. The HTML extractor reads one run-together line; Drupal's book CSS shows three lines, so the visible tier never finds it whole. Semantic still requires the line and all three links. Kit gap: the extractor should split adjacent block-styled links (DISCOVERIES.md)."
+    },
+    {
+      "path": "*",
+      "kind": ["lines", "visible", "order"],
+      "regex": "^• \\d+ downloads$",
+      "reason": "Suite limit, not a site change: the audio module prints a live download counter (audio.download_count) on the 10 podcast nodes and the /audio and /podcast listings, and every request to /audio/download/N/... adds one, including the suite's own asset check. The number cannot be frozen. The 'N downloads' line must still exist; its value is not compared. Pristine values are in DISCOVERIES.md."
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # Migration Prep
 
+> **Superseded where they disagree by [DISCOVERIES.md](DISCOVERIES.md)** (2026-10-16), which checked this
+> audit against the copy: counts, the comment visibility cause, `docroot/files` (a symlink to
+> `sites/default/files`, not empty), and the files pruned since. This file is kept as the original audit.
+
 Notes for moving an old database-driven site (here: hobobiker.com, Drupal 6) to a
 new CMS or to static HTML.
 

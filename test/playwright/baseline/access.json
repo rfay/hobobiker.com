@@ -1,0 +1,576 @@
+{
+ "generatedAt": "2026-10-16T22:11:25.461Z",
+ "baseUrl": "https://hobobiker-copy.ddev.site",
+ "byStatus": {
+  "403": 81
+ },
+ "unpublished": [
+  {
+   "nid": 2,
+   "type": "story",
+   "title": "Art of the Hobobiker",
+   "path": "art_of_the_hobobiker",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 2,
+   "type": "story",
+   "title": "Art of the Hobobiker",
+   "path": "node/2",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 51,
+   "type": "story",
+   "title": "DVD Available!",
+   "path": "dvd_available",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 51,
+   "type": "story",
+   "title": "DVD Available!",
+   "path": "node/51",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 206,
+   "type": "page",
+   "title": "Subscribe to the Hobobiker.com Email List",
+   "path": "subscribe",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 206,
+   "type": "page",
+   "title": "Subscribe to the Hobobiker.com Email List",
+   "path": "subscribe_to_the_hobobiker_com_email_list",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 206,
+   "type": "page",
+   "title": "Subscribe to the Hobobiker.com Email List",
+   "path": "node/206",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 215,
+   "type": "page",
+   "title": "Northwest Photos",
+   "path": "northwest_photos",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 215,
+   "type": "page",
+   "title": "Northwest Photos",
+   "path": "node/215",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 216,
+   "type": "page",
+   "title": "Great Divide Photos",
+   "path": "great_divide_photos",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 216,
+   "type": "page",
+   "title": "Great Divide Photos",
+   "path": "node/216",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 334,
+   "type": "book",
+   "title": "Inuvik to Ushuaia Information Database",
+   "path": "bigtrip",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 334,
+   "type": "book",
+   "title": "Inuvik to Ushuaia Information Database",
+   "path": "inuvik_to_ushuaia_information_database",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 334,
+   "type": "book",
+   "title": "Inuvik to Ushuaia Information Database",
+   "path": "node/334",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 335,
+   "type": "book",
+   "title": "Inuvik and the Dempster Highway",
+   "path": "inuvik_and_the_dempster_highway",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 335,
+   "type": "book",
+   "title": "Inuvik and the Dempster Highway",
+   "path": "node/335",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 336,
+   "type": "book",
+   "title": "Other Riders on the North-America-to-South-America route",
+   "path": "other_riders_on_the_route",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 336,
+   "type": "book",
+   "title": "Other Riders on the North-America-to-South-America route",
+   "path": "other_riders_on_the_north_america_to_south_america_route",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 336,
+   "type": "book",
+   "title": "Other Riders on the North-America-to-South-America route",
+   "path": "node/336",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 339,
+   "type": "book",
+   "title": "South America",
+   "path": "south_america",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 339,
+   "type": "book",
+   "title": "South America",
+   "path": "node/339",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1064,
+   "type": "page",
+   "title": "Photos",
+   "path": "photos-old",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1064,
+   "type": "page",
+   "title": "Photos",
+   "path": "node/1064",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1290,
+   "type": "book",
+   "title": "Country-by-Country Information",
+   "path": "country_by_country_information",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1290,
+   "type": "book",
+   "title": "Country-by-Country Information",
+   "path": "node/1290",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1291,
+   "type": "book",
+   "title": "Mexico",
+   "path": "mexico_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1291,
+   "type": "book",
+   "title": "Mexico",
+   "path": "node/1291",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1292,
+   "type": "book",
+   "title": "Guatemala",
+   "path": "guatemala",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1292,
+   "type": "book",
+   "title": "Guatemala",
+   "path": "guatemala_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1292,
+   "type": "book",
+   "title": "Guatemala",
+   "path": "node/1292",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1293,
+   "type": "book",
+   "title": "Honduras",
+   "path": "honduras",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1293,
+   "type": "book",
+   "title": "Honduras",
+   "path": "honduras_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1293,
+   "type": "book",
+   "title": "Honduras",
+   "path": "node/1293",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1294,
+   "type": "book",
+   "title": "Belize",
+   "path": "belize",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1294,
+   "type": "book",
+   "title": "Belize",
+   "path": "belize_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1294,
+   "type": "book",
+   "title": "Belize",
+   "path": "node/1294",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1295,
+   "type": "book",
+   "title": "Nicaragua",
+   "path": "nicaragua",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1295,
+   "type": "book",
+   "title": "Nicaragua",
+   "path": "nicaragua_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1295,
+   "type": "book",
+   "title": "Nicaragua",
+   "path": "node/1295",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1296,
+   "type": "book",
+   "title": "Costa Rica",
+   "path": "costa_rica",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1296,
+   "type": "book",
+   "title": "Costa Rica",
+   "path": "costarica_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1296,
+   "type": "book",
+   "title": "Costa Rica",
+   "path": "node/1296",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1297,
+   "type": "book",
+   "title": "Panama",
+   "path": "panama",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1297,
+   "type": "book",
+   "title": "Panama",
+   "path": "panama_notes",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1297,
+   "type": "book",
+   "title": "Panama",
+   "path": "node/1297",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1298,
+   "type": "book",
+   "title": "Peru",
+   "path": "peru",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1298,
+   "type": "book",
+   "title": "Peru",
+   "path": "node/1298",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1299,
+   "type": "book",
+   "title": "Ecuador",
+   "path": "ecuador",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1299,
+   "type": "book",
+   "title": "Ecuador",
+   "path": "node/1299",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1300,
+   "type": "book",
+   "title": "General Resources (Security, Travel, Weather, etc.)",
+   "path": "general_resources_security_travel_weather_etc",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1300,
+   "type": "book",
+   "title": "General Resources (Security, Travel, Weather, etc.)",
+   "path": "node/1300",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1301,
+   "type": "book",
+   "title": "Bolivia",
+   "path": "bolivia",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1301,
+   "type": "book",
+   "title": "Bolivia",
+   "path": "node/1301",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1302,
+   "type": "book",
+   "title": "Chile",
+   "path": "chile",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1302,
+   "type": "book",
+   "title": "Chile",
+   "path": "node/1302",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1303,
+   "type": "book",
+   "title": "Argentina",
+   "path": "argentina",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 1303,
+   "type": "book",
+   "title": "Argentina",
+   "path": "node/1303",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 2307,
+   "type": "(none)",
+   "title": "",
+   "path": "node/2307",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3799,
+   "type": "blog",
+   "title": "Big Trip Photos: Latin America 2006-2009",
+   "path": "photos",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3799,
+   "type": "blog",
+   "title": "Big Trip Photos: Latin America 2006-2009",
+   "path": "node/3799",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3800,
+   "type": "blog",
+   "title": "Big Trip Canada Photos (Summer, 2006)",
+   "path": "big_trip_canada_photos",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3800,
+   "type": "blog",
+   "title": "Big Trip Canada Photos (Summer, 2006)",
+   "path": "node/3800",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3803,
+   "type": "blog",
+   "title": "USA West Coast Photos",
+   "path": "usa_west_coast_photos",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3803,
+   "type": "blog",
+   "title": "USA West Coast Photos",
+   "path": "node/3803",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 3889,
+   "type": "blog",
+   "title": "The Pass of Cortes Has Been Renamed!",
+   "path": "node/3889",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4000,
+   "type": "blog",
+   "title": "Testing GEORSS",
+   "path": "test_georss",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4000,
+   "type": "blog",
+   "title": "Testing GEORSS",
+   "path": "node/4000",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4001,
+   "type": "blog",
+   "title": "Testing mapufacture",
+   "path": "node/4001",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4002,
+   "type": "blog",
+   "title": "Test slide.com slideshow",
+   "path": "node/4002",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4005,
+   "type": "page",
+   "title": "Flickr Slideshow Base Code",
+   "path": "flickr_boilerplate",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4005,
+   "type": "page",
+   "title": "Flickr Slideshow Base Code",
+   "path": "node/4005",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4006,
+   "type": "blog",
+   "title": "Mexico Map with all the photos",
+   "path": "node/4006",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4007,
+   "type": "blog",
+   "title": "Podcast: Friendship Bridge Women We Remember from Nebaj",
+   "path": "node/4007",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4016,
+   "type": "blog",
+   "title": "New features on hobobiker.com",
+   "path": "new_features",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4016,
+   "type": "blog",
+   "title": "New features on hobobiker.com",
+   "path": "node/4016",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4100,
+   "type": "blog",
+   "title": "test entry - delete this",
+   "path": "node/4100",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4111,
+   "type": "page",
+   "title": "Changelog and Patches",
+   "path": "changelog",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4111,
+   "type": "page",
+   "title": "Changelog and Patches",
+   "path": "node/4111",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4213,
+   "type": "blog",
+   "title": "We'll be in Denver for a visit - Join us for a snack-potluck",
+   "path": "node/4213",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4299,
+   "type": "blog",
+   "title": "Salar de Uyuni, Bolivia - a strange salt desert",
+   "path": "node/4299",
+   "expectedAnonymousStatus": 403
+  },
+  {
+   "nid": 4336,
+   "type": "blog",
+   "title": "tset",
+   "path": "node/4336",
+   "expectedAnonymousStatus": 403
+  }
+ ]
+}

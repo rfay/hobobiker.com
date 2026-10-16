@@ -1,0 +1,382 @@
+{
+  "title": "Central America Maps and GPS Maps and other resources for the Bicycle Tourist | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Central America Maps and GPS Maps and other resources for the Bicycle Tourist",
+  "contentFound": true,
+  "lines": [
+    "Central America Maps and GPS Maps and other resources for the Bicycle Tourist",
+    "By rfay - Posted on April 10th, 2008",
+    "It's not easy to get good, detailed maps of Central America, and you need them if you're going off the main routes.",
+    "Edit 16 Jan 2011: The Central America GPS Maps Project is now online. Also, you may be interested in downloadable GPS maps from the Open Street Maps Project.",
+    "Note that this site has complete maps from the GPS track of our trip. You can see all of them under \"Route Maps\" in the menu. The Central America route maps and info are here.",
+    "For maps, we used the following:",
+    "Guatemala: The Rough Guide Map of Guatemala and Belize. (Make sure to get the current edition.) It was generally accurate and indestructible. ITMB also has a Guatemala map which is widely available, but all of their maps are hopelessly inaccurate. Be very careful with any map, but with an ITMB map you have to always be suspicious.",
+    "Honduras and Nicaragua: We had to use the widely available ITMB maps, as nothing else was available.",
+    "Costa Rica and Panama: There is an excellent Rough Guides map to Costa Rica and Panama in one map.",
+    "We didn't do too well at coming up with GPS maps for our Garmin GPS, but did find the Caribbean Map Project based on US military sources. It covers most of Central America from eastern Guatemala on down (and much of the Caribbean and Venezuela). However, the data is amazingly old. Few of the roads we traveled on were in there, and many of the roads it showed were not there. However, it showed far more villages and towns than the Garmin basemap, and that was quite useful.",
+    "For Costa Rica we found that this site was excellent for route planning and showed a number of tours through the country.",
+    "rfay's blog"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": false,
+      "key": "http://www.cenrut.org",
+      "text": "Central America GPS Maps Project"
+    },
+    {
+      "internal": false,
+      "key": "http://wiki.openstreetmap.org/wiki/OSM_Map_On_Garmin/Download",
+      "text": "Open Street Maps Project"
+    },
+    {
+      "internal": true,
+      "key": "node/4015",
+      "text": "The Central America route maps and info are here"
+    },
+    {
+      "internal": false,
+      "key": "http://www.amazon.com/Rough-Guatemala-Belize-Country-Region/dp/1843532336/ref=sr_1_1?ie=UTF8&s=books&qid=1210524464&sr=1-1",
+      "text": "Rough Guide Map of Guatemala and Belize"
+    },
+    {
+      "internal": false,
+      "key": "http://itmb.com",
+      "text": "ITMB"
+    },
+    {
+      "internal": false,
+      "key": "http://itmb.com",
+      "text": "ITMB"
+    },
+    {
+      "internal": false,
+      "key": "http://www.amazon.com/Rough-Guide-Panama-Country-Region/dp/1843534819/ref=sr_1_1?ie=UTF8&s=books&qid=1210524717&sr=1-1",
+      "text": "Rough Guides map to Costa Rica and Panama"
+    },
+    {
+      "internal": false,
+      "key": "http://rwsmaps.griffel.se",
+      "text": "Caribbean Map Project"
+    },
+    {
+      "internal": false,
+      "key": "http://costa-rica-guide.com/portals/tours.htm",
+      "text": "this site"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "rfay's blog",
+        "key": "blog/rfay"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://costa-rica-guide.com/portals/tours.htm",
+      "http://itmb.com",
+      "http://rwsmaps.griffel.se",
+      "http://wiki.openstreetmap.org/wiki/OSM_Map_On_Garmin/Download",
+      "http://www.amazon.com/Rough-Guatemala-Belize-Country-Region/dp/1843532336/ref=sr_1_1?ie=UTF8&s=books&qid=1210524464&sr=1-1",
+      "http://www.amazon.com/Rough-Guide-Panama-Country-Region/dp/1843534819/ref=sr_1_1?ie=UTF8&s=books&qid=1210524717&sr=1-1",
+      "http://www.cenrut.org"
+    ],
+    "internalNonOk": []
+  }
+}

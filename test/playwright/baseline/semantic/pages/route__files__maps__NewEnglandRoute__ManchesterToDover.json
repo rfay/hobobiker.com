@@ -1,0 +1,25 @@
+{
+  "title": "ManchesterToDover",
+  "primaryHeading": "",
+  "contentFound": true,
+  "lines": [
+    "ManchesterToDover",
+    "Copyright © 1988-2003 Microsoft Corp. and/or its suppliers. All rights reserved. http://www.microsoft.com/mappoint",
+    "© Copyright 2002 by Geographic Data Technology, Inc. All rights reserved.",
+    "© 2002 Navigation Technologies. All rights reserved. This data includes information taken with permission from Canadian authorities © 1991-2002 Government of Canada (Statistics Canada and/or Geomatics Canada), all rights reserved."
+  ],
+  "images": [
+    {
+      "src": "ManchesterToDover_files/image_map.gif",
+      "name": "image_map.gif",
+      "alt": "ManchesterToDover"
+    }
+  ],
+  "links": [],
+  "menus": {},
+  "regions": {},
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

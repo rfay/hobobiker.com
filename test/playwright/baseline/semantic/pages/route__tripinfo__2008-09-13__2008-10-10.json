@@ -1,0 +1,449 @@
+{
+  "title": "Hobobiker Trip Details | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Hobobiker Trip Details",
+  "contentFound": true,
+  "lines": [
+    "Hobobiker Trip Details",
+    "2008-09-13 to 2008-10-10",
+    "Here is detailed information about our trip. For each day's",
+    "ride we have a map, gpx and kml files, and an elevation profile.",
+    "If you find that this isn't up-to-date or you want something that's",
+    "not here, please send us an email and we'll try to get it for you.",
+    "Ride",
+    "date",
+    "miles/km",
+    "Elev ft/mt",
+    "Huancayo to Mariscal Cáceres",
+    "2008-09-13",
+    "49/79",
+    "2700/833",
+    "Mariscal Cáceres to Camp before Anco",
+    "2008-09-14",
+    "41/66",
+    "2083/643",
+    "Camp near Anco to Mayocc",
+    "2008-09-15",
+    "27/44",
+    "1456/449",
+    "Mayocc to Huanta, Peru",
+    "2008-09-16",
+    "20/32",
+    "2047/632",
+    "Huanta to Ayacucho, Peru",
+    "2008-09-17",
+    "30/48",
+    "2381/735",
+    "Ayacucho to Andahualas by bus",
+    "2008-09-21",
+    "1/2",
+    "/0",
+    "Andahuaylas to Cuzco by bus",
+    "2008-09-22",
+    "1/2",
+    "/0",
+    "Cuzco to Quiquijana",
+    "2008-09-29",
+    "44/71",
+    "485/150",
+    "Quiquijana to Sicuani",
+    "2008-09-30",
+    "44/71",
+    "1824/563",
+    "Sicuani to Santa Rosa",
+    "2008-10-01",
+    "42/68",
+    "2677/826",
+    "Santa Rosa to Calapuja",
+    "2008-10-02",
+    "71/115",
+    "593/183",
+    "Calapuja to Puno, Peru",
+    "2008-10-03",
+    "44/71",
+    "869/268",
+    "Puno to Ilave",
+    "2008-10-07",
+    "35/56",
+    "1410/435",
+    "Ilave to Yunguyo",
+    "2008-10-08",
+    "49/79",
+    "2033/627",
+    "Yunguyo, Peru to Copacabana, Bolivia",
+    "2008-10-09",
+    "7/11",
+    "528/163"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-13/2008-09-13/2008-10-10",
+      "text": "Huancayo to Mariscal Cáceres"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-14/2008-09-13/2008-10-10",
+      "text": "Mariscal Cáceres to Camp before Anco"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-15/2008-09-13/2008-10-10",
+      "text": "Camp near Anco to Mayocc"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-16/2008-09-13/2008-10-10",
+      "text": "Mayocc to Huanta, Peru"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-17/2008-09-13/2008-10-10",
+      "text": "Huanta to Ayacucho, Peru"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-21/2008-09-13/2008-10-10",
+      "text": "Ayacucho to Andahualas by bus"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-22/2008-09-13/2008-10-10",
+      "text": "Andahuaylas to Cuzco by bus"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-29/2008-09-13/2008-10-10",
+      "text": "Cuzco to Quiquijana"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-09-30/2008-09-13/2008-10-10",
+      "text": "Quiquijana to Sicuani"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-01/2008-09-13/2008-10-10",
+      "text": "Sicuani to Santa Rosa"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-02/2008-09-13/2008-10-10",
+      "text": "Santa Rosa to Calapuja"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-03/2008-09-13/2008-10-10",
+      "text": "Calapuja to Puno, Peru"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-07/2008-09-13/2008-10-10",
+      "text": "Puno to Ilave"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-08/2008-09-13/2008-10-10",
+      "text": "Ilave to Yunguyo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2008-10-09/2008-09-13/2008-10-10",
+      "text": "Yunguyo, Peru to Copacabana, Bolivia"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

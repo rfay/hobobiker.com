@@ -1,0 +1,337 @@
+
+=== 1. Inventory: nodes by type and status
+-- SELECT type, COUNT(*) total, SUM(status=1) published, SUM(status=0) unpublished FROM node GROUP BY type ORDER BY total DESC 
+type	total	published	unpublished
+triplog	549	549	0
+blog	342	328	14
+wp	138	138	0
+story	113	111	2
+acidfree	77	77	0
+page	35	29	6
+book	18	0	18
+audio	10	10	0
+image	8	8	0
+forum	4	4	0
+poll	1	1	0
+	1	0	1
+-- SELECT COUNT(*) total, SUM(status=1) published FROM node 
+total	published
+1296	1255
+-- SELECT nid, type, status, title FROM node WHERE type = '' OR type NOT IN (SELECT type FROM node_type) 
+nid	type	status	title
+227	image	1	Alternative Bike Shop in Manchester
+228	image	1	Randy and Nancy riding by the sea near Hampton
+229	image	1	Nancy can't stay out of the Ocean!
+230	image	1	New Hampshire Farmhouse
+231	image	1	Rural roads of New Hampshire - Nancy riding in the rain
+232	image	1	Nancy riding the backroads
+233	image	1	Swan in the wetlands by the coast
+234	image	1	Quaint Cemeteries everywhere!
+243	acidfree	1	Photo Albums
+244	acidfree	1	New England 2005
+245	acidfree	1	Manchester to Fryeburg, Maine
+246	acidfree	1	Fryeburg to Canada
+247	acidfree	1	Canada to Manchester
+257	acidfree	1	Starting off at Alternative Bike Shop
+258	acidfree	1	So much green and water everywhere
+259	acidfree	1	Green everywhere
+260	acidfree	1	And more cemeteries
+261	acidfree	1	More cemeteries
+262	acidfree	1	Picturesque cemeteries around every corner
+263	acidfree	1	Quiet back roads
+264	acidfree	1	Greg's house by the beach at Hampton
+265	acidfree	1	Nancy, Randy and Greg at Hampton
+266	acidfree	1	Randy and Nancy by the sea
+267	acidfree	1	Nancy trying to ride in the ocean
+268	acidfree	1	Swan near Rye, NH
+269	acidfree	1	Colors near Rye
+270	acidfree	1	Backroads near Exeter
+271	acidfree	1	Some rainy days, but they mostly didn't last
+272	acidfree	1	09 Sometimes we got even luckier
+273	acidfree	1	10 Roland and Jeanne, benefactors everywhere
+274	acidfree	1	11 Animal control, 1813
+275	acidfree	1	12 Crossing the line between Maine and New Hampshire (maybe the 15th time)
+276	acidfree	1	13 Sunflower and water
+277	acidfree	1	14 Fryeburg cemetery
+278	acidfree	1	15 Fryeburg Fairgrounds
+279	acidfree	1	16 Famous Fryeburg fairgrounds
+280	acidfree	1	Randy's chain fell off. Our first mechanical
+281	acidfree	1	Riding quiet roads
+282	acidfree	1	Green fields and dilapidated farm buildings
+283	acidfree	1	Climbing Evans Notch
+284	acidfree	1	Farm after beautiful farm
+285	acidfree	1	Nancy riding the Appalachian Trail near Gorham, NH
+286	acidfree	1	Clair sharing her fire and camp near Gorham, NH
+287	acidfree	1	Crossing the railroad trestle to get over to Gorham
+288	acidfree	1	Brad and his beautiful home on top of the hill
+289	acidfree	1	Covered Bridge at Stark, NH
+290	acidfree	1	Stark, NH Covered Bridge
+291	acidfree	1	Dam on  Connecticut river above Stark
+292	acidfree	1	Covered bridge at Groveton, NH
+293	acidfree	1	Groveton Bridge
+294	acidfree	1	Entering Vermont for the first time with Brad
+295	acidfree	1	14 First of many Vermont crosings
+296	acidfree	1	15 Endless beautiful farmlands with quiet roads
+297	acidfree	1	16 Vermont home
+298	acidfree	1	17 Vermont's green just won't stop
+299	acidfree	1	18 Connecticut river riding north
+300	acidfree	1	19 Columbia, NH covered bridge
+301	acidfree	1	20 Columbia bridge
+302	acidfree	1	21 Nancy in front of Columbia bridge
+303	acidfree	1	22 Battered farm
+304	acidfree	1	23 Nancy wants those apples!
+305	acidfree	1	24 Another New-England-Red Farm
+306	acidfree	1	Entering Canada
+307	acidfree	1	Green roads on the way to Coaticook
+308	acidfree	1	The road less travelled, near Coaticook
+309	acidfree	1	Linda - Our B&B host at Ayer's Cliff
+310	acidfree	1	Red Barn
+311	acidfree	1	Mountains ahead (and rain) headed south to Owl's Head
+312	acidfree	1	Pierre's wonderful camp where he took us in
+313	acidfree	1	Green Everywhere
+314	acidfree	1	We didn't miss all the colors
+315	acidfree	1	Some colors were starting to show
+316	acidfree	1	Starting colors
+317	acidfree	1	Every town has a General Store
+318	acidfree	1	Covered bridge in Lindonville, VT
+319	acidfree	1	Randy and cousin Nanny in West Barnet, VT
+320	acidfree	1	Grist Mill in Littleton, NH
+321	acidfree	1	More of the road less travelled
+322	acidfree	1	Quiet Farms near Mosquitoville, VT
+323	acidfree	1	Old Farm
+324	acidfree	1	More Colors at the Shaker Museum near Enfield, NH
+325	acidfree	1	Belmont covered bridge
+326	acidfree	1	Belmont bridge
+327	acidfree	1	Henniker Covered Bridge
+328	acidfree	1	View from Henniker on the river
+2307		0	
+4156	forum	1	Bike Gearing
+4233	forum	1	Hospitality for touring cyclists / Hospitalidad para ciclistas viajeros
+4241	forum	1	Altitude sickness / Mal de la montaña / Soroche
+4265	forum	1	How often do you get sick
+
+=== 2. Comments (Drupal 6 comments.status: 0 = published, 1 = unpublished)
+-- SELECT status, COUNT(*) FROM comments GROUP BY status 
+status	COUNT(*)
+0	169
+1	278
+-- SELECT c.nid, n.status node_status, COUNT(*) comments, n.title FROM comments c JOIN node n ON n.nid = c.nid GROUP BY c.nid ORDER BY comments DESC LIMIT 5 
+nid	node_status	comments	title
+4123	1	22	Info on Sailing from Panama to Cartagena, Colombia, and other options
+4345	1	17	Our Sweden week's trip
+4226	1	15	Cyclists before us at the Casa de Ciclistas
+4348	1	13	New (free) E-Book on Cycling Bolivia
+1272	1	13	Fun in Santa Barbara
+-- SELECT COUNT(*) comments_on_unpublished_nodes FROM comments c JOIN node n ON n.nid = c.nid WHERE n.status = 0 
+comments_on_unpublished_nodes
+9
+-- SELECT name, status FROM system WHERE type = 'module' AND name = 'comment' 
+name	status
+comment	0
+-- SELECT r.name role, p.perm LIKE '%access comments%' has_access_comments FROM role r LEFT JOIN permission p ON p.rid = r.rid 
+role	has_access_comments
+administrator	0
+anonymous user	0
+authenticated user	0
+author	0
+non-authenticated user	0
+translator	0
+
+=== 3. Paths, menus, taxonomy
+-- SELECT COUNT(*) aliases, COUNT(DISTINCT src) sources FROM url_alias 
+aliases	sources
+1657	1577
+-- SELECT COUNT(*) aliases_to_missing_nodes FROM url_alias a WHERE a.src LIKE 'node/%' AND a.src REGEXP '^node/[0-9]+$' AND NOT EXISTS (SELECT 1 FROM node n WHERE n.nid = SUBSTRING(a.src, 6)) 
+aliases_to_missing_nodes
+876
+-- SELECT COUNT(*) nodes_with_several_aliases FROM (SELECT src FROM url_alias WHERE src REGEXP '^node/[0-9]+$' GROUP BY src HAVING COUNT(*) > 1) x 
+nodes_with_several_aliases
+23
+-- SELECT COUNT(*) published_nodes_without_alias FROM node n WHERE n.status = 1 AND NOT EXISTS (SELECT 1 FROM url_alias a WHERE a.src = CONCAT('node/', n.nid)) 
+published_nodes_without_alias
+924
+-- SELECT menu_name, COUNT(*) links, SUM(hidden = 0) visible FROM menu_links GROUP BY menu_name ORDER BY links DESC 
+menu_name	links	visible
+navigation	355	84
+admin_menu	343	343
+menu-menu	77	74
+book-toc-334	18	18
+primary-links	8	8
+-- SELECT m.menu_name, m.link_path, m.link_title, n.status FROM menu_links m JOIN node n ON m.link_path = CONCAT('node/', n.nid) WHERE n.status = 0 AND m.hidden = 0 AND m.menu_name NOT LIKE 'book-toc-%' 
+menu_name	link_path	link_title	status
+menu-menu	node/3799	Photos	0
+menu-menu	node/3799	Photos	0
+menu-menu	node/3799	Photos	0
+primary-links	node/3799	Photos	0
+menu-menu	node/3800	Photos	0
+menu-menu	node/3803	Photos	0
+primary-links	node/206	Email List	0
+menu-menu	node/215	Photos	0
+menu-menu	node/216	Photos	0
+-- SELECT m.menu_name, COUNT(*) visible_links_to_unpublished FROM menu_links m JOIN node n ON m.link_path = CONCAT('node/', n.nid) WHERE n.status = 0 AND m.hidden = 0 GROUP BY m.menu_name 
+menu_name	visible_links_to_unpublished
+book-toc-334	18
+menu-menu	7
+primary-links	2
+-- SELECT v.name vocabulary, COUNT(t.tid) terms FROM vocabulary v LEFT JOIN term_data t ON t.vid = v.vid GROUP BY v.vid 
+vocabulary	terms
+Adventures	30
+Image Galleries	1
+Access Level	2
+Topics	49
+
+=== 4. Input formats: use by current revisions, and filters each runs
+-- SELECT r.format, f.name, COUNT(*) nodes, SUM(n.status) published FROM node n JOIN node_revisions r ON n.vid = r.vid LEFT JOIN filter_formats f ON f.format = r.format GROUP BY r.format ORDER BY r.format 
+format	name	nodes	published
+0	NULL	192	191
+1	Filtered HTML	109	104
+2	PHP code	4	4
+3	Full HTML-No Restrictions	813	791
+5	HTML with line breaks	12	12
+6	Wiki	8	0
+7	HTML (full) with Gmap	1	0
+8	Full html with email obfuscation	1	1
+9	Tripinfo Google Map	14	13
+10	Flickr with full html and linebreaker	123	121
+11	Flickr with full html	19	18
+-- SELECT f.format, f.name, GROUP_CONCAT(CONCAT(fl.module, '/', fl.delta) ORDER BY fl.weight) filters FROM filter_formats f LEFT JOIN filters fl ON fl.format = f.format GROUP BY f.format 
+format	name	filters
+1	Filtered HTML	filter/0,filter/1,filter/3
+2	PHP code	php/0
+3	Full HTML-No Restrictions	filter/3
+5	HTML with line breaks	filter/1,filter/3
+6	Wiki	liquid_filters/0
+7	HTML (full) with Gmap	gmap/0,filter/3
+8	Full html with email obfuscation	gtspam/0,filter/3
+9	Tripinfo Google Map	tripinfo/0,php/0
+10	Flickr with full html and linebreaker	hobobiker_filter/0,flickr/0,filter/1,filter/3
+11	Flickr with full html	hobobiker_filter/0,flickr/0,filter/3
+-- SELECT DISTINCT fl.module, s.status module_enabled FROM filters fl LEFT JOIN system s ON s.name = fl.module AND s.type = 'module' WHERE s.status IS NULL OR s.status = 0 
+module	module_enabled
+liquid_filters	0
+gmap	0
+gtspam	0
+-- SELECT name, value FROM variable WHERE name = 'filter_default_format' 
+name	value
+filter_default_format	s:1:"1";
+
+=== 5. Render-time content (published nodes, current revision)
+-- SELECT COUNT(*) php_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%<?php%' 
+php_nodes	nids
+15	3801,3802,3988,4004,4010,4011,4012,4013,4015,4129,4196,4197,4223,4311,4312
+-- SELECT COUNT(*) tripinfo_table_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%tripinfo_table(%' 
+tripinfo_table_nodes	nids
+15	3801,3802,3988,4004,4010,4011,4012,4013,4015,4129,4196,4197,4223,4311,4312
+-- SELECT COUNT(*) hobophoto_nodes, SUM((LENGTH(r.body) - LENGTH(REPLACE(r.body, '[hobophoto:', ''))) / LENGTH('[hobophoto:')) macros FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%[hobophoto:%' 
+hobophoto_nodes	macros
+117	421.0000
+-- SELECT COUNT(*) multisource_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%[multisource:%' 
+multisource_nodes	nids
+13	3988,4003,4004,4010,4011,4012,4013,4015,4129,4197,4223,4311,4312
+-- SELECT COUNT(*) flickr_macro_nodes FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND (r.body LIKE '%[flickr-photo%' OR r.body LIKE '%[flickr-photoset%') 
+flickr_macro_nodes
+0
+-- SELECT COUNT(*) script_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%<script%' 
+script_nodes	nids
+4	3804,4008,4033,4057
+-- SELECT COUNT(*) document_write_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%document.write%' 
+document_write_nodes	nids
+1	3804
+-- SELECT COUNT(*) flash_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND (r.body LIKE '%<object%' OR r.body LIKE '%<embed%' OR r.body LIKE '%.swf%') 
+flash_nodes	nids
+10	3862,3907,3976,3986,3996,4024,4163,4248,4342,4343
+-- SELECT COUNT(*) iframe_nodes, GROUP_CONCAT(n.nid ORDER BY n.nid) nids FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.body LIKE '%<iframe%' 
+iframe_nodes	nids
+11	3801,3999,4008,4015,4033,4057,4129,4196,4197,4255,4345
+-- SELECT COUNT(*) teaser_differs_from_body_start FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND r.teaser <> '' AND LEFT(r.body, LENGTH(r.teaser)) <> r.teaser 
+teaser_differs_from_body_start
+43
+
+=== 6. Stored but not rendered
+-- SELECT name, status FROM system WHERE type = 'module' AND name IN ('acidfree', 'image', 'comment', 'forum', 'poll', 'book', 'audio', 'tripinfo', 'hobobiker_filter', 'php', 'simplemenu', 'thickbox', 'lightbox2', 'imagecache', 'flickr_filter') ORDER BY name 
+name	status
+acidfree	0
+audio	1
+book	1
+comment	0
+flickr_filter	1
+forum	0
+hobobiker_filter	1
+image	0
+imagecache	1
+lightbox2	1
+php	1
+poll	1
+simplemenu	0
+thickbox	1
+tripinfo	1
+-- SELECT n.type, COUNT(*) published_with_empty_body FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND TRIM(r.body) = '' GROUP BY n.type 
+type	published_with_empty_body
+acidfree	77
+poll	1
+triplog	89
+-- SELECT type, GROUP_CONCAT(nid ORDER BY nid) unpublished_nids FROM node WHERE status = 0 GROUP BY type 
+type	unpublished_nids
+	2307
+blog	3799,3800,3803,3889,4000,4001,4002,4006,4007,4016,4100,4213,4299,4336
+book	334,335,336,339,1290,1291,1292,1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303
+page	206,215,216,1064,4005,4111
+story	2,51
+
+=== 7. Assets
+-- SELECT COUNT(*) files_rows FROM files 
+files_rows
+44
+-- files rows whose filepath is not on disk
+files_rows_missing_on_disk 24
+-- local file references in published bodies (sites/default/files/...), checked on disk
+distinct_local_refs 539
+missing_on_disk 2
+  sites/default/files/297234846.jpg
+  sites/default/files/saguaro%20national%20park%20sun%20through%20saguaro_0.jpg --
+-- find docroot/sites/default/files
+files_on_disk 2252
+imagecache_derivatives_on_disk 395
+names_with_spaces 179
+names_with_non_ascii 0
+-- SELECT presetname FROM imagecache_preset ORDER BY presetname 
+presetname
+180x240
+240x180
+600x800
+800x600
+
+=== 8. Hardcoded own-domain references in published bodies
+-- SELECT COUNT(*) nodes, SUM((LENGTH(r.body) - LENGTH(REPLACE(LOWER(r.body), 'hobobiker.com/', ''))) / LENGTH('hobobiker.com/')) occurrences FROM node n JOIN node_revisions r ON n.vid = r.vid WHERE n.status = 1 AND LOWER(r.body) LIKE '%hobobiker.com/%' 
+nodes	occurrences
+33	61.0000
+
+=== 9. Secrets: variable names only (values not printed)
+-- SELECT name FROM variable WHERE name REGEXP 'key|secret|token|password|pass$|account' ORDER BY name 
+name
+drupal_private_key
+flickr_api_key
+flickr_api_secret
+flickr_auth_token
+googleanalytics_account
+googlemap_api_key
+lightbox2_keys_close
+lightbox2_keys_next
+lightbox2_keys_play_pause
+lightbox2_keys_previous
+lightbox2_keys_zoom
+location_geocode_google_apikey
+mydropwizard_customer_key
+nodewords_global_keywords
+smtp_password
+tag1quo_token
+user_mail_password_reset_body
+user_mail_password_reset_subject
+
+=== 10. Anonymous access, checked over HTTP from inside the container
+/ 200
+/node/206 403
+/node/227 200
+/node/334 403
+/node/4196 200
+/comment/reply/4123 404

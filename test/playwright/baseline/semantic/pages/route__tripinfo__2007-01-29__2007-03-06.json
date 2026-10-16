@@ -1,0 +1,512 @@
+{
+  "title": "Hobobiker Trip Details | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Hobobiker Trip Details",
+  "contentFound": true,
+  "lines": [
+    "Hobobiker Trip Details",
+    "2007-01-29 to 2007-03-06",
+    "Here is detailed information about our trip. For each day's",
+    "ride we have a map, gpx and kml files, and an elevation profile.",
+    "If you find that this isn't up-to-date or you want something that's",
+    "not here, please send us an email and we'll try to get it for you.",
+    "Ride",
+    "date",
+    "miles/km",
+    "Elev ft/mt",
+    "Mesa to Florence Junction, AZ",
+    "2007-01-29",
+    "32/52",
+    "754/233",
+    "Florence Junction to Florence, AZ",
+    "2007-01-30",
+    "19/31",
+    "85/26",
+    "Florence to Oracle Junction, AZ",
+    "2007-01-31",
+    "40/65",
+    "2119/654",
+    "Oracle Junction to Tucson, Arizona",
+    "2007-02-01",
+    "35/56",
+    "344/106",
+    "Tucson, AZ to Tucson, AZ (SW)",
+    "2007-02-05",
+    "34/55",
+    "1801/556",
+    "Tucson, AZ to Tucson, AZ (SE)",
+    "2007-02-06",
+    "15/24",
+    "406/125",
+    "Tucson, AZ to Patagonia, AZ",
+    "2007-02-07",
+    "54/87",
+    "2959/913",
+    "Patagonia, AZ to Imuris, Sonora",
+    "2007-02-09",
+    "68/110",
+    "1827/564",
+    "Imuris to Santa Ana, Sonora",
+    "2007-02-10",
+    "30/48",
+    "692/214",
+    "Santa Ana to KM100 from Hermosillo",
+    "2007-02-10",
+    "46/74",
+    "675/208",
+    "KM100 to KM30 from Hermosillo",
+    "2007-02-11",
+    "46/74",
+    "318/98",
+    "KM30 on Hwy 15 to Hermosillo, Sonora",
+    "2007-02-12",
+    "22/35",
+    "229/71",
+    "Hermosillo to Rural crucero south of Hermosillo",
+    "2007-02-14",
+    "57/92",
+    "32/10",
+    "Rural crossroads to San Carlos, Sonora, Mexico",
+    "2007-02-15",
+    "64/103",
+    "524/162",
+    "San Carlos to La Guasima",
+    "2007-02-19",
+    "38/61",
+    "597/184",
+    "La Guasima to Pueblo Yaqui",
+    "2007-02-20",
+    "69/111",
+    "186/57",
+    "Pueblo Yaqui to Huatabampo, Sonora",
+    "2007-02-21",
+    "61/98",
+    "173/53",
+    "Huatabampo to Huatabampito, Sonora",
+    "2007-02-22",
+    "12/19",
+    "36/11",
+    "Huatabampito to Navajoa, Sonora",
+    "2007-02-23",
+    "35/56",
+    "164/51",
+    "Navojoa, Sonora to Alamos, Sonora, Mexico",
+    "2007-02-24",
+    "34/55",
+    "1804/557",
+    "Alamos, Sonora to El Carrizal",
+    "2007-03-04",
+    "34/55",
+    "1233/381",
+    "El Carrizal, Sonora to El Fuerte, Sinaloa",
+    "2007-03-05",
+    "35/56",
+    "1266/391"
+  ],
+  "images": [],
+  "links": [
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-01-29/2007-01-29/2007-03-06",
+      "text": "Mesa to Florence Junction, AZ"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-01-30/2007-01-29/2007-03-06",
+      "text": "Florence Junction to Florence, AZ"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-01-31/2007-01-29/2007-03-06",
+      "text": "Florence to Oracle Junction, AZ"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-01/2007-01-29/2007-03-06",
+      "text": "Oracle Junction to Tucson, Arizona"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-05/2007-01-29/2007-03-06",
+      "text": "Tucson, AZ to Tucson, AZ (SW)"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-06/2007-01-29/2007-03-06",
+      "text": "Tucson, AZ to Tucson, AZ (SE)"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-07/2007-01-29/2007-03-06",
+      "text": "Tucson, AZ to Patagonia, AZ"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-09/2007-01-29/2007-03-06",
+      "text": "Patagonia, AZ to Imuris, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-10/2007-01-29/2007-03-06",
+      "text": "Imuris to Santa Ana, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-10/2007-01-29/2007-03-06",
+      "text": "Santa Ana to KM100 from Hermosillo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-11/2007-01-29/2007-03-06",
+      "text": "KM100 to KM30 from Hermosillo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-12/2007-01-29/2007-03-06",
+      "text": "KM30 on Hwy 15 to Hermosillo, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-14/2007-01-29/2007-03-06",
+      "text": "Hermosillo to Rural crucero south of Hermosillo"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-15/2007-01-29/2007-03-06",
+      "text": "Rural crossroads to San Carlos, Sonora, Mexico"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-19/2007-01-29/2007-03-06",
+      "text": "San Carlos to La Guasima"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-20/2007-01-29/2007-03-06",
+      "text": "La Guasima to Pueblo Yaqui"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-21/2007-01-29/2007-03-06",
+      "text": "Pueblo Yaqui to Huatabampo, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-22/2007-01-29/2007-03-06",
+      "text": "Huatabampo to Huatabampito, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-23/2007-01-29/2007-03-06",
+      "text": "Huatabampito to Navajoa, Sonora"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-02-24/2007-01-29/2007-03-06",
+      "text": "Navojoa, Sonora to Alamos, Sonora, Mexico"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-03-04/2007-01-29/2007-03-06",
+      "text": "Alamos, Sonora to El Carrizal"
+    },
+    {
+      "internal": true,
+      "key": "tripinfo_item/2007-03-05/2007-01-29/2007-03-06",
+      "text": "El Carrizal, Sonora to El Fuerte, Sinaloa"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

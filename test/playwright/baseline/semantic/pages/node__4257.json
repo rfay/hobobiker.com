@@ -1,0 +1,364 @@
+{
+  "title": "Una pequeña viaje hacia casa para ver a nuestra familia | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Una pequeña viaje hacia casa para ver a nuestra familia",
+  "contentFound": true,
+  "lines": [
+    "Una pequeña viaje hacia casa para ver a nuestra familia",
+    "By Anonymous - Posted on August 15th, 2008",
+    "Tagged: Español",
+    "Papá – Abbot Fay, en un parque cerca de Grand Junction",
+    "Acabamos de llegar a Perú venidos de una estorbada viaje a Estados Unidos. Fue excelente y exhaustiva. Primero, tuvimos que enfrentar 10 horas de autobús para la cuesta de la Cajamarca, entonces más 8 horas de autobús de Trujillo a la capital de Perú, Lima. Entonces volamos por mucho tiempo hacia Boston, y llegamos a tiempo para el evento principal que apretaba nuestro viaje: el cumpleaños de 80 años del padre de Nancy, Frank Lewis. Fuimos para la cabaña del hermano de Nancy, Dan, en New Hampshire y vivimos una conmemoración deliciosa.",
+    "Entonces volamos hacia Denver para ver los hijos de Randy, Elisheba y Mark, y dirigimos hasta Grand Junction, Colorado, para ver los padres de Randy. Caminamos con ellos a vemos su nuevo lar en el retiro de edad Atrium, en Grand Junction – ellos tienen una linda cabaña, completa, incluso con más espacio del que tenían antes, garaje, y el confort de hacer las comidas en el propio retiro. Instalaciones muy buenas.",
+    "Entonces dirigimos de vuelta a Denver y tuvimos un encuentro con amigos que fue un encanto absoluto. Varios amigos vinieron a vernos, incluso un grupo de ciclistas viajeros que no conocíamos, Nick y Dave, dos impresionantes jóvenes que están para partir de Denver en el camino de Panamá. ¡Gracias a todos qué vinieron y también a los qué no pudieron venir por su amistad! ¡Gracias, Ann, por la deliciosa recepción de la fiesta!",
+    "Los últimos días fueron gastos en una tentativa frenética de organizar todo el equipo que queríamos llevar con nosotros (cosas más calientes para las montañas, cosas nuevas que encargamos y compramos, etc.) Fue increíblemente estresante para mí, especialmente cuando decidí llevar mi trailer BOB conmigo al revés de continuar usando alforges (historia por venir). El cambio representaba un pequeño riesgo, una vez que no usaba el trailer desde 2004 y él estaba abandonado en un canto del garaje de Elisheba. Estaba realmente con miedo de haber olvidado un algo que me impediese de usarlo, o que no me adaptaría, o que un algo se perdería en el viaje de avión que estorbase todo...no se ponía tan ansioso hace años. De cualquier forma, logramos empacar todo eso, embarcar en el avión, y traer de vuelta a Lima, viajar las 9 horas de autobús para Trujillo, y tener todo instalado en la Casa de Ciclistas nuevamente. (Todo funcionó, y estoy contento pilotando con el trailer. Escribiré más sobre eso después.)",
+    "'s blog"
+  ],
+  "images": [
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/2784117843_Frank_Lewis.jpg",
+      "name": "2784117843_frank_lewis.jpg",
+      "alt": ""
+    },
+    {
+      "src": "https://hobobiker-copy.ddev.site/sites/default/files/imagecache/240x180/2784853916_Dad_Abbott_Fay_at_park_near_Grand_Junction.jpg",
+      "name": "2784853916_dad_abbott_fay_at_park_near_grand_junction.jpg",
+      "alt": ""
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "taxonomy/term/30",
+      "text": "Español"
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/2784117843_Frank_Lewis.jpg",
+      "text": ""
+    },
+    {
+      "internal": true,
+      "key": "sites/default/files/2784853916_Dad_Abbott_Fay_at_park_near_Grand_Junction.jpg",
+      "text": ""
+    },
+    {
+      "internal": false,
+      "key": "http://dmandave.blogspot.com",
+      "text": "Nick y Dave"
+    },
+    {
+      "internal": true,
+      "key": "blog/0",
+      "text": "'s blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "'s blog",
+        "key": "blog/0"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://dmandave.blogspot.com"
+    ],
+    "internalNonOk": [
+      {
+        "key": "blog/0",
+        "status": 403
+      }
+    ]
+  }
+}

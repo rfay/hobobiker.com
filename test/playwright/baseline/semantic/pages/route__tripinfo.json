@@ -1,0 +1,21 @@
+{
+  "title": "",
+  "primaryHeading": "",
+  "contentFound": true,
+  "lines": [
+    "Fatal error: Uncaught ArgumentCountError: Too few arguments to function tripinfo_list(), 0 passed in /var/www/html/docroot/includes/menu.inc on line 350 and exactly 2 expected in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo.module:51",
+    "Stack trace:",
+    "#0 /var/www/html/docroot/includes/menu.inc(350): tripinfo_list()",
+    "#1 /var/www/html/docroot/index.php(17): menu_execute_active_handler()",
+    "#2 {main}",
+    "thrown in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo.module on line 51"
+  ],
+  "images": [],
+  "links": [],
+  "menus": {},
+  "regions": {},
+  "references": {
+    "external": [],
+    "internalNonOk": []
+  }
+}

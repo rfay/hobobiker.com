@@ -1,0 +1,396 @@
+{
+  "title": "Donde estamos, Octubre de 2007 | Hobobiker.com: Randy and Nancy's Big Bike Trip",
+  "primaryHeading": "Donde estamos, Octubre de 2007",
+  "contentFound": true,
+  "lines": [
+    "Donde estamos, Octubre de 2007",
+    "By rfay - Posted on October 18th, 2007",
+    "Tagged: Español",
+    "Foto: Nancy aprendiendo una forma mas suave de viajar por bicicleta",
+    "(Aquí está el mensaje que ya mandamos a la lista de email......)",
+    "!Saludos a todos nuestos queridos amigos¡ Hace mucho tiempo no habíamos mandado un mensaje, y quisimos informarles de donde estamos. La ultima vez que mandamos una nota, estábamos trabajando con mucha felicidad como voluntarios para Puente de Amistad y Kiva.org, entrevistando a las clientas microempresarias de Puente de Amistad y subiendo sus fotos al website de Kiva para que los inversores de Kiva (personas normales in todas partes del mundo) puedan hacer préstamos. Sacamos mas de 100 entrevistas, y cada préstamo se fundó en pocas horas en la website de Kiva.",
+    "Tal vez les informé en la mi nota de Agosto que íbamos a regresar a los estados unidos por una visita con nuestra familia. Pues, Nancy tenía un poco de la tos en la semana antes del vuelo, pero cuando llegamos en Denver, Colorado (el 1 de Septiembre), ella fue muy enferma. Y claro que Randy empezó a enfermarse también. Fuimos a la casa de la hija de Randy, Elisheba, por \"pocos dias\" para recuperar. Pero peoramos mas y mas hasta que visitamos al médico, quién nos informó que tuvimos la tos ferina. Esta amenaza es tal vez la mas séria que hemos enfrentado en nuestra vida, pero ya estamos mejorando bién. Sin embargo, después de un mes y medio, nuestra salud no está completa. Habíamos planeado regresar a Guatemala al princípio de Noviembre, pero ya pensamos en quedar aquí un poco mas.",
+    "Nos agradece muchísimo que Elisheba (la hija de Randy) nos ofreció su casa en este tiempo. Está bién cómodo, y mejor que todo, ella ya habá recibido la vacuna contra la tos ferina, y por eso no se enfermó.",
+    "Pues, estamos mejorando bién, y regresamos a nuestro viaje. Les vamos a informar sobre el futuro.!",
+    "Como siempre, hay muchas fotos de nuestras aventuras en hobobiker.com, y también unacolección de fotos recientes. Y también escribimos un libro pequeño con fotos de las mujeres de Puente de Amistad (lástimamente todavía solamente en inglés), pero ustedes pueden revisarlo online en pdf",
+    "¡Pués, muchas gracias por acompañarnos!",
+    "-Randy and Nancy",
+    "rfay's blog"
+  ],
+  "images": [
+    {
+      "src": "sites/default/files/1271875309_61f77199da_m.jpg",
+      "name": "1271875309_61f77199da_m.jpg",
+      "alt": "Nancy using bicycle transportation - the easy kind",
+      "broken": 404
+    }
+  ],
+  "links": [
+    {
+      "internal": true,
+      "key": "taxonomy/term/30",
+      "text": "Español"
+    },
+    {
+      "internal": true,
+      "key": "subscribe_espanol",
+      "text": "la lista de email..."
+    },
+    {
+      "internal": false,
+      "key": "http://www.friendshipbridge.org.gt",
+      "text": "Puente de Amistad"
+    },
+    {
+      "internal": false,
+      "key": "http://kiva.org",
+      "text": "Kiva.org"
+    },
+    {
+      "internal": true,
+      "own": true,
+      "url": "http://hobobiker.com/",
+      "key": "",
+      "text": "hobobiker.com"
+    },
+    {
+      "internal": false,
+      "key": "http://flickr.com/photos/hobobiker/sets/72157601753929724/show",
+      "text": "colección de fotos recientes."
+    },
+    {
+      "internal": true,
+      "own": true,
+      "url": "http://hobobiker.com/files/The%20Women%20of%20Friendship%20Bridge%20Guatemala.pdf",
+      "key": "files/The Women of Friendship Bridge Guatemala.pdf",
+      "text": "un libro pequeño"
+    },
+    {
+      "internal": true,
+      "own": true,
+      "url": "http://hobobiker.com/files/The%20Women%20of%20Friendship%20Bridge%20Guatemala.pdf",
+      "key": "files/The Women of Friendship Bridge Guatemala.pdf",
+      "text": "online en pdf"
+    },
+    {
+      "internal": true,
+      "key": "blog/rfay",
+      "text": "rfay's blog"
+    }
+  ],
+  "menus": {
+    "main": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "The Americas",
+        "key": ""
+      },
+      {
+        "text": "Canada",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "canada_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-05-01--2006-08-30"
+      },
+      {
+        "text": "USA West Coast",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "usa_west_coast_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2006-08-31--2006-11-15"
+      },
+      {
+        "text": "Mexico",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Mexico section blog (in order)",
+        "key": "mexico_big_trip_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2007-01-01--2007-12-01"
+      },
+      {
+        "text": "Central America",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Central America Blog",
+        "key": "central_america_blog"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "South America Blog (in order)",
+        "key": "south_america_blog"
+      },
+      {
+        "text": "Colombia",
+        "key": "taxonomy/term/43"
+      },
+      {
+        "text": "Ecuador",
+        "key": "taxonomy/term/58"
+      },
+      {
+        "text": "Peru",
+        "key": "taxonomy/term/60"
+      },
+      {
+        "text": "Bolivia",
+        "key": "taxonomy/term/71"
+      },
+      {
+        "text": "Argentina",
+        "key": "taxonomy/term/72"
+      },
+      {
+        "text": "Route and Triplog",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Earlier Trips",
+        "key": "earlier_trips"
+      },
+      {
+        "text": "Mexico (2003)",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Blog",
+        "key": "mexico_2003_blog"
+      },
+      {
+        "text": "Thanks!",
+        "key": "wp/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-01-15--2003-04-01"
+      },
+      {
+        "text": "Great Divide (2003)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Blog (In Order)",
+        "key": "great_divide_blog"
+      },
+      {
+        "text": "Wonderful People",
+        "key": "wp/2003-07-01--2003-11-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2003-0-01--2003-11-15"
+      },
+      {
+        "text": "Northwest (2004)",
+        "key": "northwest_blog"
+      },
+      {
+        "text": "Route",
+        "key": "northwest_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2004-06-01--2004-10-01"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2004-06-01--2004-10-15"
+      },
+      {
+        "text": "New England (2005)",
+        "key": "new_england_blog"
+      },
+      {
+        "text": "Photos",
+        "key": "new_england_2005"
+      },
+      {
+        "text": "Route",
+        "key": "our_actual_route"
+      },
+      {
+        "text": "Thanks",
+        "key": "wp/2005-08-01--2005-11-15"
+      },
+      {
+        "text": "Trip Log",
+        "key": "triplog/2005-07-15--2005-11-15"
+      },
+      {
+        "text": "FAQ",
+        "key": "frequently_asked_questions"
+      },
+      {
+        "text": "Gear",
+        "key": "gear"
+      },
+      {
+        "text": "Route Maps",
+        "key": "route_page"
+      },
+      {
+        "text": "Canada",
+        "key": "big_trip_canada_route"
+      },
+      {
+        "text": "USA",
+        "key": "big_trip_usa_route"
+      },
+      {
+        "text": "Mexico",
+        "key": "big_trip_mexico_route"
+      },
+      {
+        "text": "Central America",
+        "key": "node/4015"
+      },
+      {
+        "text": "South America",
+        "key": "south_america_route"
+      },
+      {
+        "text": "Colombia",
+        "key": "colombia_route"
+      },
+      {
+        "text": "Ecuador",
+        "key": "ecuador_route"
+      },
+      {
+        "text": "Peru",
+        "key": "peru_route"
+      },
+      {
+        "text": "Bolivia",
+        "key": "bolivia_route"
+      },
+      {
+        "text": "Argentina/Chile",
+        "key": "argentina_route"
+      },
+      {
+        "text": "Topics",
+        "key": "topics"
+      },
+      {
+        "text": "Podcasts",
+        "key": "podcasts"
+      },
+      {
+        "text": "Tips for Travelers",
+        "key": "taxonomy/term/63"
+      },
+      {
+        "text": "Agua Para La Vida",
+        "key": "aplv"
+      },
+      {
+        "text": "Microfinance",
+        "key": "taxonomy/term/70"
+      },
+      {
+        "text": "Kiva.org",
+        "key": "taxonomy/term/69"
+      },
+      {
+        "text": "Friendship Bridge",
+        "key": "taxonomy/term/39"
+      },
+      {
+        "text": "Maps",
+        "key": "taxonomy/term/53"
+      },
+      {
+        "text": "Other Cyclists",
+        "key": "taxonomy/term/68"
+      },
+      {
+        "text": "Route Reports",
+        "key": "taxonomy/term/68"
+      }
+    ],
+    "breadcrumb": [
+      {
+        "text": "Home",
+        "key": ""
+      },
+      {
+        "text": "Blogs",
+        "key": "blog"
+      },
+      {
+        "text": "rfay's blog",
+        "key": "blog/rfay"
+      }
+    ]
+  },
+  "regions": {
+    "header": {
+      "lines": [],
+      "links": [
+        {
+          "internal": true,
+          "key": "",
+          "text": ""
+        }
+      ]
+    },
+    "footer": {
+      "lines": [],
+      "links": []
+    }
+  },
+  "references": {
+    "external": [
+      "http://flickr.com/photos/hobobiker/sets/72157601753929724/show",
+      "http://kiva.org",
+      "http://www.friendshipbridge.org.gt"
+    ],
+    "internalNonOk": [
+      {
+        "key": "node/sites/default/files/1271875309_61f77199da_m.jpg",
+        "status": 404
+      },
+      {
+        "key": "subscribe_espanol",
+        "status": 404
+      }
+    ]
+  }
+}
