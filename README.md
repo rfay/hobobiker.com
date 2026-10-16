@@ -4,6 +4,8 @@ This is the Drupal 6 PHP source code for the old Drupal 6 hobobiker.com site, a 
 
 This is also prepared for an experimental AI demo of migration to other targets, including a static html site and Drupal 11 site. 
 
+**During the live presentation only:** the working copy is viewable at <https://hobobiker-copy--remotework--rfay.coder.ddev.com>. It will go away afterwards.
+
 ## Artifacts for Migration
 
 ### PHP Source Code
