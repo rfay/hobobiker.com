@@ -1,0 +1,14 @@
+# One extended regex per line. A Bash command matching any of these is blocked by
+# .claude/hooks/deny-production.sh. Tripwire, not a wall: see the kit's docs/safe-demo-environment.md.
+
+# Production host and any DDEV transfer to or from it
+ddevprod\.thefays\.us
+\bddev[[:space:]]+(pull|push)\b
+\bddev[[:space:]]+auth[[:space:]]+ssh\b
+# Remote shells and copies to any user@host
+\b(ssh|scp|sftp|rsync)\b[^|;&]*[[:alnum:]_.-]+@[[:alnum:]_.-]+
+# Fetching the production site (the suite resolves hobobiker.com against the target instead)
+(\b(curl|wget|lynx|httpie)\b|(^|[;&|[:space:]])http[[:space:]])[^|;&]*(//)?(www\.)?hobobiker\.com
+(BASE_URL|baseURL|baseUrl)=[^[:space:]]*//(www\.)?hobobiker\.com
+# The git remote is the real repository
+\bgit[[:space:]]+push\b

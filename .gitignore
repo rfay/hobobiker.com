@@ -13,3 +13,22 @@ robots.txt
 /.ddev/docker-compose.coder-describe.yaml
 /.vscode
 /.ddev/config.coder.yaml
+
+# ddev-playwright: dev-only, installed on demand by `ddev dev-tools`, never on production
+/.ddev/addon-metadata/ddev-playwright/
+/.ddev/commands/host/install-playwright
+/.ddev/commands/web/playwright
+/.ddev/config.playwright.yml
+/.ddev/docker-compose.sqlite.yaml
+/.ddev/web-build/.gitignore
+/.ddev/web-build/Dockerfile.10-go-task
+/.ddev/web-build/Dockerfile.20-astral-uv
+/.ddev/web-build/Dockerfile.playwright
+/.ddev/web-build/disabled.Dockerfile.playwright
+/.ddev/web-build/install-kasmvnc.sh
+/.ddev/web-build/install-task.sh
+/.ddev/web-build/kasmvnc.yaml
+/.ddev/web-build/xstartup
+/.ddev/web-build/playwright/
+/.ddev/web-entrypoint.d/mkcert-nssdb.sh
+/.ddev/web-entrypoint.d/php-fpm-capacity.sh

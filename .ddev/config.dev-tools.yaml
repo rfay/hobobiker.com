@@ -1,0 +1,6 @@
+#ddev-silent-no-warn
+# Installs dev-only tooling (ddev-playwright) on developer copies, never on production.
+# The command itself decides; it does nothing unless the primary URL is *.ddev.site.
+hooks:
+  pre-start:
+    - exec-host: ddev dev-tools

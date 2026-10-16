@@ -1,0 +1,7 @@
+#ddev-silent-no-warn
+# Chromium (Playwright) crashes its tab after ~2,000 page loads with Docker's default 64 MB
+# /dev/shm. The layout baseline loads every baseline page (2,345 here) in one tab. Dev-only need,
+# harmless elsewhere.
+services:
+  web:
+    shm_size: 1gb
