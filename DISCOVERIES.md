@@ -267,6 +267,8 @@ Final run, against the final baseline (pruned snapshot with Northwest maps, kit 
 - An earlier run on the unpruned snapshot showed the same shape, plus 64 links to restricted pages that
   only the rewrite step makes relative.
 
+Resolved in Part 2: see "Part 2: retired to static HTML" below.
+
 ## Negative controls (all named by the suite)
 
 `scripts/negative-controls.mjs` breaks a hard-linked copy of the rewritten mirror; targeted run:
@@ -286,3 +288,77 @@ Final run, against the final baseline (pruned snapshot with Northwest maps, kit 
   across every day of every trip; following them all explodes the page count. The baseline captures
   the `tripinfo_item` pages linked from route tables and stops there (`discover.noFollow` in
   `test/playwright/migration.config.mjs`). A static crawl meets the same explosion and must decide too.
+  **Part 2 decided:** the crawl fetches one hop past the baseline (`mirror-static.mjs --one-hop`); see below.
+
+## Part 2: retired to static HTML (2026-10-23)
+
+`retire/run.sh` restores `hobobiker-prep` from the pristine dump, prepares it, crawls it into
+`hobobiker-static/public`, makes the crawl self-contained, and checks it against the frozen baseline with
+`MIGRATION_TARGET=static`. From a clean restore, every tier: **11,699 pass, 0 fail, 399 s** (kit `cf31882`).
+`HTTP_ONLY=1` skips the browser tiers. The baseline did not change.
+
+Every stage prints a count. The final run:
+
+| Stage | Count |
+|---|---|
+| restore | fingerprint matches; 1,255 published nodes |
+| prep 10: remove the home page's Search pane | 1 pane removed; 0 forms left on the home page |
+| prep 20: disable Google Analytics | module 1 -> 0; 0 references on 3 sample pages |
+| crawl | 4,434 baseline URLs; one hop: 159 of 170 fetched (95 pages, 64 feeds; 11 normalization artifacts answer 404); 31 of 31 uploaded HTML/CSS files restored unconverted |
+| rewrite | 379 of 2,544 pages changed (6 uploads, exact URL replacements only): 7,662 made relative, 232 kept as the original had them, 168 unwrapped |
+
+### Survey: which of the Lullabot series' steps this site needs
+
+Karen Stevenson's checklist ([kit docs](test/playwright/kit/docs/retirement-approach.md)) reduced to two
+steps. Measured on the pristine database:
+
+| Series step | This site | Done |
+|---|---|---|
+| Turn off comments | `comment` module already disabled; no comment renders on the original (see Inventory) | nothing to do |
+| Remove search | `search` enabled; the theme's search box is off. **The only form on the whole site is a Search pane on the home page's Panel** (Page Manager page `trip_wrapped_up`, display 1, block `search-0`) | removed |
+| Remove login and user blocks | none (the only enabled blocks are `boost` admin blocks; `boost` is disabled) | nothing to do |
+| Other forms | the one poll (node 4291) is closed: it shows results, not a form | nothing to do |
+| Strip shortlink and generator tags | Drupal 6 emits none (0 of 2,454 crawled pages) | nothing to do |
+| Show all results instead of pagers | the baseline captures `?page=N`; the static nginx rule serves them at the same URLs | kept |
+| Turn on CSS/JS aggregation | off; turning it on would only change asset URLs | kept off |
+| Remove clickable table headers | Views tables on `wp` and `triplog` have sort links; they work on the original | kept (fetched one hop) |
+| Status messages | none shown to visitors | nothing to do |
+| (not in the series) Google Analytics | `analytics.js` (UA-13228261-1) on every page | disabled, owner's decision |
+
+### Every failure, and what was done
+
+Control run (no prep): 112 failures. First prepared run: 113. Then the kit fixes, then the declarations.
+
+| Failures | Cause | Kind | Resolution |
+|---|---|---|---|
+| 81 access | unpublished pages answer 404 in an archive, 403 on Drupal | deliberate | declared, `target: static`, `equals: "expected 403, got 404"` (a leak, 403 -> 200, still fails) |
+| 1 semantic + 1 visible, home page | the "Search" heading of the removed pane | deliberate | declared for path `""` only, `equals: "Search"` |
+| 20 asset: route maps, `GreatParksTripRoughWriteup.htm` | wget `--convert-links` rewrote uploaded HTML: MapPoint CSS `url(#default#VML)` became `url(<page>.htm)`; a relative `./..._files/filelist.xml` (not fetched) became an **absolute URL on hobobiker-prep**, a dependency the static tier could not see (uploads are assets, not pages) | crawl gap | kit `93deb51`: the mirror fetches uploaded `.html/.htm/.css` again, unconverted |
+| 6 asset: `mexico/gallery/Page.html`, `mexico/trippics/Page*.html` | the same conversion, then `rewrite-static` re-serialized each page (about 80 changed lines) to make its one own-domain link relative | crawl gap + deliberate | kit `93deb51`: uploads get exact URL replacements only; the one-link change (20 bytes each) declared per file with its exact size |
+| 5 static: `trippics/Page*.html` link `/mexico/` | Drupal answers `/mexico/` as `/mexico`; in the archive the directory `mexico/` (alias `mexico/photos`) caught it: 403 | serving gap | kit `93deb51`: the nginx rule serves `/a/b/` from `a/b.html` first |
+| 11 layout, `tripinfo_item` pages | the baseline's bounded discovery: **87 of 526 captured day pages link to a day the baseline never captured (180 links, 71 pages, all 200 on the original)**; the crawl did not have them, so the rewrite unwrapped the links. The semantic tier passed: it asserts only links to pages the baseline knows (`kit/lib/compare.mjs`) | baseline gap | kit `cf31882`: `mirror-static.mjs --one-hop`. Every baseline page keeps all its links; the 95 hop pages are untested, and their onward links to uncaptured days are unwrapped (the 168) |
+
+No real loss was found. The full pager (about 540 days x 18 ranges, roughly 9,700 pages) was considered and
+not crawled (owner's decision): the day data is also on the `triplog` node pages, which are captured.
+
+### Found along the way
+
+- **Browsing prep through its Coder URL leaks into the crawl.** On the first prepared run a browser loaded
+  prep's home page through `hobobiker-prep--remotework--rfay.coder.ddev.com` (11:24:38-11:25:05, nginx log)
+  between the prep step and the crawl. Drupal cached rendered output with that host, and the crawl took 18
+  references on 6 pages from it. The rewrite made them relative (its `hosts` lists that URL), so no test
+  changed, only the rewrite counts (297/171 instead of 291/153). `retire/30-crawl.sh` now clears prep's
+  caches immediately before crawling.
+- **The original's own render cache holds its Coder hostname.** `/` on `hobobiker-copy` serves three
+  `imagecache/240x180` images as `https://hobobiker-copy--remotework--rfay.coder.ddev.com/...` (seen
+  2026-10-23). Harmless: the baseline was frozen after a restore, and the crawl reads prep. Left as is
+  (this site is the reference; a restore clears it).
+- **The 6 mexico gallery pages are iso-8859-1 uploads** whose "Home" link points at the production domain
+  (its root, and its `/mexico/`). They are the only uploads the archive changes.
+- **Semantic-tier limit (kit):** a removed link to a page the baseline did not capture is invisible to every
+  tier except, sometimes, layout. Recorded in the kit's `docs/static-self-containment.md`; not changed,
+  because asserting those links would fail a Drupal 11 target for dynamic paths it serves differently.
+- **Pipeline notes.** The static project's nginx rule is a copy of the vendored kit template; `run.sh`
+  refuses to run if they differ. `restore-pristine.sh` has no guard; `retire/lib.sh` refuses a PREP that is
+  the original or not named `*prep*`. drush 5.9 on PHP 7.3 prints about 20 deprecation warnings per call;
+  the scripts show them only on failure.

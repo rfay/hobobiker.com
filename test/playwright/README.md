@@ -47,5 +47,19 @@ node kit/scripts/stored-exporters/drupal6.mjs --out tmp/stored-now.json      # h
 $T 'STORED_TARGET_EXPORT=tmp/stored-now.json MIGRATION_TARGET=drupal11 npx playwright test --grep "stored:"'
 ```
 
+## Retiring to static HTML (Part 2)
+
+One command, from the host, with `hobobiker-copy`, `hobobiker-prep` and `hobobiker-static` running:
+
+```bash
+retire/run.sh               # restore prep, prepare, crawl, rewrite, every tier (about 7 minutes)
+HTTP_ONLY=1 retire/run.sh   # skip the browser tiers
+```
+
+It never touches this site: it restores and prepares `hobobiker-prep` (`retire/prep/`, one script per
+change, each printing a count), crawls it into `hobobiker-static/public`, and checks that with
+`MIGRATION_TARGET=static`. The static target's deliberate differences are the `"target": "static"` entries
+in `expected-differences.json`. Results and decisions: "Part 2" in `../../DISCOVERIES.md`.
+
 Tags: `@smoke`, `@<type>` (`@blog`, `@triplog`, `@route`...), `@tripinfo`, `@hobophoto`, `@php`, `@flash`,
 `@script`, `@iframe`, `@empty-body`, `@has-comments`, `@draft`, `@assets`.

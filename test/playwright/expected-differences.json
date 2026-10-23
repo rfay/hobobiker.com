@@ -1,5 +1,5 @@
 {
-  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. At the Part 1 freeze the only entries are known limits of the suite itself; no migration has happened yet.",
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. The first three are known limits of the suite itself (all targets). The rest are Part 2's static archive (target static), made by retire/run.sh. One Part 2 decision has no entry because no check observes it: retire/prep/20-disable-google-analytics.sh removes the Google Analytics script from every page (owner's decision, 2026-10-23; a page may refer to fewer external URLs than the original).",
   "entries": [
     {
       "path": "*",
@@ -18,6 +18,62 @@
       "kind": ["lines", "visible", "order"],
       "regex": "^• \\d+ downloads$",
       "reason": "Suite limit, not a site change: the audio module prints a live download counter (audio.download_count) on the 10 podcast nodes and the /audio and /podcast listings, and every request to /audio/download/N/... adds one, including the suite's own asset check. The number cannot be frozen. The 'N downloads' line must still exist; its value is not compared. Pristine values are in DISCOVERIES.md."
+    },
+    {
+      "path": "*",
+      "kind": "access",
+      "equals": "expected 403, got 404",
+      "target": "static",
+      "reason": "An archive has no unpublished pages: the 81 paths of the 41 unpublished nodes answer 404 instead of Drupal's 403. Equally private. Only 403 -> 404 is allowed; a private page that leaks (403 -> 200) still fails, and a Drupal 11 target is still held to 403."
+    },
+    {
+      "path": "",
+      "kind": ["lines", "visible"],
+      "equals": "Search",
+      "target": "static",
+      "reason": "Home page only: retire/prep/10-remove-search-pane.sh removes the Search pane (heading 'Search' and the site's only form) from the home page's Panel, because search cannot work on a static site (Lullabot retirement series, part 1)."
+    },
+    {
+      "path": "/sites/default/files/mexico/gallery/Page.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/gallery/Page.html (content differs: 11430 bytes, expected 11450)",
+      "target": "static",
+      "reason": "Uploaded pre-Drupal gallery page: its one link to the production domain, http://hobobiker.com/, is made relative (/) by rewrite-static.mjs so the archive does not depend on that domain. Exact text replacement; every other byte is the original's (20 bytes shorter)."
+    },
+    {
+      "path": "/sites/default/files/mexico/trippics/Page.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/trippics/Page.html (content differs: 13305 bytes, expected 13325)",
+      "target": "static",
+      "reason": "Uploaded pre-Drupal gallery page: its one link to the production domain, http://hobobiker.com/mexico/, is made relative (/mexico/) by rewrite-static.mjs so the archive does not depend on that domain. Exact text replacement; every other byte is the original's (20 bytes shorter)."
+    },
+    {
+      "path": "/sites/default/files/mexico/trippics/Page0002.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/trippics/Page0002.html (content differs: 12658 bytes, expected 12678)",
+      "target": "static",
+      "reason": "As mexico/trippics/Page.html: one own-domain link made relative, nothing else changed."
+    },
+    {
+      "path": "/sites/default/files/mexico/trippics/Page0003.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/trippics/Page0003.html (content differs: 11659 bytes, expected 11679)",
+      "target": "static",
+      "reason": "As mexico/trippics/Page.html: one own-domain link made relative, nothing else changed."
+    },
+    {
+      "path": "/sites/default/files/mexico/trippics/Page0004.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/trippics/Page0004.html (content differs: 12789 bytes, expected 12809)",
+      "target": "static",
+      "reason": "As mexico/trippics/Page.html: one own-domain link made relative, nothing else changed."
+    },
+    {
+      "path": "/sites/default/files/mexico/trippics/Page0005.html",
+      "kind": "assets",
+      "equals": "/sites/default/files/mexico/trippics/Page0005.html (content differs: 9459 bytes, expected 9479)",
+      "target": "static",
+      "reason": "As mexico/trippics/Page.html: one own-domain link made relative, nothing else changed."
     }
   ]
 }
