@@ -4,7 +4,13 @@ This is the Drupal 6 PHP source code for the old Drupal 6 hobobiker.com site, a 
 
 This is also prepared for an experimental AI demo of migration to other targets, including a static html site and Drupal 11 site. 
 
-**During the live presentation only:** the working copy is viewable at <https://hobobiker-copy--remotework--rfay.coder.ddev.com>. It will go away afterwards.
+**During the live presentations only** (they go away afterwards), the three sites are public:
+
+- The original (Drupal 6 working copy): <https://hobobiker-copy--remotework--rfay.coder.ddev.com>
+- The prepared copy that Part 2 crawls: <https://hobobiker-prep--remotework--rfay.coder.ddev.com>
+- The static HTML archive from Part 2: <https://hobobiker-static--remotework--rfay.coder.ddev.com>
+
+They run PHP with the October 2026 PHP2Shell fix ([DDEV's notes](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)).
 
 ## Artifacts for Migration
 
@@ -32,5 +38,7 @@ git clone https://github.com/rfay/site-migration-kit
 
 ## Slides
 
-Slides for the live series: <https://rfay.github.io/hobobiker-migration-slides/>
-(source: <https://github.com/rfay/hobobiker-migration-slides>)
+Slides for the live series (source: <https://github.com/rfay/hobobiker-migration-slides>):
+
+- Part 1, Road Test: <https://rfay.github.io/hobobiker-migration-slides/>
+- Part 2, The Last Ride: <https://rfay.github.io/hobobiker-migration-slides/part2.html>

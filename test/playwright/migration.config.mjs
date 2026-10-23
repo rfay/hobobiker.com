@@ -62,7 +62,13 @@ export default {
   ownDomains: ['hobobiker.com'],
 
   static: {
-    forbiddenHosts: ['hobobiker-copy.ddev.site', 'hobobiker-copy--remotework--rfay.coder.ddev.com'],
+    // The original and the prepared copy that Part 2 crawls, under every name each answers to.
+    forbiddenHosts: [
+      'hobobiker-copy.ddev.site',
+      'hobobiker-copy--remotework--rfay.coder.ddev.com',
+      'hobobiker-prep.ddev.site',
+      'hobobiker-prep--remotework--rfay.coder.ddev.com',
+    ],
   },
 
   // Uploaded files on disk (see the manifest for what is left out and why).
