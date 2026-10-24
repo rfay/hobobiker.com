@@ -5,6 +5,9 @@ build and rehearse the migration-testing method in
 [rfay/site-migration-kit](https://github.com/rfay/site-migration-kit) (local checkout:
 `~/workspace/site-migration-kit`). Nothing here is production.
 
+**Work in progress (2026-10-24): read `HANDOFF.md` first.** Personal data and credentials were found in
+published copies; the cleanup and the Leaflet map repair are planned there, step by step.
+
 ## What this environment is
 
 - Local URL: https://hobobiker-copy.ddev.site. In this Coder workspace the same site is also served
