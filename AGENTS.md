@@ -5,8 +5,9 @@ build and rehearse the migration-testing method in
 [rfay/site-migration-kit](https://github.com/rfay/site-migration-kit) (local checkout:
 `~/workspace/site-migration-kit`). Nothing here is production.
 
-**Work in progress (2026-10-24): read `HANDOFF.md` first.** Personal data and credentials were found in
-published copies; the cleanup and the Leaflet map repair are planned there, step by step.
+**Work in progress (2026-10-25): read `HANDOFF.md` first.** Personal data and credentials were found in
+published copies. Production is cleaned up and its maps now use Leaflet; the steps left before the
+static archive is produced again are listed there.
 
 ## What this environment is
 
