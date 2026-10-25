@@ -4,6 +4,8 @@
 # against the frozen baseline. Re-runnable: every step starts from the previous one's clean output.
 #   retire/run.sh               everything, every tier
 #   HTTP_ONLY=1 retire/run.sh   skip the browser tiers (visible, layout)
+#   NEEDLES=<file> retire/run.sh   the secrets gate also fails on any line of <file> (personal data; keep
+#                                  the file outside every repository)
 set -euo pipefail
 cd "$(dirname "$0")"
 source ./lib.sh
@@ -21,6 +23,8 @@ start=$SECONDS
 ./20-prepare.sh
 ./30-crawl.sh
 ./35-rewrite.sh
+./36-files-symlink.sh  # /files as on the original; files only JavaScript asks for; every map file
+./37-scan-secrets.sh   # NEEDLES=<file outside the repo> adds the personal-data strings
 # Every tier by default (about 10 minutes); HTTP_ONLY=1 skips the browser tiers (about 1 minute).
 if [ "${HTTP_ONLY:-0}" = 1 ]; then ./40-verify.sh; else GREP='semantic:|access:|asset:|static:|baseline:|visible:|layout:' ./40-verify.sh; fi
 echo "pipeline: $((SECONDS - start)) s"

@@ -99,13 +99,8 @@ search() {
   [ "$rc" -le 1 ] || { echo "GATE ERROR: grep $1 exited $rc" >&2; exit 3; }
 }
 
-secret_patterns=(
-  'aws_access_key=(AKIA|ASIA)[A-Z0-9]{16}'
-  'google_api_key=AIza[0-9A-Za-z_-]{35}'
-  'google_maps_v1_key=ABQIAAAA[0-9A-Za-z_-]{20}'
-  'private_key=-----BEGIN [A-Z ]*PRIVATE KEY'
-  "url_with_password=[a-z][a-z0-9+.-]*://[^/@:[:space:]'\"\\\\]+:[^/@[:space:]'\"\\\\]+@"
-)
+# secret_patterns and removed_personal_files, shared with retire/37-scan-secrets.sh.
+source migration/secret-patterns.sh
 
 echo "Gate: database"
 for p in "${secret_patterns[@]}"; do
@@ -134,10 +129,8 @@ for t in $truncate_tables; do
 done
 
 echo "Gate: files ($files_dir)"
-# Personal data removed from production on 2026-10-24 (names only; the contents were never recorded).
-for f in WSLNHandVT.xml NHWarmShowers.xml NEFamily.xml warmshowers.html warmshowers.xsl \
-         newenglandcontacts.html NEFamily.xsl; do
-  [ ! -e "$files_dir/maps/$f" ] || fail "removed personal-data file is present: maps/$f"
+for f in "${removed_personal_files[@]}"; do
+  [ ! -e "$files_dir/$f" ] || fail "removed personal-data file is present: $f"
 done
 dumps=$(find "$files_dir" -type f \( -iname '*.sql' -o -iname '*.sql.*' -o -iname '*.mysql' -o -iname '*.mysql.*' \) | sed "s|^$files_dir/||" | tr '\n' ' ')
 [ -z "$dumps" ] || fail "database dump(s) in files: $dumps"

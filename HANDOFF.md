@@ -60,7 +60,6 @@ things by length, hash or count (see "How the checks were done").
       destination (key ID differs from the exposed one, compared by hash), two backups written to the
       bucket with it. CloudTrail not checked (owner's decision). Whatever production does, the snapshot
       never carries the key (B1).
-- [ ] Delete the old, now inactive, access key in IAM (`aws iam delete-access-key`) if not done yet.
 - [x] **Google Analytics disabled and uninstalled on production** (2026-10-25). Also done in this macOS
       checkout: 0 analytics references on 5 sample pages. The module was the only source; no theme, block or
       node has a hardcoded snippet.
@@ -72,16 +71,27 @@ things by length, hash or count (see "How the checks were done").
       pristine snapshot (B1). The pull replaces the whole files directory (rsync into `.ddev/.downloads`,
       then an import), so `files/maps/` disappears from `hobobiker-copy` with it. **Before that pull, an
       agent builds the needles file from the 3 XML files still there** (see B1), or the needles are lost.
-- [ ] Later: re-create `rfay/hobobiker-static` from the new archive (fresh history), publish hobobiker-assets
-      **v1.2** from the sanitized snapshot, point `README.md` at v1.2.
+- [x] Refresh the Coder workspace (2026-10-25): pulls done, snapshot rebuilt, both projects restored.
+- [x] Kit pushed (`59ceae0`, `21f2226`).
+- [x] Committed on Coder (2026-10-25). Still to do: push it, then `git pull` in `hobobiker-prep`.
+- [x] **The needles file deleted** (owner's decision, 2026-10-25). `retire/37-scan-secrets.sh` still runs
+      every other check; the personal-data strings are no longer checked. The data is gone from production,
+      the snapshot and the archive, and the gate's file-name check still refuses the 7 removed files.
+- [x] Old IAM access key deleted (2026-10-25).
+- [x] `rfay/hobobiker-static` re-created (public, empty as of 2026-10-25).
+- [ ] Fill `rfay/hobobiker-static` from `hobobiker-static/public` after a passing `retire/run.sh` (fresh
+      `git init`; the old history is gone). `public/files` is a symlink to `sites/default/files`; keep it one.
+- [ ] Publish hobobiker-assets **v1.2** from `hobobiker-copy/.tarballs/` (the 4 sanitized files, nothing
+      else), and point `README.md` at v1.2.
 
 ### B. Agent, in this order (stop and report after each step, as in Part 2)
 
-**B1 and B2 done on Coder (2026-10-25):** sanitized snapshot from the pull, both projects restored from it,
-baseline re-frozen (owner's decision), self-check 9,232 pass / 0 fail. Deleting all of `files/maps/` had
-also removed `NewEnglandRoute/` (linked from node 220); recovered byte for byte, restored on production by
-the owner, and included. Details: `DISCOVERIES.md`, "Re-frozen baseline". The needles file is in the
-2026-10-25 session's scratchpad, outside every repo, for B6; delete it after. Next: B3.
+**B1 to B8 done on Coder (2026-10-25).** Sanitized snapshot, baseline re-frozen (self-check 9,232 / 0),
+`NewEnglandRoute/` recovered and restored on production; kit `59ceae0` (static tier reads inline scripts) and
+`21f2226` (`browser.blockHosts`, OSM tiles); `retire/36-files-symlink.sh` and `retire/37-scan-secrets.sh`;
+old local copies deleted; final `NEEDLES=… retire/run.sh`: **11,679 pass, 0 fail**. Details:
+`DISCOVERIES.md`, "Re-frozen baseline" and "Part 2 re-run after the cleanup". What is left is in A (owner).
+The steps below are kept as the record of what was planned.
 
 1. **A sanitized pristine snapshot from the fresh pull: `migration/sanitize-snapshot.sh`** (written and
    tested on macOS, 2026-10-25). It copies the live database into a separate `sanitize` database (the

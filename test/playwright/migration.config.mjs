@@ -71,6 +71,10 @@ export default {
     ],
   },
 
+  // The Leaflet maps (464 pages since 2026-10-25) load OpenStreetMap tiles. The browser tiers must not:
+  // OSM's tile policy forbids automated bulk use, and after a day of runs it answered every tile with 429.
+  browser: { blockHosts: ['tile.openstreetmap.org'] },
+
   // Uploaded files on disk (see the manifest for what is left out and why).
   async listAssets({ root }) {
     return manifestOf(root).assets.map((a) => a.url);

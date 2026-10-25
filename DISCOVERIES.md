@@ -392,3 +392,51 @@ maps rebuilt with Leaflet and OpenStreetMap (commit `72fcbc2`). The old baseline
   in the live download counter (already declared). No visible line changed.
 - **Self-check** against the restored copy, every tier (sanity, semantic, access, asset, visible, layout):
   **9,232 pass, 0 fail.**
+
+## Part 2 re-run after the cleanup (2026-10-25)
+
+`NEEDLES=<file> retire/run.sh` from a clean restore of the sanitized snapshot, every tier, kit `21f2226`:
+**11,679 pass, 0 fail, 402 s.** The old archive, its git history and every local copy of the old data
+(14,664 files: the 2026-10-23 control crawl, `.ddev/db_snapshots`, prep's `.ddev/.downloads` with the
+personal-data files, `.tarballs/rehearsal*`) were deleted first, with the owner's confirmation.
+
+| Stage | Count |
+|---|---|
+| restore | fingerprint matches; 1,255 published nodes |
+| prep 10: Search pane | 1 removed; 0 forms left |
+| prep 20: Analytics guard | module 0 -> 0, 0 references (uninstalled on production; the step now fails if it comes back) |
+| crawl | 4,419 baseline URLs; one hop 159 of 170; 27 of 27 uploaded HTML/CSS restored unconverted; 2,540 pages, 2,591 other files |
+| rewrite | 368 of 2,540 pages changed (6 uploads, exact URL replacements): 7,656 made relative, 232 kept as the original had them, 149 unwrapped |
+| 36 files-symlink | `files -> sites/default/files`; 225 identical and 16 converted copies dropped; 2 library images fetched; map files 257 present, 1 missing on the original too |
+| 37 secrets | 4,892 files: no secret shapes, no removed files, no credential values, none of the 58 needles |
+
+Declared differences used: 81 access (403 -> 404), the home page's "Search", the 6 mexico uploads (one own-domain
+link each), and the suite's own limits. No new entry was needed.
+
+### What the re-run found and changed
+
+- **The static tier now reads inline scripts** (kit `59ceae0`). The 434 `hobobiker-prep` URLs that had hidden in
+  `Drupal.settings` JSON in the 2026-10-23 archive are what it would have caught: against that old archive it
+  failed 435 pages (405 prep URLs, 35 own-domain URLs in the malformed route-map settings), and passed the
+  other 2,020. In the new archive there is nothing to find: the Leaflet maps carry a site-relative `data-kml`.
+- **A secrets gate in the pipeline** (`retire/37-scan-secrets.sh`, patterns shared with
+  `migration/sanitize-snapshot.sh` in `migration/secret-patterns.sh`). Against the old archive it reported 10
+  failures (the dead Google key in 464 pages, the Maps v1 key in 4, the 7 removed files, 3 files with needles).
+- **`/files` must be a symlink in the archive too** (`retire/36-files-symlink.sh`). On the original,
+  `docroot/files` points at `sites/default/files`, so every upload answers under both paths. wget made
+  `public/files` a real directory with only the 241 files it fetched there, so `/files/gps/SouthAmerica.kmz`
+  (read by a map's JavaScript, never linked) answered 404. The 16 legacy pages under `/files` that wget had
+  converted are now served as the original serves them, byte for byte.
+- **Files only JavaScript asks for.** Leaflet builds the paths of `marker-icon-2x.png` and `marker-shadow.png` at
+  run time; wget never saw them. Fetched from prep by the same step; 0 broken markers at 2x.
+- **A map broken on the original stays broken:** `[multisource:/files/regional_kml/CentralAmerica.kmz]` names a
+  file that exists only as `files/gps/CentralAmerica.kmz` (404 on the original).
+- **The maps draw the same** in the archive and the original (Playwright, 2x): a day page 1 route, node 4010 3
+  routes, node 4003 19 routes and 4 markers. `south_america_route` and `colombia_route` embed Google My Maps
+  iframes, not Leaflet.
+- **The test runs were hammering OpenStreetMap.** After a day of browser-tier runs (464 map pages per run),
+  `tile.openstreetmap.org` answered every tile with 429, for the original and the archive alike; its
+  [tile policy](https://operations.osmfoundation.org/policies/tiles/) forbids automated bulk use. Kit `21f2226`
+  adds `config.browser.blockHosts`; this site blocks `tile.openstreetmap.org` in the browser tiers and the
+  layout exporter. Tiles sit inside a fixed-size box, so the measurements do not change (browser tiers 4,905
+  pass with the block). The tests therefore no longer see tiles at all; that the tiles load is checked by eye.

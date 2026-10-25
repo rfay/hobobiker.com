@@ -1,5 +1,5 @@
 {
-  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. The first three are known limits of the suite itself (all targets). The rest are Part 2's static archive (target static), made by retire/run.sh. One Part 2 decision has no entry because no check observes it: retire/prep/20-disable-google-analytics.sh removes the Google Analytics script from every page (owner's decision, 2026-10-23; a page may refer to fewer external URLs than the original).",
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. The first three are known limits of the suite itself (all targets). The rest are Part 2's static archive (target static), made by retire/run.sh. The baseline was re-frozen on 2026-10-25 from production after the cleanup (DISCOVERIES.md): Google Analytics, the Google Maps key and the personal-data files are gone from the original itself, so they need no entry; retire/prep/20-disable-google-analytics.sh only guards that Analytics stays off.",
   "entries": [
     {
       "path": "*",
