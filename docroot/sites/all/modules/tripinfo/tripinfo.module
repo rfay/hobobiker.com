@@ -71,20 +71,37 @@ function tripinfo_list($startdate, $enddate) {
 }
 
 
-function tripinfo_gmap($kmlurl) {
-  $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
-  drupal_set_html_head("<script src='$google_map_location'  type='text/javascript'></script>");
-
+/**
+ * Add Leaflet (with OpenStreetMap tiles) and the KML/KMZ loaders to the page.
+ * The libraries are served from this module's lib/ directory, not a CDN.
+ */
+function tripinfo_map_add_js() {
+  $lib = drupal_get_path('module', 'tripinfo') . '/lib';
+  drupal_add_css("$lib/leaflet-1.9.4/leaflet.css", 'module', 'all', FALSE);
+  drupal_add_js("$lib/leaflet-1.9.4/leaflet.js", 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_js("$lib/togeojson-5.8.1/togeojson.umd.js", 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_js("$lib/jszip-3.10.1/jszip.min.js", 'module', 'header', FALSE, TRUE, FALSE);
   drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_filtermap.js");
+}
 
+/**
+ * Markup for one map. tripinfo_filtermap.js draws the KML or KMZ file named
+ * in data-kml, so several maps can share a page.
+ *
+ * @param $kmlpath
+ *   Site-relative path of a KML or KMZ file, such as
+ *   sites/default/files/gps/20070326.kml.
+ */
+function tripinfo_map_div($kmlpath) {
+  return "<div style='height:500px;width:100%'><div class='mapholder' id='mapholder' style='width:100%;height:100%'>
+	 <div class='filtermap tripinfo-map' id='filtermap' data-kml='" . check_plain(url($kmlpath)) . "' style='width:100%;height:100%;border:2px solid black'></div>";
+}
 
-  $output .= "<div style='height:500px;width:100%'><div class='mapholder' id='mapholder' style='width:100%;height:100%'>
-	 <div class='filtermap' id='filtermap' style='width:100%;height:100%;border:2px solid black'></div>";
+function tripinfo_map($kmlfname) {
+  tripinfo_map_add_js();
 
-  $settings['tripinfo'] = array('kmlurl' => $kmlurl);
-  drupal_add_js($settings, 'setting');
-
-  $output .= l("Explore in Google Earth", $kmlurl) . "</div></div>";
+  $output = tripinfo_map_div($kmlfname);
+  $output .= l("Explore in Google Earth", $kmlfname) . "</div></div>";
 
   return $output;
 }
@@ -124,13 +141,6 @@ function tripinfo_item($date, $startdate, $enddate) {
   $gpxfname = "sites/default/files/gps/$fulldate.gpx";
   $kmlfname = "sites/default/files/gps/$fulldate.kml";
   $profile_fname = "sites/default/files/gps/$fulldate.png";
-  $kmlurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "/$kmlfname";
-
-  // For local debugging, use hobobiker.com directly
-  if ($_SERVER[HTTP_HOST] == "hobobiker.ddev.site") {
-      $kmlurl = "https://hobobiker.com/$kmlfname";
-  }
-
 
     $whentime = mktime(12, 0, 0, $row->month, $row->day, $row->year);
   $when = strftime("%B %d, %Y", $whentime);
@@ -140,7 +150,7 @@ function tripinfo_item($date, $startdate, $enddate) {
   $page .= "<h3>$when: $row->start to $row->destination</h3>";
 
   if (file_exists($kmlfname)) {
-    $page .= tripinfo_gmap($kmlurl);
+    $page .= tripinfo_map($kmlfname);
   }
 
   $page .= "<div class=\"tripdesc\" style='margin-top: 60px; border-top: 2px solid black;'><i>$row->body</i></div>";
@@ -245,25 +255,20 @@ function tripinfo_filter_gmap($format, $text) {
 
 function tripinfo_gen_gmap($text) {
 
+  // Only the first source is drawn; the others (flickr_georss feeds) are gone.
   $overlays = $text[1];
-  $kmlfile = preg_replace('/,.*$/', '', $overlays);
+  $kmlfile = trim(preg_replace('/,.*$/', '', $overlays));
+  // Make our own absolute URLs site-relative and drop the cache-busting query,
+  // e.g. http://www.hobobiker.com/files/gps/Peru.kmz?1 becomes files/gps/Peru.kmz
+  if (preg_match('@^https?://(www\.)?hobobiker\.com/\s*([^?]*)@', $kmlfile, $matches)) {
+    $kmlfile = $matches[2];
+  }
 
-  $google_map_location = "https://maps.googleapis.com/maps/api/js?key=" . variable_get('googlemap_api_key', '0');
+  // The filter result is evaluated by the PHP filter that follows this one in
+  // the input format, so the JavaScript is added on every view.
+  $output .= "<?php tripinfo_map_add_js(); ?>";
 
-  $kmlurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" + $kmlfile;
-  // For local debugging, use
-   $kmlurl = "https://hobobiker.com/$kmlfile";
-  $output .= <<<ENDOUTPUT
-<?php
-  drupal_set_html_head("<script src='$google_map_location'  type='text/javascript'></script>");
-  drupal_add_js(drupal_get_path('module', 'tripinfo') . "/tripinfo_filtermap.js");
-  \$settings['tripinfo'] = array('kmlurl' => '$kmlurl');
-  drupal_add_js(\$settings, 'setting');
-?>
-ENDOUTPUT;
-
-  $output .= "<div style='height:500px;width:100%'><div class='mapholder' id='mapholder' style='width:100%;height:100%'>
-	 <div class='filtermap' id='filtermap' style='width:100%;height:100%;border:2px solid black'></div>";
+  $output .= tripinfo_map_div($kmlfile);
 
   $output .= l("Explore in Google Earth", $kmlfile) . "</div></div><br/><br/>";
 
