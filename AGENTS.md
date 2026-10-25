@@ -7,7 +7,7 @@ build and rehearse the migration-testing method in
 
 **Work in progress (2026-10-25): read `HANDOFF.md` first.** Personal data and credentials were found in
 published copies. Production is cleaned up and its maps now use Leaflet; the steps left before the
-static archive is produced again are listed there.
+static archive is produced again are listed there. Part 3 (Drupal 11): `PART3-PLAN.md`.
 
 ## What this environment is
 
@@ -66,7 +66,7 @@ Four DDEV projects sit side by side in `~/workspace/hobo/` (setup and check list
 | `hobobiker-copy` (this checkout) | the original; the reference for every test | never modified by migration work |
 | `hobobiker-prep` | a second checkout of this repo, restored and then prepared by scripts | the only place for destructive prep |
 | `hobobiker-static` | the crawled HTML, docroot `docs/`, served with the kit's `static-urls.nginx.conf`; a git repo (rfay/hobobiker-static) that GitHub Pages publishes from `main:/docs` as static.hobobiker.com | `retire/run.sh` replaces `docs/`; the owner commits and pushes |
-| `hobobiker-d11` | the Drupal 11 rebuild (Part 3) | not built yet |
+| `hobobiker-d11` | the Drupal 11 rebuild (Part 3) | Drupal 11 installed, empty; see `PART3-PLAN.md` |
 
 - `migration/restore-pristine.sh` restores **the project whose checkout it is run from**; there is no
   guard. For Part 2 run `~/workspace/hobo/hobobiker-prep/migration/restore-pristine.sh`, never this

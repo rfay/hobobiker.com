@@ -4,13 +4,17 @@ This is the Drupal 6 PHP source code for the old Drupal 6 hobobiker.com site, a 
 
 This is also prepared for an experimental AI demo of migration to other targets, including a static html site and Drupal 11 site. 
 
-**During the live presentations only** (they go away afterwards), the three sites are public:
+The static HTML archive from Part 2 is published permanently at <https://static.hobobiker.com> (GitHub
+Pages, from <https://github.com/rfay/hobobiker-static>).
+
+**During the live presentations only** (they go away afterwards), the working sites are public:
 
 - The original (Drupal 6 working copy): <https://hobobiker-copy--remotework--rfay.coder.ddev.com>
 - The prepared copy that Part 2 crawls: <https://hobobiker-prep--remotework--rfay.coder.ddev.com>
-- The static HTML archive from Part 2: <https://hobobiker-static--remotework--rfay.coder.ddev.com>
+- The static HTML archive, as Part 2 built it: <https://hobobiker-static--remotework--rfay.coder.ddev.com>
+- The Drupal 11 rebuild from Part 3: <https://hobobiker-d11--remotework--rfay.coder.ddev.com>
 
-They run PHP with the October 2026 PHP2Shell fix ([DDEV's notes](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)).
+The Drupal 6 sites run PHP with the October 2026 PHP2Shell fix ([DDEV's notes](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)).
 
 ## Artifacts for Migration
 
@@ -24,7 +28,9 @@ git clone https://github.com/rfay/hobobiker.com
 
 ## User-generated files (sites/default/files) and sanitized database
 
-The files and a sanitized database are at <https://github.com/rfay/hobobiker-assets/releases/tag/v1.1>
+The files and a sanitized database are at <https://github.com/rfay/hobobiker-assets/releases/tag/v1.2>
+(`db.sql.gz` or `db.sql.zst`, and `files.tar.gz`). Earlier releases were withdrawn: they held credentials and
+personal data that are removed from v1.2.
 
 You can import these with standard `ddev import-db` and `ddev import-files` commands.
 
@@ -42,3 +48,4 @@ Slides for the live series (source: <https://github.com/rfay/hobobiker-migration
 
 - Part 1, Road Test: <https://rfay.github.io/hobobiker-migration-slides/>
 - Part 2, The Last Ride: <https://rfay.github.io/hobobiker-migration-slides/part2.html>
+- Part 3, The Long Haul: <https://rfay.github.io/hobobiker-migration-slides/part3.html>
