@@ -68,9 +68,9 @@ things by length, hash or count (see "How the checks were done").
 - [ ] **Decide on the baseline** (open question 1) before B2.
 - [ ] **Refresh the Coder workspace** once A's production changes are done: `git pull` in `hobobiker-copy`
       and `hobobiker-prep`; `ddev pull` production into `hobobiker-copy`. That pull is the source of the new
-      pristine snapshot (B1). **The pull's files step is `rsync -avz` without `--delete`**: it never removes
-      files that production removed, so `files/maps/` (deleted on production) stays in `hobobiker-copy` after a pull.
-      Delete them there (or pull into an emptied files directory); B1's gate fails if they are present.
+      pristine snapshot (B1). The pull replaces the whole files directory (rsync into `.ddev/.downloads`,
+      then an import), so `files/maps/` disappears from `hobobiker-copy` with it. **Before that pull, an
+      agent builds the needles file from the 3 XML files still there** (see B1), or the needles are lost.
 - [ ] Later: re-create `rfay/hobobiker-static` from the new archive (fresh history), publish hobobiker-assets
       **v1.2** from the sanitized snapshot, point `README.md` at v1.2.
 
@@ -93,11 +93,10 @@ things by length, hash or count (see "How the checks were done").
 
    Tested: negative controls (planted keys and a needle) all fail it; on a raw dump its patterns find the
    AWS key and the Maps key, on the sanitized one nothing; the write step produces the 4 tarballs with
-   no macOS `._` entries. Production deleted all of `files/maps/` on 2026-10-25, but `ddev pull` never
-   deletes local files, so every copy still has it (the gate fails on `maps/index.html` and
-   `orig-index.html`, the dead Maps v1 key) until `files/maps/` is deleted by hand.
+   no macOS `._` entries. Production deleted all of `files/maps/` on 2026-10-25; after a pull of that
+   (macOS, 2026-10-25) the gate passes.
 
-   On Coder: before deleting `files/maps/` in `hobobiker-copy`, build a needles file from the 3 XML files (phone numbers'
+   On Coder: before the pull into `hobobiker-copy`, build a needles file from the 3 XML files (phone numbers'
    last 7 digits, emails) **outside every repo**, and pass `--needles`. Run it in `hobobiker-copy`, copy
    the 4 tarballs to `hobobiker-prep/.tarballs/`, restore both (`restore-pristine.sh`, from each checkout),
    then `migration/fingerprint.sh > migration/pristine.fingerprint`. The prep step should truncate
