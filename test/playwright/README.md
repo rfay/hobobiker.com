@@ -57,7 +57,7 @@ HTTP_ONLY=1 retire/run.sh   # skip the browser tiers
 ```
 
 It never touches this site: it restores and prepares `hobobiker-prep` (`retire/prep/`, one script per
-change, each printing a count), crawls it into `hobobiker-static/public`, and checks that with
+change, each printing a count), crawls it into `hobobiker-static/docs`, and checks that with
 `MIGRATION_TARGET=static`. The static target's deliberate differences are the `"target": "static"` entries
 in `expected-differences.json`. Results and decisions: "Part 2" in `../../DISCOVERIES.md`.
 

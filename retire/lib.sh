@@ -3,20 +3,20 @@
 # Three sibling DDEV projects (see test/playwright/kit/docs/retirement-approach.md and AGENTS.md):
 #   ORIGINAL  hobobiker-copy     the reference; this pipeline never modifies it
 #   PREP      hobobiker-prep     restored from the pristine dump, then prepared by scripts
-#   STATIC    hobobiker-static   the crawled HTML of PREP, served from public/
+#   STATIC    hobobiker-static   the crawled HTML of PREP, in docs/ (the DDEV docroot; GitHub Pages publishes it)
 set -euo pipefail
 
 HOBO="${HOBO:-$HOME/workspace/hobo}"
 ORIGINAL="${ORIGINAL:-$HOBO/hobobiker-copy}"
 PREP="${PREP:-$HOBO/hobobiker-prep}"
 STATIC="${STATIC:-$HOBO/hobobiker-static}"
-STATIC_PUBLIC="${STATIC_PUBLIC:-$STATIC/public}"          # the static project's docroot (a subdirectory)
+STATIC_DOCROOT="${STATIC_DOCROOT:-$STATIC/docs}"            # the static project's docroot: docs/, which GitHub Pages publishes
 PREP_URL="${PREP_URL:-https://hobobiker-prep.ddev.site}"
 STATIC_URL="${STATIC_URL:-https://hobobiker-static.ddev.site}"
 TESTS="$ORIGINAL/test/playwright"
 CA="$(mkcert -CAROOT 2>/dev/null)/rootCA.pem"
 
-# Safety: every destructive step acts on $PREP (and $STATIC_PUBLIC) only. Refuse to run if PREP is the
+# Safety: every destructive step acts on $PREP (and $STATIC_DOCROOT) only. Refuse to run if PREP is the
 # original, or anything not named like a prep copy. restore-pristine.sh has no guard of its own.
 guard_prep() {
   [ "$(cd "$PREP" && pwd)" != "$(cd "$ORIGINAL" && pwd)" ] || { echo "Refusing: PREP is the original project." >&2; exit 2; }

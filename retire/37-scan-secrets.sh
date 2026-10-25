@@ -9,7 +9,7 @@
 #   NEEDLES=/path/outside/the/repo/needles.txt retire/37-scan-secrets.sh
 source "$(dirname "$0")/lib.sh"
 source "$ORIGINAL/migration/secret-patterns.sh"
-dir="$STATIC_PUBLIC"
+dir="$STATIC_DOCROOT"
 failures=0
 fail() { echo "secrets: FAIL: $*"; failures=$((failures + 1)); }
 # grep exits 1 for "no match" and 2 for an error; an error must stop the run, never pass.

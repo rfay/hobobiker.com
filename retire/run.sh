@@ -25,6 +25,7 @@ start=$SECONDS
 ./35-rewrite.sh
 ./36-files-symlink.sh  # /files as on the original; files only JavaScript asks for; every map file
 ./37-scan-secrets.sh   # NEEDLES=<file outside the repo> adds the personal-data strings
+./38-publishing-files.sh  # CNAME and .nojekyll for GitHub Pages
 # Every tier by default (about 10 minutes); HTTP_ONLY=1 skips the browser tiers (about 1 minute).
 if [ "${HTTP_ONLY:-0}" = 1 ]; then ./40-verify.sh; else GREP='semantic:|access:|asset:|static:|baseline:|visible:|layout:' ./40-verify.sh; fi
 echo "pipeline: $((SECONDS - start)) s"

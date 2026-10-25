@@ -65,7 +65,7 @@ Four DDEV projects sit side by side in `~/workspace/hobo/` (setup and check list
 |---|---|---|
 | `hobobiker-copy` (this checkout) | the original; the reference for every test | never modified by migration work |
 | `hobobiker-prep` | a second checkout of this repo, restored and then prepared by scripts | the only place for destructive prep |
-| `hobobiker-static` | the crawled HTML, docroot `public/`, served with the kit's `static-urls.nginx.conf` | not a git repo; the crawl replaces `public/` |
+| `hobobiker-static` | the crawled HTML, docroot `docs/`, served with the kit's `static-urls.nginx.conf`; a git repo (rfay/hobobiker-static) that GitHub Pages publishes from `main:/docs` as static.hobobiker.com | `retire/run.sh` replaces `docs/`; the owner commits and pushes |
 | `hobobiker-d11` | the Drupal 11 rebuild (Part 3) | not built yet |
 
 - `migration/restore-pristine.sh` restores **the project whose checkout it is run from**; there is no
@@ -79,10 +79,10 @@ Four DDEV projects sit side by side in `~/workspace/hobo/` (setup and check list
 
 ```bash
 # Crawl the prep copy into the static project (from the host, in test/playwright)
-node kit/scripts/mirror-static.mjs --root . --out ~/workspace/hobo/hobobiker-static/public \
+node kit/scripts/mirror-static.mjs --root . --out ~/workspace/hobo/hobobiker-static/docs \
   --from https://hobobiker-prep.ddev.site --ca "$(mkcert -CAROOT)/rootCA.pem"
 # Make the crawl self-contained
-node kit/scripts/rewrite-static.mjs --dir ~/workspace/hobo/hobobiker-static/public --root . \
+node kit/scripts/rewrite-static.mjs --dir ~/workspace/hobo/hobobiker-static/docs --root . \
   --rules rewrite-rules.json
 # Run checks against any target (from the host, in this checkout)
 ddev exec -d /var/www/html/test/playwright \

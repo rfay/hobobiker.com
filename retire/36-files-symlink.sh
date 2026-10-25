@@ -4,9 +4,9 @@
 # 1. /files is the uploads directory, as on the original. There, docroot/files is a symlink to
 #    sites/default/files, so every upload answers under both paths. wget saved only what it fetched under
 #    /files into a real directory, so a /files URL nobody linked (a map's data-kml, read by JavaScript)
-#    answered 404 (2026-10-25: /files/gps/SouthAmerica.kmz). Each file under public/files is checked
+#    answered 404 (2026-10-25: /files/gps/SouthAmerica.kmz). Each file under docs/files is checked
 #    against its sites/default/files counterpart (the byte-exact upload; the /files copy may be wget's
-#    converted one) and dropped, or moved there if it has none; then public/files becomes the same symlink.
+#    converted one) and dropped, or moved there if it has none; then docs/files becomes the same symlink.
 # 2. Files only JavaScript asks for: Leaflet builds the paths of its marker images (marker-icon-2x.png,
 #    marker-shadow.png) at run time, so wget never sees them. Fetch every file in the libraries' images/
 #    directories that the crawl does not have, from PREP.
@@ -15,7 +15,7 @@
 # Prints counts. Exits 1 if a map file the original serves is missing.
 source "$(dirname "$0")/lib.sh"
 guard_prep
-cd "$STATIC_PUBLIC"
+cd "$STATIC_DOCROOT"
 
 # 1. files/ -> sites/default/files
 same=0 differ=0 moved=0

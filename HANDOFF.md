@@ -78,9 +78,15 @@ things by length, hash or count (see "How the checks were done").
       every other check; the personal-data strings are no longer checked. The data is gone from production,
       the snapshot and the archive, and the gate's file-name check still refuses the 7 removed files.
 - [x] Old IAM access key deleted (2026-10-25).
-- [x] `rfay/hobobiker-static` re-created (public, empty as of 2026-10-25).
-- [ ] Fill `rfay/hobobiker-static` from `hobobiker-static/public` after a passing `retire/run.sh` (fresh
-      `git init`; the old history is gone). `public/files` is a symlink to `sites/default/files`; keep it one.
+- [x] `rfay/hobobiker-static` re-created and filled from the passing run; GitHub Pages publishes `main:/docs`.
+- [ ] **Custom domain `static.hobobiker.com`.** Saving it in the Pages settings gave a 500: `docs` was a
+      symlink to `public`, and GitHub commits `docs/CNAME` when the domain is saved. `docs/` is now the real
+      directory and the static project's DDEV docroot (2026-10-25); `retire/38-publishing-files.sh` writes
+      `CNAME` and `.nojekyll` after every crawl. Commit the rename in `hobobiker-static` and push; then the
+      Pages build picks up `docs/CNAME`. `docs/files` stays a symlink to `sites/default/files`.
+- [ ] GitHub Pages does not do everything the nginx rule does: `?page=N` (80 links), the `/files` symlink
+      (110 pages), `/mexico/`, and the 1 GB site limit (the archive is 1.3 GB). Measure on the live domain
+      with the HTTP tiers (not the asset tier), then decide: fix in the kit, accept, or host elsewhere.
 - [ ] Publish hobobiker-assets **v1.2** from `hobobiker-copy/.tarballs/` (the 4 sanitized files, nothing
       else), and point `README.md` at v1.2.
 
