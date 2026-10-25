@@ -65,7 +65,8 @@ things by length, hash or count (see "How the checks were done").
       checkout: 0 analytics references on 5 sample pages. The module was the only source; no theme, block or
       node has a hardcoded snippet.
 - [ ] Check older backups and files tarballs kept elsewhere for the 3 XML files.
-- [ ] **Decide on the baseline** (open question 1) before B2.
+- [x] **Decide on the baseline:** re-freeze (2026-10-25).
+- [x] **`files/maps/NewEnglandRoute/` restored on production** (2026-10-25; collateral of deleting `files/maps/`).
 - [ ] **Refresh the Coder workspace** once A's production changes are done: `git pull` in `hobobiker-copy`
       and `hobobiker-prep`; `ddev pull` production into `hobobiker-copy`. That pull is the source of the new
       pristine snapshot (B1). The pull replaces the whole files directory (rsync into `.ddev/.downloads`,
@@ -75,6 +76,12 @@ things by length, hash or count (see "How the checks were done").
       **v1.2** from the sanitized snapshot, point `README.md` at v1.2.
 
 ### B. Agent, in this order (stop and report after each step, as in Part 2)
+
+**B1 and B2 done on Coder (2026-10-25):** sanitized snapshot from the pull, both projects restored from it,
+baseline re-frozen (owner's decision), self-check 9,232 pass / 0 fail. Deleting all of `files/maps/` had
+also removed `NewEnglandRoute/` (linked from node 220); recovered byte for byte, restored on production by
+the owner, and included. Details: `DISCOVERIES.md`, "Re-frozen baseline". The needles file is in the
+2026-10-25 session's scratchpad, outside every repo, for B6; delete it after. Next: B3.
 
 1. **A sanitized pristine snapshot from the fresh pull: `migration/sanitize-snapshot.sh`** (written and
    tested on macOS, 2026-10-25). It copies the live database into a separate `sanitize` database (the
@@ -140,7 +147,7 @@ things by length, hash or count (see "How the checks were done").
 
 ## Open questions for the owner
 
-1. Re-freeze the baseline from the refreshed copy, or keep it and declare the differences (B2)?
+1. ~~Re-freeze the baseline, or keep it and declare the differences (B2)?~~ Re-frozen (2026-10-25).
 
 ## How the checks were done (2026-10-24 and 25)
 

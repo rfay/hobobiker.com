@@ -900,9 +900,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://hobobiker.com/files/regional_kml/EntireTrip.kmz?1299",
-      "key": "files/regional_kml/EntireTrip.kmz?1299=",
+      "key": "files/regional_kml/EntireTrip.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -932,8 +930,6 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://hobobiker.com/files/regional_kml/MexicoAndGuatemala.kmz",
       "key": "files/regional_kml/MexicoAndGuatemala.kmz",
       "text": "Explore in Google Earth"
     },
@@ -1378,7 +1374,6 @@
       "http://www.kiva.org/app.php?page=businesses&queryString=patzun&status=All&gender=All&sectors%5B%5D=All&regions%5B%5D=Central+America&sortBy=Popularity",
       "http://www.slide.com/pivot?cy=ms&ad=0&id=936748722493519725&map=1",
       "http://www.slide.com/pivot?cy=ms&ad=0&id=936748722493519725&map=2",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y",
       "https://www.youtube.com/v/Lmtqm7xRIoA&rel=1",
       "https://www.youtube.com/v/vSPDk2rhL9o"
     ],

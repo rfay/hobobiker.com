@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T22:37:41.388Z",
+  "generatedAt": "2026-10-25T15:45:46.509Z",
   "viewport": {
     "width": 1280,
     "height": 900
@@ -31228,9 +31228,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -37048,9 +37048,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -37081,9 +37081,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -39373,9 +39373,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -39406,9 +39406,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -39439,9 +39439,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -39472,9 +39472,9 @@
       },
       "link": {
         "color": {
-          "r": 39,
-          "g": 99,
-          "b": 165,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         }
       },
@@ -41854,116 +41854,6 @@
       "link": null
     },
     "files/Northwest/maps/WashingtonAndBritishColumbia.htm": {
-      "viewport": 1280,
-      "overflow": false,
-      "content": {
-        "left": 0.00625,
-        "width": 0.9875,
-        "found": 3
-      },
-      "sidebar": null,
-      "header": null,
-      "text": {
-        "color": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "size": 10.6667,
-        "font": "sans"
-      },
-      "link": null
-    },
-    "files/maps/NewEnglandRoute/Dover to Gorham.htm": {
-      "viewport": 1280,
-      "overflow": false,
-      "content": {
-        "left": 0.00625,
-        "width": 0.9875,
-        "found": 3
-      },
-      "sidebar": null,
-      "header": null,
-      "text": {
-        "color": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "size": 10.6667,
-        "font": "sans"
-      },
-      "link": null
-    },
-    "files/maps/NewEnglandRoute/Georges Mills to Manchester.htm": {
-      "viewport": 1280,
-      "overflow": false,
-      "content": {
-        "left": 0.00625,
-        "width": 0.9875,
-        "found": 3
-      },
-      "sidebar": null,
-      "header": null,
-      "text": {
-        "color": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "size": 10.6667,
-        "font": "sans"
-      },
-      "link": null
-    },
-    "files/maps/NewEnglandRoute/Gorham to West Barnet.htm": {
-      "viewport": 1280,
-      "overflow": false,
-      "content": {
-        "left": 0.00625,
-        "width": 0.9875,
-        "found": 3
-      },
-      "sidebar": null,
-      "header": null,
-      "text": {
-        "color": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "size": 10.6667,
-        "font": "sans"
-      },
-      "link": null
-    },
-    "files/maps/NewEnglandRoute/ManchesterToDover.htm": {
-      "viewport": 1280,
-      "overflow": false,
-      "content": {
-        "left": 0.00625,
-        "width": 0.9875,
-        "found": 3
-      },
-      "sidebar": null,
-      "header": null,
-      "text": {
-        "color": {
-          "r": 0,
-          "g": 0,
-          "b": 0,
-          "a": 1
-        },
-        "size": 10.6667,
-        "font": "sans"
-      },
-      "link": null
-    },
-    "files/maps/NewEnglandRoute/West Barnet to Canaan, NH.htm": {
       "viewport": 1280,
       "overflow": false,
       "content": {

@@ -314,9 +314,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://hobobiker.com/files/regional_kml/EntireTrip.kmz?1299",
-      "key": "files/regional_kml/EntireTrip.kmz?1299=",
+      "key": "files/regional_kml/EntireTrip.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -760,8 +758,7 @@
       "http://www.friendshipbridge.org",
       "http://www.hopkinsmedicine.org/heic/ID/pertussis",
       "http://www.kiva.org",
-      "http://www.kiva.org/app.php?page=businesses&action=about&id=16693",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "http://www.kiva.org/app.php?page=businesses&action=about&id=16693"
     ],
     "internalNonOk": [
       {

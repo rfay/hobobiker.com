@@ -322,9 +322,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://www.hobobiker.com/files/gps/ArgentinaChile.kmz?12345",
-      "key": "files/gps/ArgentinaChile.kmz?12345=",
+      "key": "files/gps/ArgentinaChile.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -868,8 +866,7 @@
       "http://dreirad.fenris.ca",
       "http://flickr.com/photos/hobobiker/tags/andeanlakescrossing/show",
       "https://farm4.static.flickr.com/3146/3081327811_f49bfdcf0a_b.jpg",
-      "https://farm4.static.flickr.com/3220/3095561950_848913e31d_b_d.jpg",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "https://farm4.static.flickr.com/3220/3095561950_848913e31d_b_d.jpg"
     ],
     "internalNonOk": []
   }

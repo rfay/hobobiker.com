@@ -469,9 +469,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://www.hobobiker.com/files/gps/Peru.kmz?1",
-      "key": "files/gps/Peru.kmz?1=",
+      "key": "files/gps/Peru.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -1075,8 +1073,7 @@
       "http://www.crazyguyonabike.com/doc/pianomanIII",
       "http://www.guiacalles.com/cartografiagps.shtml",
       "http://www.mvermeulen.com/yukon.html",
-      "http://www.perut.org",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "http://www.perut.org"
     ],
     "internalNonOk": []
   }

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T22:11:15.673Z",
+ "generatedAt": "2026-10-25T16:00:50.642Z",
  "source": "database: node JOIN node_revisions ON node.vid = node_revisions.vid; url_alias src node/N; files: docroot/sites/default/files on disk",
  "counts": {
   "nodes": 1296,
@@ -7,8 +7,8 @@
   "unpublished": 41,
   "publishedPaths": 1601,
   "smoke": 14,
-  "assets": 1808,
-  "assetBytes": 1129681792
+  "assets": 1793,
+  "assetBytes": 1129591081
  },
  "nodes": [
   {
@@ -24210,21 +24210,6 @@
    "sha256": "70fd3a6e62e73987a3d7fec96def7e1c02427b52cfc37e3a81e0abcd0961645e"
   },
   {
-   "url": "/sites/default/files/maps/NEFamily.xml",
-   "size": 3916,
-   "sha256": "0ce2c921ed642aacbb2f5fb64c7ca5ac183bb015b31825573da3a215d194d7b4"
-  },
-  {
-   "url": "/sites/default/files/maps/NEFamily.xsl",
-   "size": 490,
-   "sha256": "95fcf4886afae1d06230dba77d5c815ecbe8471c6c0a165e799adc0c9e48c768"
-  },
-  {
-   "url": "/sites/default/files/maps/NHWarmShowers.xml",
-   "size": 21718,
-   "sha256": "da9cb2b54613a608b4a04d01d6b914c77fbc817e31d9de52db98d6787c71a05e"
-  },
-  {
    "url": "/sites/default/files/maps/NewEnglandRoute/CanaanNHToManchester.htm",
    "size": 5555,
    "sha256": "e5d179353813e2f0276c73988db9575e2cb7ba6007928b73c32cc991d0abca01"
@@ -24368,66 +24353,6 @@
    "url": "/sites/default/files/maps/NewEnglandRoute/West%20Barnet%20to%20Canaan%2C%20NH_files/image_overview.gif",
    "size": 14653,
    "sha256": "5b40244e4e2067ebf68401969ec26d2cc6ab16bfa9e43c6093aaf4fadb1805e2"
-  },
-  {
-   "url": "/sites/default/files/maps/Thumbs.db",
-   "size": 5632,
-   "sha256": "4a71708a22d007a988e3b5ea5cc926d2494128fc9a66ef09a297ca31ba06a839"
-  },
-  {
-   "url": "/sites/default/files/maps/WSLNHandVT.xml",
-   "size": 45423,
-   "sha256": "3b389b98be65a55b2ab7c07882e2cb3ec460c48a31d5cb2cb94949ed3f257c63"
-  },
-  {
-   "url": "/sites/default/files/maps/familyicon.png",
-   "size": 1176,
-   "sha256": "7aace5fff941da97a8d6f2688bd66cc7951906e7340e64336c5aa700e9ce7cc2"
-  },
-  {
-   "url": "/sites/default/files/maps/index.html",
-   "size": 2143,
-   "sha256": "3bb3241b41a22e271610dea593441e268eac07583ccf9bda083fec309badc03f"
-  },
-  {
-   "url": "/sites/default/files/maps/marker-with-data.xml",
-   "size": 1144,
-   "sha256": "54a8276639091e2577337f965f470ceaf4f0d841223726a088f6d010c94bf638"
-  },
-  {
-   "url": "/sites/default/files/maps/marker.xml",
-   "size": 190,
-   "sha256": "e93209452c0060ebeb00468d735d6c193b3cc3744c326307255efd48535c7518"
-  },
-  {
-   "url": "/sites/default/files/maps/newenglandcontacts.html",
-   "size": 3567,
-   "sha256": "a797e3ce150469fb518954e45ecebf2e2a5e650070cdc7c5814fc5555c0a4268"
-  },
-  {
-   "url": "/sites/default/files/maps/orig-index.html",
-   "size": 1549,
-   "sha256": "ba1a7f3b73fdfd76f29404489f2a95b2d816040d3ed1a21417854d3e001e79bb"
-  },
-  {
-   "url": "/sites/default/files/maps/parks.xsl",
-   "size": 434,
-   "sha256": "eeadee951238083372d9f5ae54d4bae467cd681f542511c210af950493fb646e"
-  },
-  {
-   "url": "/sites/default/files/maps/shadow50.png",
-   "size": 711,
-   "sha256": "891844aabb062dedc2c5d556b1530a1b9c2d95c4fe10d01300dd106269b11144"
-  },
-  {
-   "url": "/sites/default/files/maps/warmshowers.html",
-   "size": 2080,
-   "sha256": "591398ab34edf0ed20dc32dca2c8f0c57acd48fe673b0fade978ada03095ded9"
-  },
-  {
-   "url": "/sites/default/files/maps/warmshowers.xsl",
-   "size": 538,
-   "sha256": "4e98926a7e69be148a3070878de375bf1e1429b49c31997822b540fef6704feb"
   },
   {
    "url": "/sites/default/files/mexico/.htaccess.1043466662",

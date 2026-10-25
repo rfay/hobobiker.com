@@ -99,9 +99,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://www.hobobiker.com/files/gps/ArgentinaChile.kmz?12345",
-      "key": "files/gps/ArgentinaChile.kmz?12345=",
+      "key": "files/gps/ArgentinaChile.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -492,8 +490,7 @@
   },
   "references": {
     "external": [
-      "http://dreirad.fenris.ca",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "http://dreirad.fenris.ca"
     ],
     "internalNonOk": []
   }

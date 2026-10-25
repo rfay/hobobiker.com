@@ -362,3 +362,33 @@ not crawled (owner's decision): the day data is also on the `triplog` node pages
   refuses to run if they differ. `restore-pristine.sh` has no guard; `retire/lib.sh` refuses a PREP that is
   the original or not named `*prep*`. drush 5.9 on PHP 7.3 prints about 20 deprecation warnings per call;
   the scripts show them only on failure.
+
+## Re-frozen baseline (2026-10-25)
+
+The Part 1 baseline was re-frozen, on purpose, after the 2026-10-24 exposure (personal data and credentials in
+published copies; `HANDOFF.md`). Production had changed deliberately: `files/maps/` (personal-data XML files,
+their viewers, pre-Drupal Maps v1 demos) deleted, credentials deleted, Google Analytics uninstalled, and the
+maps rebuilt with Leaflet and OpenStreetMap (commit `72fcbc2`). The old baseline is in git history (`ccfe6c4`).
+
+- **Source.** A `ddev pull` of production into this copy, then `migration/sanitize-snapshot.sh --needles`
+  (the needles: the phone numbers and emails of the removed files, kept outside every repo). It deleted 1
+  credential variable and the Backup and Migrate destination (its URL held the AWS key), sanitized 4 users, 447
+  comments and 7 poll votes, and truncated 17 tables (83,381 rows: `watchdog`, `accesslog`, `sessions`,
+  `cache*`, ...). The gate found no keys, removed files or needles. Both copy and prep restored from it;
+  `migration/pristine.fingerprint` records it.
+- **Collateral loss found and reverted.** Deleting all of `files/maps/` also removed `files/maps/NewEnglandRoute/`
+  (29 files: the 5 pre-Drupal New England route maps and their images). Node 220 (`our_actual_route`,
+  `new_england/route`, and the `new_england_blog` listing) then showed a broken `Overview.gif` and 5 links
+  answering 404; the first export of the new baseline recorded that as normal. The 29 files were recovered
+  byte for byte (each matched its SHA-256 in the old `assets.json`; none holds personal data) from the last
+  crawl, restored on production by the owner, and the snapshot and baseline rebuilt with them. The snapshot's
+  database is the one from the pull, not the copy's after the first export: the exports had advanced the
+  live download counters.
+- **Against the old baseline:** the same 2,455 pages; 1,255 published nodes; 81 private paths, all 403; 23
+  broken or restricted links, unchanged. The asset tier lost exactly the 15 deliberately deleted files under
+  `files/maps/` (1,796 → 1,781). References to `maps.googleapis.com` went from 435 page records to 0; no
+  `AIza…` or `ABQIAAAA…` key remains anywhere in the baseline. 24 pages link to `.kmz` files without their old
+  cache-busting query (`Peru.kmz?1=` → `Peru.kmz`, from the map repair; 5 new assets); 38 pages differ only
+  in the live download counter (already declared). No visible line changed.
+- **Self-check** against the restored copy, every tier (sanity, semantic, access, asset, visible, layout):
+  **9,232 pass, 0 fail.**

@@ -20,9 +20,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://hobobiker.com/files/regional_kml/EntireTrip.kmz?1299",
-      "key": "files/regional_kml/EntireTrip.kmz?1299=",
+      "key": "files/regional_kml/EntireTrip.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -340,9 +338,7 @@
     }
   },
   "references": {
-    "external": [
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
-    ],
+    "external": [],
     "internalNonOk": []
   }
 }

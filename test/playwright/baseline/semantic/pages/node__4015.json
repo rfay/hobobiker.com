@@ -844,7 +844,6 @@
   },
   "references": {
     "external": [
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y",
       "https://www.google.com/maps/d/u/0/embed?mid=zgrTbi5vnCXo.kRNQ5V45qtRw"
     ],
     "internalNonOk": []

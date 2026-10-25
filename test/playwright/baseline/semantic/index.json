@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-16T22:35:24.045Z",
+  "generatedAt": "2026-10-25T16:03:55.081Z",
   "baseUrl": "https://hobobiker-copy.ddev.site",
   "counts": {
     "pages": 2455,
     "skipped": 0,
-    "assets": 1973,
+    "assets": 1963,
     "missingAssets": 12,
     "byType": {
       "story": 221,
@@ -24,8 +24,8 @@
     "links": 24453,
     "menuItems": 164360,
     "discoveredRoutes": 854,
-    "discoveredFiles": 177,
-    "ownDomainLinks": 38,
+    "discoveredFiles": 182,
+    "ownDomainLinks": 27,
     "ownDomainImages": 0,
     "brokenOrRestrictedLinks": 23
   },
@@ -24038,9 +24038,6 @@
     "/sites/default/files/logo.jpg",
     "/sites/default/files/logo_cottonwood.jpg",
     "/sites/default/files/mapplets/Sonora-Sinaloa_mapplet.xml",
-    "/sites/default/files/maps/NEFamily.xml",
-    "/sites/default/files/maps/NEFamily.xsl",
-    "/sites/default/files/maps/NHWarmShowers.xml",
     "/sites/default/files/maps/NewEnglandRoute/CanaanNHToManchester.htm",
     "/sites/default/files/maps/NewEnglandRoute/CanaanNHToManchester_files/image_map.gif",
     "/sites/default/files/maps/NewEnglandRoute/ChelseaVTToCanaanNH.htm",
@@ -24070,18 +24067,6 @@
     "/sites/default/files/maps/NewEnglandRoute/West%20Barnet%20to%20Canaan%2C%20NH.htm",
     "/sites/default/files/maps/NewEnglandRoute/West%20Barnet%20to%20Canaan%2C%20NH_files/image_map.gif",
     "/sites/default/files/maps/NewEnglandRoute/West%20Barnet%20to%20Canaan%2C%20NH_files/image_overview.gif",
-    "/sites/default/files/maps/Thumbs.db",
-    "/sites/default/files/maps/WSLNHandVT.xml",
-    "/sites/default/files/maps/familyicon.png",
-    "/sites/default/files/maps/index.html",
-    "/sites/default/files/maps/marker-with-data.xml",
-    "/sites/default/files/maps/marker.xml",
-    "/sites/default/files/maps/newenglandcontacts.html",
-    "/sites/default/files/maps/orig-index.html",
-    "/sites/default/files/maps/parks.xsl",
-    "/sites/default/files/maps/shadow50.png",
-    "/sites/default/files/maps/warmshowers.html",
-    "/sites/default/files/maps/warmshowers.xsl",
     "/sites/default/files/mexico/Thumbs.db",
     "/sites/default/files/mexico/db_cache/query_057d7b8344e1ed6d95b583b319c34a7f",
     "/sites/default/files/mexico/db_cache/query_05923de5b84f364a79e5ce1081f0aeef",
@@ -24405,8 +24390,13 @@
     "/files/Northwest/maps/Hobobiker%20Northwest%20Trip%20Strip%20Maps.pdf",
     "/files/The%20Women%20of%20Friendship%20Bridge%20Guatemala.pdf",
     "/files/YukonFirstPart-smaller.pdf",
+    "/files/gps/ArgentinaChile.kmz",
+    "/files/gps/Bolivia.kmz",
+    "/files/gps/Peru.kmz",
+    "/files/regional_kml/ArizonaToElFuerteSinaloa.kmz",
     "/files/regional_kml/CholulaToOaxaca.kmz",
     "/files/regional_kml/CopperCanyon.kmz",
+    "/files/regional_kml/EntireTrip.kmz",
     "/files/regional_kml/GuanajuatoToCholula.kmz",
     "/files/regional_kml/OaxacaToGuatemalaBorder.kmz",
     "/files/regional_kml/ParralToGuanajuato.kmz",
@@ -24918,6 +24908,9 @@
     "files/Northwest/maps/WashingtonAndBritishColumbia",
     "files/The Women of Friendship Bridge Guatemala.pdf",
     "files/YukonFirstPart-smaller.pdf",
+    "files/gps/ArgentinaChile.kmz",
+    "files/gps/Bolivia.kmz",
+    "files/gps/Peru.kmz",
     "files/maps/NewEnglandRoute/Dover to Gorham",
     "files/maps/NewEnglandRoute/Georges Mills to Manchester",
     "files/maps/NewEnglandRoute/Gorham to West Barnet",
@@ -25013,8 +25006,10 @@
     "files/mexico/trippics/Page0003",
     "files/mexico/trippics/Page0004",
     "files/mexico/trippics/Page0005",
+    "files/regional_kml/ArizonaToElFuerteSinaloa.kmz",
     "files/regional_kml/CholulaToOaxaca.kmz",
     "files/regional_kml/CopperCanyon.kmz",
+    "files/regional_kml/EntireTrip.kmz",
     "files/regional_kml/GuanajuatoToCholula.kmz",
     "files/regional_kml/MexicoAndGuatemala.kmz",
     "files/regional_kml/OaxacaToGuatemalaBorder.kmz",
@@ -28017,9 +28012,6 @@
     "sites/default/files/logo.jpg",
     "sites/default/files/logo_cottonwood.jpg",
     "sites/default/files/mapplets/Sonora-Sinaloa_mapplet.xml",
-    "sites/default/files/maps/NEFamily.xml",
-    "sites/default/files/maps/NEFamily.xsl",
-    "sites/default/files/maps/NHWarmShowers.xml",
     "sites/default/files/maps/NewEnglandRoute/CanaanNHToManchester.htm",
     "sites/default/files/maps/NewEnglandRoute/CanaanNHToManchester_files/image_map.gif",
     "sites/default/files/maps/NewEnglandRoute/ChelseaVTToCanaanNH.htm",
@@ -28049,18 +28041,6 @@
     "sites/default/files/maps/NewEnglandRoute/West Barnet to Canaan, NH.htm",
     "sites/default/files/maps/NewEnglandRoute/West Barnet to Canaan, NH_files/image_map.gif",
     "sites/default/files/maps/NewEnglandRoute/West Barnet to Canaan, NH_files/image_overview.gif",
-    "sites/default/files/maps/Thumbs.db",
-    "sites/default/files/maps/WSLNHandVT.xml",
-    "sites/default/files/maps/familyicon.png",
-    "sites/default/files/maps/index.html",
-    "sites/default/files/maps/marker-with-data.xml",
-    "sites/default/files/maps/marker.xml",
-    "sites/default/files/maps/newenglandcontacts.html",
-    "sites/default/files/maps/orig-index.html",
-    "sites/default/files/maps/parks.xsl",
-    "sites/default/files/maps/shadow50.png",
-    "sites/default/files/maps/warmshowers.html",
-    "sites/default/files/maps/warmshowers.xsl",
     "sites/default/files/mexico/Thumbs.db",
     "sites/default/files/mexico/db_cache/query_057d7b8344e1ed6d95b583b319c34a7f",
     "sites/default/files/mexico/db_cache/query_05923de5b84f364a79e5ce1081f0aeef",
@@ -29334,34 +29314,6 @@
         ]
       },
       {
-        "url": "http://hobobiker.com/files/regional_kml/ArizonaToElFuerteSinaloa.kmz?123",
-        "pages": [
-          "node/3988"
-        ]
-      },
-      {
-        "url": "http://hobobiker.com/files/regional_kml/CopperCanyon.kmz",
-        "pages": [
-          "node/4004"
-        ]
-      },
-      {
-        "url": "http://hobobiker.com/files/regional_kml/EntireTrip.kmz?1299",
-        "pages": [
-          "blog/rfay?page=11",
-          "blog?page=17",
-          "blog_in_order?page=9",
-          "inuvik_to_ushuaia?page=15",
-          "node/4003"
-        ]
-      },
-      {
-        "url": "http://hobobiker.com/files/regional_kml/MexicoAndGuatemala.kmz",
-        "pages": [
-          "blog_in_order?page=9"
-        ]
-      },
-      {
         "url": "http://hobobiker.com/files/The%20Women%20of%20Friendship%20Bridge%20Guatemala.pdf",
         "pages": [
           "blog/rfay?page=11",
@@ -29502,62 +29454,10 @@
         ]
       },
       {
-        "url": "http://www.hobobiker.com/files/gps/ArgentinaChile.kmz?12345",
-        "pages": [
-          "argentina_route",
-          "inuvik_to_ushuaia?page=26",
-          "node/4312",
-          "taxonomy/term/72"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/gps/Bolivia.kmz?1234",
-        "pages": [
-          "bolivia_route",
-          "node/4311"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/gps/Peru.kmz?1",
-        "pages": [
-          "inuvik_to_ushuaia?page=23",
-          "node/4223",
-          "peru_route",
-          "taxonomy/term/53",
-          "taxonomy/term/54",
-          "taxonomy/term/60",
-          "taxonomy/term/68"
-        ]
-      },
-      {
         "url": "http://www.hobobiker.com/files/Las%20Mujeres%20de%20Puente%20de%20Amistad%2020080614.pdf",
         "pages": [
           "blog_in_order?page=9",
           "node/3994"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/regional_kml/CholulaToOaxaca.kmz",
-        "pages": [
-          "node/4012"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/regional_kml/GuanajuatoToCholula.kmz",
-        "pages": [
-          "node/4011"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/regional_kml/OaxacaToGuatemalaBorder.kmz",
-        "pages": [
-          "node/4013"
-        ]
-      },
-      {
-        "url": "http://www.hobobiker.com/files/regional_kml/ParralToGuanajuato.kmz",
-        "pages": [
-          "node/4010"
         ]
       },
       {

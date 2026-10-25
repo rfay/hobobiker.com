@@ -252,9 +252,7 @@
     },
     {
       "internal": true,
-      "own": true,
-      "url": "http://www.hobobiker.com/files/gps/Peru.kmz?1",
-      "key": "files/gps/Peru.kmz?1=",
+      "key": "files/gps/Peru.kmz",
       "text": "Explore in Google Earth"
     },
     {
@@ -848,8 +846,7 @@
       "http://panamerica.ch/map/peru/img_routmap/Elevation_Profile-Peru-Trujillo_Huancayo.pdf",
       "http://www.amazon.com/Rough-Guide-Peru-Country-Region/dp/1843533367/ref=pd_sim_b_3/183-5391113-8294220",
       "http://www.guiacalles.com/cartografiagps.shtml",
-      "http://www.perut.org",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "http://www.perut.org"
     ],
     "internalNonOk": []
   }

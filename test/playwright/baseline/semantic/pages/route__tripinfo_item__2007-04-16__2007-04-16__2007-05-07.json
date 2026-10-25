@@ -360,9 +360,7 @@
     }
   },
   "references": {
-    "external": [
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
-    ],
+    "external": [],
     "internalNonOk": []
   }
 }

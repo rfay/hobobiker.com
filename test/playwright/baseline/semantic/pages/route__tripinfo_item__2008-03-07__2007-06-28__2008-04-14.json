@@ -366,8 +366,7 @@
   },
   "references": {
     "external": [
-      "http://www.2roadrunners-on-tour.at",
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwT3hoRXWU1UkYIBK5Mm_tdpdRb30YC0Y"
+      "http://www.2roadrunners-on-tour.at"
     ],
     "internalNonOk": []
   }
