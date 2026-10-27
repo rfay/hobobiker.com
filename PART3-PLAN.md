@@ -41,6 +41,11 @@ Success at the end of the session:
   (2 deliberate changes declared). Kit `7db0c15` (Drupal 11 stored exporter) committed and vendored; not pushed.
   Not done yet: listings (Views), menus and breadcrumbs, the theme, tripinfo, PHP nodes, wiki/gmap/email filters,
   audio metadata and poll results, the integrity check (D15).
+- **P6, 2026-10-27 evening:** menus, the `hobo` subtheme, Views (16 D6 views, blog, taxonomy, 3 tables), tripinfo
+  (routes, `[tripinfo:]` and `[multisource:]` filters, Leaflet), the home page (D6 Panels panes in core's
+  three-column layout), captions and read-more as on the original. Suite: **3,934 pass, 48 fail** (semantic 2,408 of
+  2,456; access and stored all pass). Left: the audio module (46 failures), `/tripinfo` (a PHP fatal error on the
+  original) and `blog_in_order/1` (a view argument) to declare. Caching is off in the development copy.
 - Data: the sanitized database and files are hobobiker-assets v1.2 (also `.tarballs/` here).
 
 ## What has to come over
@@ -77,7 +82,7 @@ rehearsal; the rest can be settled during the rehearsal or live.
 | D3 | Where the pipeline lives | **Decided, done (2026-10-27):** rfay/hobobiker-d11, `scripts/` plus `config/sync`; the tests stay here | Scripts in this repo | before |
 | D4 | How much is pre-built vs live | **Decided (2026-10-27):** rehearse the whole pipeline this week; live, rebuild with Claude from the plan, tagged checkpoints to fall back on | Run the finished pipeline live | before |
 | D5 | Content types | Keep the live types (`triplog`, `blog`, `story`, `page`, `wp`, `book`); fold the dead-module types (`acidfree`, `image`, `audio`, `forum`, `poll`) into one or two, since they render as a title and little else. **Decided (owner):** the 1 node with no type is migrated to another type (declared) | Keep all 12 | rehearsal |
-| D6 | The 15 PHP nodes | Store the HTML they rendered (from the prep copy) as the body; drop the PHP | Port the PHP | rehearsal |
+| D6 | PHP (no PHP filter in Drupal 11; owner, 2026-10-27: replace every use) | 15 nodes are exactly `<?php print tripinfo_table('START','END'); ?>` (formats 2 and 9; 3 more nodes in format 9 have no PHP). **Recommended:** the import rewrites the call to `[tripinfo:START,END]`, rendered by a text filter in the `hobobiker` module from the tripinfo data; the stored-body line declared with one anchored regex. The 3 stat blocks (custom blocks 11, 14, 18; PHP that sums miles): the site is frozen, so a plain custom block with the HTML they render now | Store each node's rendered HTML as its body | rehearsal |
 | D7 | Tripinfo: 15 route tables and the 545 `tripinfo*` pages | Route tables: render once, store as HTML (the audit's advice; the site is frozen). The 545 day pages: decide after measuring; cheapest is generating them as static nodes or files from the D6 data | A small D11 module that reproduces the routes: allowed (owner, 2026-10-27), in the same custom module `hobobiker` as the photo filter | rehearsal |
 | D8 | `[hobophoto:]` macros (119 nodes) | **Decided (owner):** a Drupal 11 text filter plugin (`@Filter`, Twig template) in a custom module `hobobiker` in `web/modules/custom/`, ported from `hobobiker_filter` (105 lines). Bodies keep the macros as stored on D6 (the stored tier matches them line for line); the filter renders them | Expand to markup at import | rehearsal |
 | D9 | Maps (Leaflet, `data-kml`) | Keep the markup; attach the same `lib/` files as a library | Drop the maps (a real loss: the owner wants them) | rehearsal |

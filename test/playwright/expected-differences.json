@@ -88,6 +88,34 @@
       "equals": "comment 27 on node 1198 by Matthew & Nancy Stovall is missing",
       "target": "drupal11",
       "reason": "Node 1198 was deleted on the original; its one comment is an orphan that Drupal 11 cannot attach to anything. Dropped (owner's decision, 2026-10-27, PART3-PLAN.md D15)."
+    },
+    {
+      "path": "*",
+      "kind": "stored-body",
+      "equals": "<?php",
+      "target": "drupal11",
+      "reason": "Drupal 11 runs no PHP (owner's decision, 2026-10-27, PART3-PLAN.md D6). The import rewrites each PHP block that only prints tripinfo_table('START','END') (15 nodes, 17 calls) to [tripinfo:START,END], which the hobobiker module renders as the same table; any other PHP stops the import, so these lines cannot hide anything else."
+    },
+    {
+      "path": "*",
+      "kind": "stored-body",
+      "equals": "?>",
+      "target": "drupal11",
+      "reason": "Drupal 11 runs no PHP (owner's decision, 2026-10-27, PART3-PLAN.md D6). The import rewrites each PHP block that only prints tripinfo_table('START','END') (15 nodes, 17 calls) to [tripinfo:START,END], which the hobobiker module renders as the same table; any other PHP stops the import, so these lines cannot hide anything else."
+    },
+    {
+      "path": "*",
+      "kind": "stored-body",
+      "regex": "^print tripinfo_table\\('\\d{4}-\\d\\d-\\d\\d','\\d{4}-\\d\\d-\\d\\d'\\);$",
+      "target": "drupal11",
+      "reason": "Drupal 11 runs no PHP (owner's decision, 2026-10-27, PART3-PLAN.md D6). The import rewrites each PHP block that only prints tripinfo_table('START','END') (15 nodes, 17 calls) to [tripinfo:START,END], which the hobobiker module renders as the same table; any other PHP stops the import, so these lines cannot hide anything else."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "equals": "sites/default/files/imagecache/600x800/saguaro national park sun through saguaro_0.jpg",
+      "target": "drupal11",
+      "reason": "The one displayed blog image field (node 1313, field_blog_image_portrait) links its 600x800 version, which Drupal 11 serves as an image style derivative (sites/default/files/styles/600x800/public/...) instead of the Drupal 6 imagecache path. Same image, same size; the thumbnail and caption are unchanged."
     }
   ]
 }

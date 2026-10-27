@@ -440,3 +440,27 @@ link each), and the suite's own limits. No new entry was needed.
   adds `config.browser.blockHosts`; this site blocks `tile.openstreetmap.org` in the browser tiers and the
   layout exporter. Tiles sit inside a fixed-size box, so the measurements do not change (browser tiers 4,905
   pass with the block). The tests therefore no longer see tiles at all; that the tiles load is checked by eye.
+
+## Part 3: Drupal 11 rebuild (2026-10-27)
+
+The pipeline is in rfay/hobobiker-d11 (`scripts/run-all.sh`); decisions in `PART3-PLAN.md`.
+
+- **Found in the data while importing:** 876 aliases of deleted nodes, 1 comment on deleted node 1198, node 2307
+  with no type and an empty title (Drupal 11 can store neither), 24 `files` records whose file is gone (the image
+  module's `images/` derivatives), 335 aliases to paths Drupal 11 does not have (`node/N/feed`, taxonomy feeds,
+  `gsitemap`, pathauto leftovers). The sanitized user emails (`user+N@localhost`) are not valid addresses for
+  Drupal 11.
+- **Sideways photos are the original's.** Some photos show rotated 90°, for example
+  `2851505864_Maria_Galarza_Valenzuela.jpg` on node 4269: the camera recorded the picture upright with EXIF
+  Orientation 1, so the pixels themselves lie sideways, on the original as on the rebuild (full-size file and the
+  240x180 derivative byte for byte identical on both). Of the 384 photos `[hobophoto:]` uses, 8 carry a real
+  rotation tag (6 with 8, 2 with 6) and 64 none; the one rotated photo with a derivative
+  (`3160167087_Randy_Hiking_near_Puerto_Frias.jpg`) also has identical derivatives on both. No check covers
+  orientation: the tiers compare images by file name, the asset tier compares only the files the baseline lists.
+- **Drupal 11 looks up aliases only for paths whose first segment is a route.** `/blog/1 → /blog/rfay` and
+  `/podcast → /podcasts` were imported correctly but unused until Views created `/blog/%` and `/podcast`.
+- **Drupal's database layer reads `[0-9]` in a query string as a quoted identifier**: a literal REGEXP matched
+  nothing and every alias was imported. Pass a pattern as a placeholder.
+- **The 11.4 standard install has no content types**, no body field and no comment type.
+- **The original's listing sizes are not Views defaults:** `/blog` and `/blog/UID` show 8 per page
+  (`default_nodes_main`); taxonomy pages sort sticky first, then oldest first.
