@@ -116,6 +116,20 @@
       "equals": "sites/default/files/imagecache/600x800/saguaro national park sun through saguaro_0.jpg",
       "target": "drupal11",
       "reason": "The one displayed blog image field (node 1313, field_blog_image_portrait) links its 600x800 version, which Drupal 11 serves as an image style derivative (sites/default/files/styles/600x800/public/...) instead of the Drupal 6 imagecache path. Same image, same size; the thumbnail and caption are unchanged."
+    },
+    {
+      "path": "tripinfo",
+      "kind": "status",
+      "equals": "expected 200, got 404",
+      "target": "drupal11",
+      "reason": "On the original, /tripinfo without dates is a PHP fatal error (ArgumentCountError in tripinfo_list()), served as a page with the stack trace. The Drupal 11 route needs both dates, so the bare path is not found. Every /tripinfo/START/END page is reproduced."
+    },
+    {
+      "path": "blog_in_order/1",
+      "kind": "status",
+      "equals": "expected 200, got 404",
+      "target": "drupal11",
+      "reason": "blog_in_order took an optional Drupal 6 date argument (the date module's); the rebuilt view does not reproduce view arguments, so /blog_in_order/1 is not found. /blog_in_order itself, which lists every entry, is reproduced."
     }
   ]
 }

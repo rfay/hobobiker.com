@@ -78,7 +78,7 @@ rehearsal; the rest can be settled during the rehearsal or live.
 | # | Decision | Recommendation | Alternatives | When |
 |---|---|---|---|---|
 | D1 | How content moves | **Decided (2026-10-27):** a rerunnable PHP script per step, starting from randyfay-d11's scripts | Migrate API with core's `d6_*` plugins | before |
-| D2 | Where the D6 data comes from | **Decided, done (2026-10-27):** schema `d6` in hobobiker-d11's database | Read hobobiker-prep's database across projects | before |
+| D2 | Where the D6 data comes from | **Decided, done (2026-10-27):** schema `d6` in hobobiker-d11's database | Read the source database directly across projects: from hobobiker-d11's web container, `mysql -h hobobiker-copy-db -udb -pdb db` works (DDEV's shared network; `ddev mysql -h …` does not). A common migration technique; the copy keeps the source frozen and the scripts self-contained | before |
 | D3 | Where the pipeline lives | **Decided, done (2026-10-27):** rfay/hobobiker-d11, `scripts/` plus `config/sync`; the tests stay here | Scripts in this repo | before |
 | D4 | How much is pre-built vs live | **Decided (2026-10-27):** rehearse the whole pipeline this week; live, rebuild with Claude from the plan, tagged checkpoints to fall back on | Run the finished pipeline live | before |
 | D5 | Content types | Keep the live types (`triplog`, `blog`, `story`, `page`, `wp`, `book`); fold the dead-module types (`acidfree`, `image`, `audio`, `forum`, `poll`) into one or two, since they render as a title and little else. **Decided (owner):** the 1 node with no type is migrated to another type (declared) | Keep all 12 | rehearsal |
