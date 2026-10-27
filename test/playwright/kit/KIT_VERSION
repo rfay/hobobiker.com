@@ -1,4 +1,4 @@
 site-migration-kit
-ref:    21f2226
-commit: 21f222633d69a2e26643a5e4181db02b347c00b2
+ref:    HEAD
+commit: 7db0c15f8240fcd62bffb9219d3bfb3b4f732e4a
 vendored by scripts/vendor-into.sh -- do not edit this directory; change the kit and vendor again.

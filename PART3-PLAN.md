@@ -20,13 +20,27 @@ Success at the end of the session:
 ## Where things stand (2026-10-25)
 
 - `hobobiker-d11`: Drupal 11.4.11, PHP 8.4, MariaDB 11.8, installed with the standard modules and Olivero. Empty.
-  **Not a git repository yet.** No pipeline scripts.
+  Git repository rfay/hobobiker-d11 (2026-10-27), with `AGENTS.md` and the tripwire hook. No pipeline scripts yet.
+  **The 11.4 standard install has no content types, no `body` field and no comment type** (only the `tags`
+  vocabulary): the site-shell script creates all of them.
+- `d6` schema loaded in hobobiker-d11's database (2026-10-27): 1,296 nodes, 447 comments, 1,657 aliases; checked
+  sanitized (no Backup and Migrate destinations, no credential values, empty `watchdog` and `sessions`).
 - The model to copy: `~/workspace/randyfay-d11/scripts/` (`run-all.sh`, `10-site-shell.php`, `20-import.php`,
   `30-copy-files.sh`, `40-views.php`, `50-theme-*.php`; about 600 lines in all, rebuilds in about 20 s). The source
   database is loaded into a second schema in the target's own database, and the scripts read it from there.
 - The suite: the baseline was re-frozen 2026-10-25. `expected-differences.json` has no `drupal11` entries. The
   stored tier is enforced for `drupal11` (`migration.config.mjs`), but **the kit has no Drupal 11 exporter**
   (`scripts/stored-exporters/` has only `drupal6.mjs`), so that tier cannot run yet.
+- **Starting point (P5, 2026-10-27), the empty D11 site**, every tier but `@assets`, 7 min 43 s: **1 pass, 3,981 fail**.
+  Semantic 2,455 fail (every page), access 81 fail (the drafts answer 404, not 403), stored 1,445 fail (exported with
+  the new `drupal11.mjs`: 0 nodes, 0 comments, 0 terms). The one pass is the suite's own check that the baseline
+  covers every published path.
+- **P6, first pass (2026-10-27):** `scripts/run-all.sh` in hobobiker-d11 rebuilds content model, files and content
+  in 30 s: 1,296 nodes, 446 comments, 82 terms, 4 users, 781 aliases, 20 file records. Dropped and counted: 876
+  aliases of deleted nodes, 1 orphan comment, 24 file records whose file is gone. Stored tier **1,445 pass**
+  (2 deliberate changes declared). Kit `7db0c15` (Drupal 11 stored exporter) committed and vendored; not pushed.
+  Not done yet: listings (Views), menus and breadcrumbs, the theme, tripinfo, PHP nodes, wiki/gmap/email filters,
+  audio metadata and poll results, the integrity check (D15).
 - Data: the sanitized database and files are hobobiker-assets v1.2 (also `.tarballs/` here).
 
 ## What has to come over
@@ -50,25 +64,29 @@ Render-time content (baseline tags): 15 `@php` nodes, 15 `@tripinfo` route table
 
 ## Decisions
 
+Owner's standing rule (2026-10-27): content types, text formats, and a custom module (`hobobiker`, for the photo filter and
+possibly tripinfo) may be created wherever the rebuild needs them.
+
 The owner decides; my recommendation comes first in each row. The ones marked **before** need an answer before any
 rehearsal; the rest can be settled during the rehearsal or live.
 
 | # | Decision | Recommendation | Alternatives | When |
 |---|---|---|---|---|
-| D1 | How content moves | **A rerunnable PHP script** per step, as in randyfay-d11: short, readable on screen, fast to rerun | Migrate API with core's `d6_*` plugins (standard source; but 11 text formats, custom filters and dead modules mean a lot of custom process plugins) | before |
-| D2 | Where the D6 data comes from | A schema `d6` in hobobiker-d11's database, loaded from `.tarballs/db.sql.zst` (the same snapshot as the baseline) | Read hobobiker-prep's database across projects (fragile networking) | before |
-| D3 | Where the pipeline lives | `hobobiker-d11` as its own git repo (rfay/hobobiker-d11), `scripts/` plus `config/sync`; the tests stay here | Scripts in this repo (mixes the source and the target) | before |
-| D4 | How much is pre-built vs live | Rehearse the whole pipeline this week; live, rebuild it with Claude from the plan, with tagged checkpoints to fall back on | Run the finished pipeline live and spend the hour on failures | before |
-| D5 | Content types | Keep the live types (`triplog`, `blog`, `story`, `page`, `wp`, `book`); fold the dead-module types (`acidfree`, `image`, `audio`, `forum`, `poll`) into one or two, since they render as a title and little else | Keep all 12 | rehearsal |
+| D1 | How content moves | **Decided (2026-10-27):** a rerunnable PHP script per step, starting from randyfay-d11's scripts | Migrate API with core's `d6_*` plugins | before |
+| D2 | Where the D6 data comes from | **Decided, done (2026-10-27):** schema `d6` in hobobiker-d11's database | Read hobobiker-prep's database across projects | before |
+| D3 | Where the pipeline lives | **Decided, done (2026-10-27):** rfay/hobobiker-d11, `scripts/` plus `config/sync`; the tests stay here | Scripts in this repo | before |
+| D4 | How much is pre-built vs live | **Decided (2026-10-27):** rehearse the whole pipeline this week; live, rebuild with Claude from the plan, tagged checkpoints to fall back on | Run the finished pipeline live | before |
+| D5 | Content types | Keep the live types (`triplog`, `blog`, `story`, `page`, `wp`, `book`); fold the dead-module types (`acidfree`, `image`, `audio`, `forum`, `poll`) into one or two, since they render as a title and little else. **Decided (owner):** the 1 node with no type is migrated to another type (declared) | Keep all 12 | rehearsal |
 | D6 | The 15 PHP nodes | Store the HTML they rendered (from the prep copy) as the body; drop the PHP | Port the PHP | rehearsal |
-| D7 | Tripinfo: 15 route tables and the 545 `tripinfo*` pages | Route tables: render once, store as HTML (the audit's advice; the site is frozen). The 545 day pages: decide after measuring; cheapest is generating them as static nodes or files from the D6 data | A small D11 module that reproduces the routes (more code, more to show live) | rehearsal |
-| D8 | `[hobophoto:]` macros (119 nodes) | Expand to markup at import | A tiny D11 text filter (closer to the original, more code) | rehearsal |
+| D7 | Tripinfo: 15 route tables and the 545 `tripinfo*` pages | Route tables: render once, store as HTML (the audit's advice; the site is frozen). The 545 day pages: decide after measuring; cheapest is generating them as static nodes or files from the D6 data | A small D11 module that reproduces the routes: allowed (owner, 2026-10-27), in the same custom module `hobobiker` as the photo filter | rehearsal |
+| D8 | `[hobophoto:]` macros (119 nodes) | **Decided (owner):** a Drupal 11 text filter plugin (`@Filter`, Twig template) in a custom module `hobobiker` in `web/modules/custom/`, ported from `hobobiker_filter` (105 lines). Bodies keep the macros as stored on D6 (the stored tier matches them line for line); the filter renders them | Expand to markup at import | rehearsal |
 | D9 | Maps (Leaflet, `data-kml`) | Keep the markup; attach the same `lib/` files as a library | Drop the maps (a real loss: the owner wants them) | rehearsal |
 | D10 | Listings: `/blog`, per-trip blogs, taxonomy pages, the panels home page | Views with the original's page size and order, so `?page=N` matches page for page | Accept and declare the listing differences | rehearsal |
 | D11 | Comments | Import all 447 for the stored tier; hide them on pages, as the original does | Show them (a deliberate change to declare) | rehearsal |
 | D12 | File URLs | Keep the files under `sites/default/files` and set the public path to match, so 1,793 URLs don't change; legacy hand-made files (`files/Northwest/maps/*.htm`, `files/mexico/`) served as they are | Rewrite URLs (many references in bodies) | rehearsal |
 | D13 | Looks | Olivero plus a documented allowlist (step 1 of the kit's theming ladder); a subtheme only if time allows | Port `hobo_golden` (out of scope for an hour) | live |
 | D14 | Users | Import the 4 users from the sanitized snapshot (names show in "By rfay"); no passwords | | rehearsal |
+| D15 | Is the imported data valid Drupal 11 data? | **An integrity check after every run**: (1) every entity through Drupal's own `validate()` as uid 1, violations counted by constraint; (2) SQL orphan checks (field items, comments, aliases, file usage pointing at nothing; files whose bytes are missing); (3) `drush updatedb:status` and entity-definition updates empty, `config:status` clean after `cex`, `core:requirements` with no errors; (4) open `/node/N/edit` as admin for a sample of each type. Output as JSON with counts; a kit tier fails `drupal11` on anything not declared. Negative control: plant an orphan comment and a node with a missing text format. **Decided (owner):** the 876 aliases to deleted nodes and the 1 comment on a missing node may be dropped (declared, exact); the 11 text formats are created in D11 | Trust the Entity API (a script that writes through it can still save invalid references: `save()` does not call `validate()`) | rehearsal |
 
 ## Prep work
 
@@ -85,6 +103,7 @@ rehearsal; the rest can be settled during the rehearsal or live.
 | P9 | owner | Write the opening prompt for the session (onboard Claude: read D6 source, learn D11, write the plan) | the plan's quality is the demo (webinar/PLAN.md) |
 | P10 | agent | Update the slides with measured numbers after P7 | AGENTS.md of the slides repo: numbers from measured runs |
 | P11 | owner | On the day: all four projects running, PHP2Shell build check, Coder URLs public, kit vendored | the kit's `docs/system-prep.md` |
+| P12 | agent | The integrity check (D15): `scripts/90-check-integrity.php` here or in the kit, and a test tier that reads its JSON | known now in `d6`: 876 aliases to deleted nodes, 1 comment on a missing node, 1 node with no type, 11 text formats; each needs a decision (skip and declare, or keep) |
 
 Order: P1-P5 first (P4 and P5 can run in parallel), then P6-P7, then P8 at least once a day before the session.
 
