@@ -48,6 +48,14 @@ Success at the end of the session:
   original) and `blog_in_order/1` (a view argument) to declare. Caching is off in the development copy.
 - **2026-10-28:** audio, poll, the hobo_golden theme port. **Every tier but assets passes: 8,887 of 8,887**
   (semantic 2,456, access 81, stored 1,445, visible 2,455, layout 2,450), with 9 declared drupal11 differences.
+- **P8 rehearsal from nothing (2026-10-28):** `scripts/00-reset.sh && scripts/run-all.sh` in hobobiker-d11 (reset 21 s,
+  pipeline 38 s), then every tier (4 min 18 s): **10,669 pass, 0 fail**, assets included. Checkpoint tags (local, on
+  hobobiker-d11): `s3-import`, `s3-views`, `s3-audio`, `s3-theme`, `s3-rehearsal`; DDEV snapshot `s3-rehearsal`.
+  Slides updated with these numbers (P10).
+- **Status of the prep tasks:** P1-P8 and P10 done. Open: P9 (the owner's opening prompt), P11 (on the day), P12's
+  second half (the validity check as a kit tier with a negative control; today it is a script, 330 findings, all
+  aliases to paths Drupal 11 does not have plus one user time zone). The kit (`7db0c15`) and every repo are
+  committed, not pushed.
 - Data: the sanitized database and files are hobobiker-assets v1.2 (also `.tarballs/` here).
 
 ## What has to come over
