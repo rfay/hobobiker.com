@@ -46,6 +46,8 @@ Success at the end of the session:
   three-column layout), captions and read-more as on the original. Suite: **3,934 pass, 48 fail** (semantic 2,408 of
   2,456; access and stored all pass). Left: the audio module (46 failures), `/tripinfo` (a PHP fatal error on the
   original) and `blog_in_order/1` (a view argument) to declare. Caching is off in the development copy.
+- **2026-10-28:** audio, poll, the hobo_golden theme port. **Every tier but assets passes: 8,887 of 8,887**
+  (semantic 2,456, access 81, stored 1,445, visible 2,455, layout 2,450), with 9 declared drupal11 differences.
 - Data: the sanitized database and files are hobobiker-assets v1.2 (also `.tarballs/` here).
 
 ## What has to come over
@@ -89,7 +91,7 @@ rehearsal; the rest can be settled during the rehearsal or live.
 | D10 | Listings: `/blog`, per-trip blogs, taxonomy pages, the panels home page | Views with the original's page size and order, so `?page=N` matches page for page | Accept and declare the listing differences | rehearsal |
 | D11 | Comments | Import all 447 for the stored tier; hide them on pages, as the original does | Show them (a deliberate change to declare) | rehearsal |
 | D12 | File URLs | Keep the files under `sites/default/files` and set the public path to match, so 1,793 URLs don't change; legacy hand-made files (`files/Northwest/maps/*.htm`, `files/mexico/`) served as they are | Rewrite URLs (many references in bodies) | rehearsal |
-| D13 | Looks | Olivero plus a documented allowlist (step 1 of the kit's theming ladder); a subtheme only if time allows | Port `hobo_golden` (out of scope for an hour) | live |
+| D13 | Looks | **Decided (owner, 2026-10-28): port hobo_golden.** A Drupal 11 theme on stable9 with the original's page, menu, breadcrumb and node markup, so its CSS, images and nav.js work as they were (`web/themes/custom/hobo_golden`); the first pass's Olivero subtheme is gone. Browser tiers: visible 2,455 / 2,455, layout 2,450 / 2,450 | Olivero plus an allowlist | rehearsal |
 | D14 | Users | Import the 4 users from the sanitized snapshot (names show in "By rfay"); no passwords | | rehearsal |
 | D15 | Is the imported data valid Drupal 11 data? | **An integrity check after every run**: (1) every entity through Drupal's own `validate()` as uid 1, violations counted by constraint; (2) SQL orphan checks (field items, comments, aliases, file usage pointing at nothing; files whose bytes are missing); (3) `drush updatedb:status` and entity-definition updates empty, `config:status` clean after `cex`, `core:requirements` with no errors; (4) open `/node/N/edit` as admin for a sample of each type. Output as JSON with counts; a kit tier fails `drupal11` on anything not declared. Negative control: plant an orphan comment and a node with a missing text format. **Decided (owner):** the 876 aliases to deleted nodes and the 1 comment on a missing node may be dropped (declared, exact); the 11 text formats are created in D11 | Trust the Entity API (a script that writes through it can still save invalid references: `save()` does not call `validate()`) | rehearsal |
 

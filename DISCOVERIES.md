@@ -464,3 +464,18 @@ The pipeline is in rfay/hobobiker-d11 (`scripts/run-all.sh`); decisions in `PART
 - **The 11.4 standard install has no content types**, no body field and no comment type.
 - **The original's listing sizes are not Views defaults:** `/blog` and `/blog/UID` show 8 per page
   (`default_nodes_main`); taxonomy pages sort sticky first, then oldest first.
+- **The audio module's numbers.** Three MP3s show "8 MB": the files table stopped at 8,388,607 bytes (2^23 - 1);
+  the real files are up to 20 MB. Drupal 11 records the true size on the file; the pages keep the original's. The
+  download counter went up with every download, including the baseline crawl's (8,515 on the node page, 8,516 in
+  listings captured later).
+- **Two time zones on the original:** dates printed with a fixed UTC-6 (`date_default_timezone`), Views date
+  filters read in PHP's zone, America/Denver (node 3802, created at midnight MST, is inside a range ending that day).
+- **Ties were broken by table order.** Nine dates have two trip days, and people share dates in the Wonderful
+  People table; the original's queries had no tie-break and MySQL returned the lower id first.
+- **The tripinfo day pages relied on Drupal 6 core CSS:** their prev/up/next links reuse the book module's markup,
+  laid out by `modules/book/book.css` (three floated columns). The layout tier measured those links.
+- **Several aliases for one path (73 paths):** both versions link the newest; on a page requested through an older
+  alias, Drupal 6 linked that page to itself by the requested alias (its per-request alias cache). Drupal 11 does so
+  only sometimes (its caches); the two self-links in the baseline are declared.
+- **The home page is a Panels page** (page_manager `trip_wrapped_up`): node teasers with their titles moved into
+  pane titles (each node keeps an empty title link), the search form, and a PHP statistics block.

@@ -130,6 +130,20 @@
       "equals": "expected 200, got 404",
       "target": "drupal11",
       "reason": "blog_in_order took an optional Drupal 6 date argument (the date module's); the rebuilt view does not reproduce view arguments, so /blog_in_order/1 is not found. /blog_in_order itself, which lists every entry, is reproduced."
+    },
+    {
+      "path": "new_england_pics",
+      "kind": "menu",
+      "equals": "main: Photos -> /new_england_pics",
+      "target": "drupal11",
+      "reason": "Two aliases for one path. Drupal 6 linked a path by its newest alias, except on a page requested through an older alias, where its per-request alias cache made links to that same page use the requested one. Drupal 11 links the newest alias here too, but whether the requested alias wins depends on its caches. Only this self-link differs; the page and every other link are the same. Node 244 has new_england_pics and new_england_2005; the menu item on its own page may link new_england_2005."
+    },
+    {
+      "path": "adventures/inuvik_to_denver/gear",
+      "kind": "links",
+      "equals": "adventures/inuvik_to_denver/gear",
+      "target": "drupal11",
+      "reason": "Two aliases for one path. Drupal 6 linked a path by its newest alias, except on a page requested through an older alias, where its per-request alias cache made links to that same page use the requested one. Drupal 11 links the newest alias here too, but whether the requested alias wins depends on its caches. Only this self-link differs; the page and every other link are the same. Term 23 has adventures/inuvik_to_denver/gear and inuvik_to_denver/gear; its own page may link the latter."
     }
   ]
 }
