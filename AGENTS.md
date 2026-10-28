@@ -5,9 +5,9 @@ build and rehearse the migration-testing method in
 [rfay/site-migration-kit](https://github.com/rfay/site-migration-kit) (local checkout:
 `~/workspace/site-migration-kit`). Nothing here is production.
 
-**Work in progress (2026-10-25): read `HANDOFF.md` first.** Personal data and credentials were found in
-published copies. Production is cleaned up and its maps now use Leaflet; the steps left before the
-static archive is produced again are listed there. Part 3 (Drupal 11): `PART3-PLAN.md`.
+**Now (2026-10-28): Part 3, the Drupal 11 rebuild. Read `PART3-PLAN.md` first.** Part 2 (the static
+archive, https://static.hobobiker.com) is finished; its cleanup record is `HANDOFF.md`. To compare a page on
+all three sites, `PAGE-MAP.md`.
 
 ## What this environment is
 

@@ -1,4 +1,8 @@
-# Handoff: Part 2 cleanup before the re-crawl (updated 2026-10-25)
+# Handoff: Part 2 cleanup before the re-crawl (finished; last updated 2026-10-28)
+
+**Part 2 is done:** the archive was rebuilt, retested (11,679 pass, 0 fail) and is published at
+https://static.hobobiker.com; the data is hobobiker-assets v1.2. Part 3: `PART3-PLAN.md`. The one item left is the
+owner's check of older backups (below).
 
 Where Part 2 (retiring hobobiker.com to static HTML) stands after the exposure found on 2026-10-24, what
 has been fixed on production since, and the steps left before `retire/run.sh` runs again. Read `AGENTS.md`
@@ -66,7 +70,7 @@ things by length, hash or count (see "How the checks were done").
 - [ ] Check older backups and files tarballs kept elsewhere for the 3 XML files.
 - [x] **Decide on the baseline:** re-freeze (2026-10-25).
 - [x] **`files/maps/NewEnglandRoute/` restored on production** (2026-10-25; collateral of deleting `files/maps/`).
-- [ ] **Refresh the Coder workspace** once A's production changes are done: `git pull` in `hobobiker-copy`
+- [x] **Refresh the Coder workspace** once A's production changes are done: `git pull` in `hobobiker-copy`
       and `hobobiker-prep`; `ddev pull` production into `hobobiker-copy`. That pull is the source of the new
       pristine snapshot (B1). The pull replaces the whole files directory (rsync into `.ddev/.downloads`,
       then an import), so `files/maps/` disappears from `hobobiker-copy` with it. **Before that pull, an
@@ -79,15 +83,15 @@ things by length, hash or count (see "How the checks were done").
       the snapshot and the archive, and the gate's file-name check still refuses the 7 removed files.
 - [x] Old IAM access key deleted (2026-10-25).
 - [x] `rfay/hobobiker-static` re-created and filled from the passing run; GitHub Pages publishes `main:/docs`.
-- [ ] **Custom domain `static.hobobiker.com`.** Saving it in the Pages settings gave a 500: `docs` was a
+- [x] **Custom domain `static.hobobiker.com`** (works, 2026-10-25). Saving it in the Pages settings gave a 500: `docs` was a
       symlink to `public`, and GitHub commits `docs/CNAME` when the domain is saved. `docs/` is now the real
       directory and the static project's DDEV docroot (2026-10-25); `retire/38-publishing-files.sh` writes
       `CNAME` and `.nojekyll` after every crawl. Commit the rename in `hobobiker-static` and push; then the
       Pages build picks up `docs/CNAME`. `docs/files` stays a symlink to `sites/default/files`.
-- [ ] GitHub Pages does not do everything the nginx rule does: `?page=N` (80 links), the `/files` symlink
+- [x] Measured (2026-10-25): 4,648 pass, 344 fail, 326 of them `?page=N`; recorded in `PART3-PLAN.md`, decision open. GitHub Pages does not do everything the nginx rule does: `?page=N` (80 links), the `/files` symlink
       (110 pages), `/mexico/`, and the 1 GB site limit (the archive is 1.3 GB). Measure on the live domain
       with the HTTP tiers (not the asset tier), then decide: fix in the kit, accept, or host elsewhere.
-- [ ] Publish hobobiker-assets **v1.2** from `hobobiker-copy/.tarballs/` (the 4 sanitized files, nothing
+- [x] Published hobobiker-assets **v1.2** from `hobobiker-copy/.tarballs/` (the 4 sanitized files, nothing
       else), and point `README.md` at v1.2.
 
 ### B. Agent, in this order (stop and report after each step, as in Part 2)

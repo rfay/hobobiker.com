@@ -1,143 +1,130 @@
-# Part 3 plan: The Long Haul (Drupal 11), Oct 30
+# Part 3 plan: The Long Haul (Drupal 11), Friday Oct 30
 
-The owner's plan for the week before Part 3: what to decide, what to build or rehearse before the session, and
-what is left for the live hour. Written 2026-10-25. `HANDOFF.md` covers the Part 2 cleanup; this file covers Part 3
-only. The session outline is in the kit's `webinar/PLAN.md` ("Part 3"); the slides are
-`hobobiker-migration-slides/slides/part3-the-long-haul.md`.
+The owner's plan for Part 3 of "Hobobiker Rides Again": rebuild hobobiker.com (Drupal 6) in Drupal 11 and judge it
+with the same test suite. Rewritten 2026-10-28 for the day itself. The opening prompt is `PART3-PROMPT.md`; the
+slides are `hobobiker-migration-slides/slides/part3-the-long-haul.md`; the session outline is the kit's
+`webinar/PLAN.md` ("Part 3").
 
-## Goal
+## Where things stand (2026-10-28)
 
-The same test suite, run with `MIGRATION_TARGET=drupal11` against `hobobiker-d11`, judged honestly. A green run is not
-required; a reproducible run with every failure classified is.
+**The rebuild is done and rehearsed.** From nothing (a fresh install, the Drupal 6 data reloaded) the pipeline
+rebuilds the whole site in about a minute, and the suite passes in full:
 
-Success at the end of the session:
-
-- A pipeline that rebuilds `hobobiker-d11` from nothing with one command, every step a script that prints a count.
-- The suite's result against it, each failure sorted into: a gap in the baseline or suite (fix), a real loss (fix
-  the import), or a deliberate change (declared in `expected-differences.json` with `"target": "drupal11"`).
-- Tag `s3-d11-run`.
-
-## Where things stand (2026-10-25)
-
-- `hobobiker-d11`: Drupal 11.4.11, PHP 8.4, MariaDB 11.8, installed with the standard modules and Olivero. Empty.
-  Git repository rfay/hobobiker-d11 (2026-10-27), with `AGENTS.md` and the tripwire hook. No pipeline scripts yet.
-  **The 11.4 standard install has no content types, no `body` field and no comment type** (only the `tags`
-  vocabulary): the site-shell script creates all of them.
-- `d6` schema loaded in hobobiker-d11's database (2026-10-27): 1,296 nodes, 447 comments, 1,657 aliases; checked
-  sanitized (no Backup and Migrate destinations, no credential values, empty `watchdog` and `sessions`).
-- The model to copy: `~/workspace/randyfay-d11/scripts/` (`run-all.sh`, `10-site-shell.php`, `20-import.php`,
-  `30-copy-files.sh`, `40-views.php`, `50-theme-*.php`; about 600 lines in all, rebuilds in about 20 s). The source
-  database is loaded into a second schema in the target's own database, and the scripts read it from there.
-- The suite: the baseline was re-frozen 2026-10-25. `expected-differences.json` has no `drupal11` entries. The
-  stored tier is enforced for `drupal11` (`migration.config.mjs`), but **the kit has no Drupal 11 exporter**
-  (`scripts/stored-exporters/` has only `drupal6.mjs`), so that tier cannot run yet.
-- **Starting point (P5, 2026-10-27), the empty D11 site**, every tier but `@assets`, 7 min 43 s: **1 pass, 3,981 fail**.
-  Semantic 2,455 fail (every page), access 81 fail (the drafts answer 404, not 403), stored 1,445 fail (exported with
-  the new `drupal11.mjs`: 0 nodes, 0 comments, 0 terms). The one pass is the suite's own check that the baseline
-  covers every published path.
-- **P6, first pass (2026-10-27):** `scripts/run-all.sh` in hobobiker-d11 rebuilds content model, files and content
-  in 30 s: 1,296 nodes, 446 comments, 82 terms, 4 users, 781 aliases, 20 file records. Dropped and counted: 876
-  aliases of deleted nodes, 1 orphan comment, 24 file records whose file is gone. Stored tier **1,445 pass**
-  (2 deliberate changes declared). Kit `7db0c15` (Drupal 11 stored exporter) committed and vendored; not pushed.
-  Not done yet: listings (Views), menus and breadcrumbs, the theme, tripinfo, PHP nodes, wiki/gmap/email filters,
-  audio metadata and poll results, the integrity check (D15).
-- **P6, 2026-10-27 evening:** menus, the `hobo` subtheme, Views (16 D6 views, blog, taxonomy, 3 tables), tripinfo
-  (routes, `[tripinfo:]` and `[multisource:]` filters, Leaflet), the home page (D6 Panels panes in core's
-  three-column layout), captions and read-more as on the original. Suite: **3,934 pass, 48 fail** (semantic 2,408 of
-  2,456; access and stored all pass). Left: the audio module (46 failures), `/tripinfo` (a PHP fatal error on the
-  original) and `blog_in_order/1` (a view argument) to declare. Caching is off in the development copy.
-- **2026-10-28:** audio, poll, the hobo_golden theme port. **Every tier but assets passes: 8,887 of 8,887**
-  (semantic 2,456, access 81, stored 1,445, visible 2,455, layout 2,450), with 9 declared drupal11 differences.
-- **P8 rehearsal from nothing (2026-10-28):** `scripts/00-reset.sh && scripts/run-all.sh` in hobobiker-d11 (reset 21 s,
-  pipeline 38 s), then every tier (4 min 18 s): **10,669 pass, 0 fail**, assets included. Checkpoint tags (local, on
-  hobobiker-d11): `s3-import`, `s3-views`, `s3-audio`, `s3-theme`, `s3-rehearsal`; DDEV snapshot `s3-rehearsal`.
-  Slides updated with these numbers (P10).
-- **Status of the prep tasks:** P1-P8 and P10 done. Open: P9 (the owner's opening prompt), P11 (on the day), P12's
-  second half (the validity check as a kit tier with a negative control; today it is a script, 330 findings, all
-  aliases to paths Drupal 11 does not have plus one user time zone). The kit (`7db0c15`) and every repo are
-  committed, not pushed.
-- Data: the sanitized database and files are hobobiker-assets v1.2 (also `.tarballs/` here).
-
-## What has to come over
-
-From the frozen baseline (`data/manifest.json`, `baseline/semantic/index.json`, `baseline/stored.json`):
-
-| What | Count | Notes |
+| Tier | Checks | Result |
 |---|---|---|
-| Nodes | 1,296 (1,255 published, 41 unpublished) | 12 types: triplog 549, blog 342, wp 138, story 113, acidfree 77, page 35, book 18, audio 10, image 8, forum 4, poll 1, one without a type |
-| Pages in the semantic baseline | 2,455 | besides the nodes: **545 `tripinfo*` pages**, **167 paginated listings** (`blog?page=N` and the per-trip blogs), 42 taxonomy term pages, the listings and other aliases |
-| Published paths of nodes | 1,601 | `node/N` and aliases; keep every node ID |
-| Files | 1,793, 1.1 GB | byte for byte, at the same URLs (`sites/default/files/...`, and `/files/...` as on the original) |
-| Comments | 447 (169 published) | none render on the original (comment module off); the stored tier still counts them |
-| Terms | 82 | |
-| Users | 4 | 4 of them own nodes |
+| semantic (words, links, images, menus, per page) | 2,457 | all pass |
+| visible (what a visitor sees) | 2,455 | all pass |
+| layout (column, colours, fonts, header) | 2,450 | all pass |
+| assets (every file, byte for byte) | 1,781 | all pass |
+| stored (bodies, 446 comments, 82 terms) | 1,445 | all pass |
+| access (41 unpublished nodes answer 403) | 81 | all pass |
+| **total** | **10,669** | **0 fail**, 11 declared differences |
 
-Render-time content (baseline tags): 15 `@php` nodes, 15 `@tripinfo` route tables, 119 `@hobophoto` nodes, 15
-`@iframe`, 13 `@flash` (already broken), 168 `@empty-body`. Enabled D6 modules with no Drupal 11 equivalent:
-`tripinfo`, `hobobiker_filter`, `php`, `panels`/`page_manager` (the home page), `acidfree`-era content, `audio`,
-`imagecache`, `lightbox2`/`thickbox`, `nodewords`.
+Timings (2026-10-28): `00-reset.sh` 21 s, `run-all.sh` 38 s, every tier 4 min 18 s.
 
-## Decisions
+- **Two starting points in rfay/hobobiker-d11:** the tag `s3-start` (branch `live-start`): the empty site, its
+  rules and the reset script, no pipeline, for building live. The branch `main` (tag `s3-rehearsal`): the finished
+  pipeline. Checkpoints along the way: `s3-import`, `s3-views`, `s3-audio`, `s3-theme`.
+- **A DDEV snapshot of the finished site:** `ddev snapshot restore s3-rehearsal` (in hobobiker-d11).
+- Every repository is committed and pushed. **The `s3-*` tags and the `live-start` branch are local only**
+  (see "Before the session").
+- What went where: `hobobiker-d11/docs/MIGRATION-MAP.md`. Every page on all three sites: `PAGE-MAP.md`. What was
+  found on the way: `DISCOVERIES.md`, "Part 3".
 
-Owner's standing rule (2026-10-27): content types, text formats, and a custom module (`hobobiker`, for the photo filter and
-possibly tripinfo) may be created wherever the rebuild needs them.
+## Friday: the hour
 
-The owner decides; my recommendation comes first in each row. The ones marked **before** need an answer before any
-rehearsal; the rest can be settled during the rehearsal or live.
+The rule of the series: at each step Claude stops, summarizes, explains the next step and asks before going on.
 
-| # | Decision | Recommendation | Alternatives | When |
-|---|---|---|---|---|
-| D1 | How content moves | **Decided (2026-10-27):** a rerunnable PHP script per step, starting from randyfay-d11's scripts | Migrate API with core's `d6_*` plugins | before |
-| D2 | Where the D6 data comes from | **Decided, done (2026-10-27):** schema `d6` in hobobiker-d11's database | Read the source database directly across projects: from hobobiker-d11's web container, `mysql -h hobobiker-copy-db -udb -pdb db` works (DDEV's shared network; `ddev mysql -h …` does not). A common migration technique; the copy keeps the source frozen and the scripts self-contained | before |
-| D3 | Where the pipeline lives | **Decided, done (2026-10-27):** rfay/hobobiker-d11, `scripts/` plus `config/sync`; the tests stay here | Scripts in this repo | before |
-| D4 | How much is pre-built vs live | **Decided (2026-10-27):** rehearse the whole pipeline this week; live, rebuild with Claude from the plan, tagged checkpoints to fall back on | Run the finished pipeline live | before |
-| D5 | Content types | Keep the live types (`triplog`, `blog`, `story`, `page`, `wp`, `book`); fold the dead-module types (`acidfree`, `image`, `audio`, `forum`, `poll`) into one or two, since they render as a title and little else. **Decided (owner):** the 1 node with no type is migrated to another type (declared) | Keep all 12 | rehearsal |
-| D6 | PHP (no PHP filter in Drupal 11; owner, 2026-10-27: replace every use) | 15 nodes are exactly `<?php print tripinfo_table('START','END'); ?>` (formats 2 and 9; 3 more nodes in format 9 have no PHP). **Recommended:** the import rewrites the call to `[tripinfo:START,END]`, rendered by a text filter in the `hobobiker` module from the tripinfo data; the stored-body line declared with one anchored regex. The 3 stat blocks (custom blocks 11, 14, 18; PHP that sums miles): the site is frozen, so a plain custom block with the HTML they render now | Store each node's rendered HTML as its body | rehearsal |
-| D7 | Tripinfo: 15 route tables and the 545 `tripinfo*` pages | Route tables: render once, store as HTML (the audit's advice; the site is frozen). The 545 day pages: decide after measuring; cheapest is generating them as static nodes or files from the D6 data | A small D11 module that reproduces the routes: allowed (owner, 2026-10-27), in the same custom module `hobobiker` as the photo filter | rehearsal |
-| D8 | `[hobophoto:]` macros (119 nodes) | **Decided (owner):** a Drupal 11 text filter plugin (`@Filter`, Twig template) in a custom module `hobobiker` in `web/modules/custom/`, ported from `hobobiker_filter` (105 lines). Bodies keep the macros as stored on D6 (the stored tier matches them line for line); the filter renders them | Expand to markup at import | rehearsal |
-| D9 | Maps (Leaflet, `data-kml`) | Keep the markup; attach the same `lib/` files as a library | Drop the maps (a real loss: the owner wants them) | rehearsal |
-| D10 | Listings: `/blog`, per-trip blogs, taxonomy pages, the panels home page | Views with the original's page size and order, so `?page=N` matches page for page | Accept and declare the listing differences | rehearsal |
-| D11 | Comments | Import all 447 for the stored tier; hide them on pages, as the original does | Show them (a deliberate change to declare) | rehearsal |
-| D12 | File URLs | Keep the files under `sites/default/files` and set the public path to match, so 1,793 URLs don't change; legacy hand-made files (`files/Northwest/maps/*.htm`, `files/mexico/`) served as they are | Rewrite URLs (many references in bodies) | rehearsal |
-| D13 | Looks | **Decided (owner, 2026-10-28): port hobo_golden.** A Drupal 11 theme on stable9 with the original's page, menu, breadcrumb and node markup, so its CSS, images and nav.js work as they were (`web/themes/custom/hobo_golden`); the first pass's Olivero subtheme is gone. Browser tiers: visible 2,455 / 2,455, layout 2,450 / 2,450 | Olivero plus an allowlist | rehearsal |
-| D14 | Users | Import the 4 users from the sanitized snapshot (names show in "By rfay"); no passwords | | rehearsal |
-| D15 | Is the imported data valid Drupal 11 data? | **An integrity check after every run**: (1) every entity through Drupal's own `validate()` as uid 1, violations counted by constraint; (2) SQL orphan checks (field items, comments, aliases, file usage pointing at nothing; files whose bytes are missing); (3) `drush updatedb:status` and entity-definition updates empty, `config:status` clean after `cex`, `core:requirements` with no errors; (4) open `/node/N/edit` as admin for a sample of each type. Output as JSON with counts; a kit tier fails `drupal11` on anything not declared. Negative control: plant an orphan comment and a node with a missing text format. **Decided (owner):** the 876 aliases to deleted nodes and the 1 comment on a missing node may be dropped (declared, exact); the 11 text formats are created in D11 | Trust the Entity API (a script that writes through it can still save invalid references: `save()` does not call `validate()`) | rehearsal |
-
-## Prep work
-
-| # | Who | Task | Notes |
+| Min | What | How | If it runs long |
 |---|---|---|---|
-| P1 | owner | Answer D1-D4 | |
-| P2 | owner | Make `hobobiker-d11` a git repo and create rfay/hobobiker-d11 | the agent can `git init`; the owner creates the GitHub repo and pushes |
-| P3 | agent | Add the protected-pattern hook and an `AGENTS.md` to hobobiker-d11, as in this repo | the rules: never touch production, never push, reproduce don't repair |
-| P4 | agent | Kit: a Drupal 11 stored exporter (`scripts/stored-exporters/drupal11.mjs`), with the negative control | the owner pushes the kit; vendor it here |
-| P5 | agent | Run the suite against the empty D11 now, to record the starting point | expect nearly every check to fail; the counts go in a slide note |
-| P6 | agent | Build the pipeline per D1-D12 and run it end to end from nothing; record timings | DISCOVERIES.md gets a "Part 3" section |
-| P7 | agent | Run the suite; classify every failure; declare deliberate changes narrowly | |
-| P8 | both | Full rehearsal from a clean checkout, timed against the 60-minute outline | tag checkpoints: `s3-shell`, `s3-import`, `s3-files`, `s3-views` |
-| P9 | owner | Write the opening prompt for the session (onboard Claude: read D6 source, learn D11, write the plan) | the plan's quality is the demo (webinar/PLAN.md) |
-| P10 | agent | Update the slides with measured numbers after P7 | AGENTS.md of the slides repo: numbers from measured runs |
-| P11 | owner | On the day: all four projects running, PHP2Shell build check, Coder URLs public, kit vendored | the kit's `docs/system-prep.md` |
-| P12 | agent | The integrity check (D15): `scripts/90-check-integrity.php` here or in the kit, and a test tier that reads its JSON | known now in `d6`: 876 aliases to deleted nodes, 1 comment on a missing node, 1 node with no type, 11 text formats; each needs a decision (skip and declare, or keep) |
+| 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar | slides 1-8 | |
+| 5-15 | **Onboard a fresh Claude**; it explores the Drupal 6 source and the empty target and writes its plan | `PART3-PROMPT.md`, in a new session in hobobiker-d11 on `live-start` | show its plan as it is; the plan's quality is the demo |
+| 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
+| 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |
+| 50-60 | Read the results; the declared differences; what the layout tier caught; questions | slides "Rehearsed this week", "Looks", "Decisions"; `PAGE-MAP.md` for side by side | |
 
-Order: P1-P5 first (P4 and P5 can run in parallel), then P6-P7, then P8 at least once a day before the session.
+Tag the end state `s3-d11-run` (in hobobiker-d11, on whichever branch the hour ended).
 
-## Risks
+The suite, every tier (from hobobiker-copy; export the stored content first):
 
-- **Time.** 545 tripinfo pages and 167 paginated listings are more than randyfay.com needed. If D7 or D10 runs
-  long, declare the gap and say so on screen rather than rushing a fix.
-- **Copying files.** 1.1 GB; copy once into the D11 project and reuse it between runs instead of copying on every
-  run (randyfay-d11's import deletes file bytes when it deletes file entities: run the copy after the import).
-- **Allowlist hiding a real error.** Every `drupal11` entry exact (`equals` or anchored `regex`), each with a reason.
-- **The tripwire hook** blocks any command that names a `*hobobiker.com` URL, including `static.hobobiker.com`.
-  Expected; ask before working around it.
+```bash
+cd ~/workspace/hobo/hobobiker-copy/test/playwright && node kit/scripts/stored-exporters/drupal11.mjs \
+  --project-dir ~/workspace/hobo/hobobiker-d11 --out tmp/stored-d11.json
+cd ~/workspace/hobo/hobobiker-copy && ddev exec -d /var/www/html/test/playwright \
+  'TEST_BASE_URL=https://hobobiker-d11.ddev.site MIGRATION_TARGET=drupal11 STORED_TARGET_EXPORT=tmp/stored-d11.json npx playwright test --grep "semantic:|access:|asset:|baseline:|stored:|visible:|layout:"'
+```
 
-## Part 2 leftovers that touch this week
+## Before the session
 
-- The suite against GitHub Pages (https://static.hobobiker.com, 2026-10-25, without the `@assets` tests):
-  4,648 pass, 344 fail. 326 are the `?page=N` listings (Pages ignores the query string and serves page 0); 11 are
-  legacy `files/Northwest/maps/*.htm` pages missing their `©` lines (probably the charset Pages declares; not
-  confirmed); 5 are `files/mexico/trippics/` links to the `mexico/` folder (no directory index on Pages); 1 is a
-  `tripinfo?start_date=...` link on node/4003 (a query-string file); 1 was a 503 on node/2792 (probably transient).
-  Open: accept and document these for the Pages copy, or host the archive where the nginx rule applies.
-- `HANDOFF.md`'s open items (older backups to check for the 3 XML files).
+**Owner, once (before Friday):**
+
+- [ ] Push the start state and the checkpoints: in hobobiker-d11, `git push rfay live-start` and `git push rfay --tags`.
+- [ ] Read `PART3-PROMPT.md` and edit it; it is a draft.
+- [ ] Decide F1 to F3 below (or leave them as discussion material).
+
+**Friday morning:**
+
+- [ ] Start every project: `hobobiker-copy`, `hobobiker-prep`, `hobobiker-static`, `hobobiker-d11` (`ddev start`
+      in each; a workspace restart stops them all).
+- [ ] PHP2Shell fix: `ddev php -v` in each shows "built: Oct 21 2026" or later.
+- [ ] Coder URLs public for `hobobiker-copy`, `hobobiker-static`, `hobobiker-d11`.
+- [ ] Kit vendored and current: `cat test/playwright/kit/KIT_VERSION` (now `7db0c15`).
+- [ ] A last rehearsal, 5 minutes: in hobobiker-d11 on `main`, `scripts/00-reset.sh && scripts/run-all.sh`, then
+      the suite; expect 10,669 pass. Then `ddev snapshot --name s3-friday`.
+- [ ] Prepare the live start: `git switch live-start && scripts/00-reset.sh` (an empty site, `d6` loaded; the
+      copied files stay). Open a **new** Claude Code session in `~/workspace/hobo/hobobiker-d11`.
+- [ ] Slides open: https://rfay.github.io/hobobiker-migration-slides/part3.html
+
+## Open decisions (owner)
+
+| # | Question | Recommendation |
+|---|---|---|
+| F1 | The live part: build from `s3-start` with a fresh Claude, or only demonstrate the rehearsed pipeline? | Build live from `s3-start` for about 25 minutes (onboarding, plan, content model, import, stored tier), then switch to `main` for the full result. The plan quality and the first green stored tier are the story; the whole rebuild is too long for an hour. |
+| F2 | GitHub Pages copy of the archive: 344 failures (326 are `?page=N`, which Pages ignores) | Accept and document for the Pages copy; the nginx-served archive passes everything. |
+| F3 | The validity check (`hobobiker-d11/scripts/90-check-integrity.php`): every entity passes Drupal's validation; 330 findings remain, all aliases to paths Drupal 11 does not have (old feeds, pathauto leftovers) plus one user time zone | Leave as discussion material ("the data is valid Drupal 11 data, and here is how we know"); making it a kit tier with a negative control is after Part 3. |
+
+## Decisions taken (record)
+
+| # | Decision |
+|---|---|
+| D1 | Content moves with rerunnable PHP scripts (`hobobiker-d11/scripts/`), starting from randyfay-d11's; not the Migrate API. |
+| D2 | The source is a copy of the sanitized snapshot in the schema `d6` of the target's database. Reading the original's database directly also works (`mysql -h hobobiker-copy-db -udb -pdb db` from hobobiker-d11's web container) and is common. |
+| D3 | The pipeline lives in rfay/hobobiker-d11; the tests stay here. |
+| D4 | Rehearse the whole pipeline before; live, build with Claude from a start state, with checkpoints to fall back on. |
+| D5 | All 12 content types kept (the dead-module ones render their own data); the node with no type became a page, its empty title "(untitled)" (declared). |
+| D6 | No PHP runs. The 17 `tripinfo_table()` calls became `[tripinfo:START,END]`, a text filter; the PHP statistics block became the HTML it rendered. |
+| D7 | Tripinfo ported into the custom module `hobobiker`: the 526 day pages, the trip lists, the route tables, the maps. |
+| D8 | `[hobophoto:]` stays in the content; a Drupal 11 filter plugin renders it with the original's markup; photos open in an overlay. |
+| D9 | Maps: the same Leaflet library and markup. |
+| D10 | Listings rebuilt from the Drupal 6 view definitions, with the original's page sizes and order (8 per page on /blog). |
+| D11 | All comments imported for the stored tier, never shown (the comment module was off). |
+| D12 | Files byte for byte at the same URLs, `/files/...` included. |
+| D13 | Looks: the original theme ported (`hobo_golden` on stable9, the original's CSS unchanged); Olivero was tried first and passed every word check while looking nothing like the site. |
+| D14 | The 4 users imported, emails `user+N@example.invalid`. |
+| D15 | Validity: every entity through Drupal's `validate()`, orphan checks, Drupal's health (`90-check-integrity.php`). Aliases of deleted nodes (876) and the comment on a deleted node dropped. |
+
+**Declared differences (11, all `"target": "drupal11"`):** node 2307's empty title; the comment on deleted node
+1198; the three stored lines of each rewritten PHP call (`<?php`, `print tripinfo_table(...)`, `?>`); `/tripinfo`
+without dates (a PHP fatal error on the original); `/blog_in_order/1` (a view argument); one image link now an
+image style derivative; two self-links where a path has two aliases.
+
+## Risks on the day
+
+- **Time.** The full rebuild took two days of work; live, aim for the plan and the first steps, then switch.
+- **A stale workspace.** A Coder restart stops every DDEV project and a stopped one makes every test fail slowly:
+  start them first.
+- **The tripwire hook** blocks any shell command that names `*hobobiker.com` (including static.hobobiker.com) or
+  the production host, even in a heredoc. Expected; Claude should stop and ask, not work around it.
+- **Caching is off** in hobobiker-d11 (`settings.local.php`), so pages are slower than a production site.
+- **Map tiles** come from OpenStreetMap; the browser tiers block them, so that tiles load is checked by eye.
+
+## How it got here (measured)
+
+| Date | State | Suite |
+|---|---|---|
+| 2026-10-27 | the empty site | 1 pass, 3,981 fail (every tier but assets) |
+| 2026-10-27 | content model and import | stored 1,445 of 1,445 |
+| 2026-10-27 | menus, Views, tripinfo, home page | 3,934 of 3,982 (semantic, access, stored) |
+| 2026-10-28 | audio, poll | 3,982 of 3,982 |
+| 2026-10-28 | the theme ported | 8,887 of 8,887 (with the browser tiers) |
+| 2026-10-28 | rebuilt from nothing | **10,669 of 10,669** (assets included) |
