@@ -17,6 +17,10 @@ Recaps of the sessions on drupal.org: [Part 1: Road Test](https://www.drupal.org
 - The static HTML archive, as Part 2 built it: <https://hobobiker-static--remotework--rfay.coder.ddev.com>
 - The Drupal 11 rebuild from Part 3: <https://hobobiker-d11--remotework--rfay.coder.ddev.com>
 
+To compare any page across the original, the static archive and the Drupal 11 rebuild, see
+[PAGE-MAP.md](PAGE-MAP.md): every node and every other page, with a link to each of the three
+(regenerate with `node migration/page-map.mjs`; `--local` for the DDEV URLs).
+
 The Drupal 6 sites run PHP with the October 2026 PHP2Shell fix ([DDEV's notes](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)).
 
 ## Artifacts for Migration
