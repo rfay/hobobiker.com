@@ -47,7 +47,7 @@ after each step, run the relevant tests, stop, summarize what was done and what 
 step, and ask before going on. Reproduce the site, don't repair it: anything you change on purpose gets declared,
 narrowly, with a reason.
 
-Don't look at other branches or tags of this repository or at `hobobiker-copy`'s `PART3-PLAN.md`: those
-are from a rehearsal, and today is a fresh build from scratch.
+Don't look at other branches or tags of this repository, the `hobobiker-d11-rehearsed` project, or
+`hobobiker-copy`'s `PART3-PLAN.md`: those are from a rehearsal, and today is a fresh build from scratch.
 
 At each point in the process, stop and summarize status and ask permission to go forward.

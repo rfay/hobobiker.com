@@ -25,9 +25,10 @@ Timings (2026-10-28): `00-reset.sh` 21 s, `run-all.sh` 38 s, every tier 4 min 18
 - **Two starting points in rfay/hobobiker-d11:** the tag `s3-start` (branch `live-start`): the empty site, its
   rules and the reset script, no pipeline, for building live. The branch `main` (tag `s3-rehearsal`): the finished
   pipeline. Checkpoints along the way: `s3-import`, `s3-views`, `s3-audio`, `s3-theme`.
-- **A DDEV snapshot of the finished site:** `ddev snapshot restore s3-rehearsal` (in hobobiker-d11).
-- Every repository is committed and pushed. **The `s3-*` tags and the `live-start` branch are local only**
-  (see "Before the session").
+- **The finished site, running:** the DDEV project `hobobiker-d11-rehearsed` (`~/workspace/hobo/hobobiker-d11-rehearsed`,
+  rfay/hobobiker-d11 `main`), https://hobobiker-d11-rehearsed.ddev.site. The fallback: point the suite at it; nothing
+  in hobobiker-d11 has to change. Also a DDEV snapshot in hobobiker-d11: `ddev snapshot restore s3-rehearsal`.
+- Every repository is committed and pushed, the `s3-*` tags and `live-start` included.
 - What went where: `hobobiker-d11/docs/MIGRATION-MAP.md`. Every page on all three sites: `PAGE-MAP.md`. What was
   found on the way: `DISCOVERIES.md`, "Part 3".
 
@@ -39,13 +40,14 @@ The rule of the series: at each step Claude stops, summarizes, explains the next
 |---|---|---|---|
 | 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar, the approach, "Today", the opening prompt | slides 1-15 | |
 | 5-15 | **Onboard a fresh Claude**; it explores the Drupal 6 source and the empty target and writes its plan | `PART3-PROMPT.md`, in a new session in hobobiker-d11 on `live-start` | show its plan as it is; the plan's quality is the demo |
-| 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: restore the declarations (below), `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
-| 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | restore the declarations (below), then `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |
+| 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | stop after any step; the live site stays as it is |
+| 40-50 | **The rehearsed result:** every tier against `hobobiker-d11-rehearsed` | restore the declarations (below), then the suite (below) with `hobobiker-d11-rehearsed` for `hobobiker-d11` | the tiers without the browser (semantic, access, stored) take about a minute |
 | 50-60 | Read the results; the declared differences; what the layout tier caught; questions | slides "Looks", "Decisions" (the rehearsal numbers are in the notes of "Today"); `PAGE-MAP.md` for side by side | |
 
-Tag the end state `s3-d11-run` (in hobobiker-d11, on whichever branch the hour ended).
+Tag the end state `s3-d11-run` (in hobobiker-d11, on `live-start`).
 
-The suite, every tier (from hobobiker-copy; export the stored content first):
+The suite, every tier (from hobobiker-copy; export the stored content first). For the rehearsed site, replace
+`hobobiker-d11` with `hobobiker-d11-rehearsed` in the project directory and the URL:
 
 ```bash
 cd ~/workspace/hobo/hobobiker-copy/test/playwright && node kit/scripts/stored-exporters/drupal11.mjs \
@@ -58,21 +60,21 @@ cd ~/workspace/hobo/hobobiker-copy && ddev exec -d /var/www/html/test/playwright
 
 **Owner, once (before Friday):**
 
-- [ ] Push the start state and the checkpoints: in hobobiker-d11, `git push rfay live-start` and `git push rfay --tags`.
-- [ ] Read `PART3-PROMPT.md` and edit it; it is a draft.
+- [x] Push the start state and the checkpoints: in hobobiker-d11, `git push rfay live-start` and `git push rfay --tags`.
+- [x] Read `PART3-PROMPT.md` and edit it.
 - [ ] Decide F1 to F3 below (or leave them as discussion material).
 
 **Friday morning:**
 
-- [ ] Start every project: `hobobiker-copy`, `hobobiker-prep`, `hobobiker-static`, `hobobiker-d11` (`ddev start`
-      in each; a workspace restart stops them all).
-- [ ] PHP2Shell fix: `ddev php -v` in each shows "built: Oct 21 2026" or later.
-- [ ] Coder URLs public for `hobobiker-copy`, `hobobiker-static`, `hobobiker-d11`.
-- [ ] Kit vendored and current: `cat test/playwright/kit/KIT_VERSION` (now `7db0c15`).
-- [ ] A last rehearsal, 5 minutes: in hobobiker-d11 on `main`, `scripts/00-reset.sh && scripts/run-all.sh`, then
-      the suite; expect 10,669 pass. Then `ddev snapshot --name s3-friday`.
-- [ ] Prepare the live start: `git switch live-start && scripts/00-reset.sh` (an empty site, `d6` loaded; the
-      copied files stay).
+- [x] Start every project: `hobobiker-copy`, `hobobiker-prep`, `hobobiker-static`, `hobobiker-d11`,
+      `hobobiker-d11-rehearsed` (`ddev start` in each; a workspace restart stops them all).
+- [x] PHP2Shell fix: `ddev php -v` in each shows "built: Oct 21 2026" or later.
+- [ ] Coder URLs public for `hobobiker-copy`, `hobobiker-static`, `hobobiker-d11`, `hobobiker-d11-rehearsed`.
+- [x] Kit vendored and current: `cat test/playwright/kit/KIT_VERSION` (now `7db0c15`).
+- [x] A last check of the fallback: the suite against `hobobiker-d11-rehearsed`, with the declarations in place;
+      expect 10,669 pass (2026-10-30: 10,669 passed, 4 min 21 s).
+- [x] Prepare the live start: in hobobiker-d11, `git switch live-start && scripts/00-reset.sh` (an empty site, `d6`
+      loaded; the copied files stay).
 - [ ] Hide the rehearsal's declarations (their reasons describe its solutions, and they would excuse failures
       the live build has not earned). In hobobiker-copy, not committed:
 
@@ -82,6 +84,7 @@ cd ~/workspace/hobo/hobobiker-copy && ddev exec -d /var/www/html/test/playwright
       ```
 
 - [ ] Open a **new** Claude Code session in `~/workspace/hobo/hobobiker-d11`.
+- [ ] Slides open: https://rfay.github.io/hobobiker-migration-slides/part3.html
 
 **Before switching to the rehearsed result** (minute 40, or any fallback): put the rehearsal's 10 declarations
 back, or the rehearsed site fails on exactly those. Keep whatever Claude declared live first, if it is worth
@@ -92,7 +95,6 @@ cd ~/workspace/hobo/hobobiker-copy
 git diff test/playwright/expected-differences.json > test/playwright/tmp/live-declarations.diff   # optional
 git checkout test/playwright/expected-differences.json
 ```
-- [ ] Slides open: https://rfay.github.io/hobobiker-migration-slides/part3.html
 
 ## Open decisions (owner)
 
