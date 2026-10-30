@@ -13,7 +13,7 @@ passes that suite. Now the target is this project: an empty Drupal 11.4 site.
 
 My decisions for this rebuild. Treat them as requirements:
 
-- The site is built from nothing by rerunnable steps in `scripts/`, keeping the original IDs. The method is up to
+- The site is built from nothing by re-runnable steps in `scripts/`, keeping the original IDs. The method is up to
   you: the Migrate API or your own scripts.
 - No PHP stored in the content runs on Drupal 11. Content that used the PHP filter gets another approach.
 - The `[hobophoto:]` photo macros work in a Drupal 11 way.
@@ -28,7 +28,8 @@ Start by reading:
 1. `~/workspace/hobo/hobobiker-d11/AGENTS.md`: the environment, the reference site and the rules.
 2. The test suite's view of the site: `~/workspace/hobo/hobobiker-copy/test/playwright/data/manifest.json` and
    `baseline/semantic/index.json` (what has to come over), and `expected-differences.json` (how deliberate
-   changes are declared). The first two are large: summarize them with `jq`, don't read them whole.
+   changes are declared; the other targets' entries show the format, and yours will need `"target": "drupal11"`).
+   The first two are large: summarize them with `jq`, don't read them whole.
 
 Then explore the source: the schema `d6` in this project's database `ddev mysql d6`, and the original's code in
 `~/workspace/hobo/hobobiker-copy/docroot` (its custom modules and theme). Find out what is stored and what the
@@ -46,5 +47,5 @@ after each step, run the relevant tests, stop, summarize what was done and what 
 step, and ask before going on. Reproduce the site, don't repair it: anything you change on purpose gets declared,
 narrowly, with a reason.
 
-Don't look at this repository's `main` branch or its `s3-*` tags, or at `hobobiker-copy`'s `PART3-PLAN.md`: those
+Don't look at other branches or tags of this repository or at `hobobiker-copy`'s `PART3-PLAN.md`: those
 are from a rehearsal, and today is a fresh build from scratch.

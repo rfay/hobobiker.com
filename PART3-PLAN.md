@@ -18,7 +18,7 @@ rebuilds the whole site in about a minute, and the suite passes in full:
 | assets (every file, byte for byte) | 1,781 | all pass |
 | stored (bodies, 446 comments, 82 terms) | 1,445 | all pass |
 | access (41 unpublished nodes answer 403) | 81 | all pass |
-| **total** | **10,669** | **0 fail**, 11 declared differences |
+| **total** | **10,669** | **0 fail**, 10 declared differences |
 
 Timings (2026-10-28): `00-reset.sh` 21 s, `run-all.sh` 38 s, every tier 4 min 18 s.
 
@@ -39,8 +39,8 @@ The rule of the series: at each step Claude stops, summarizes, explains the next
 |---|---|---|---|
 | 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar, the approach, "Today" | slides 1-14 | |
 | 5-15 | **Onboard a fresh Claude**; it explores the Drupal 6 source and the empty target and writes its plan | `PART3-PROMPT.md`, in a new session in hobobiker-d11 on `live-start` | show its plan as it is; the plan's quality is the demo |
-| 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
-| 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |
+| 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: restore the declarations (below), `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
+| 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | restore the declarations (below), then `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |
 | 50-60 | Read the results; the declared differences; what the layout tier caught; questions | slides "Looks", "Decisions" (the rehearsal numbers are in the notes of "Today"); `PAGE-MAP.md` for side by side | |
 
 Tag the end state `s3-d11-run` (in hobobiker-d11, on whichever branch the hour ended).
@@ -72,7 +72,26 @@ cd ~/workspace/hobo/hobobiker-copy && ddev exec -d /var/www/html/test/playwright
 - [ ] A last rehearsal, 5 minutes: in hobobiker-d11 on `main`, `scripts/00-reset.sh && scripts/run-all.sh`, then
       the suite; expect 10,669 pass. Then `ddev snapshot --name s3-friday`.
 - [ ] Prepare the live start: `git switch live-start && scripts/00-reset.sh` (an empty site, `d6` loaded; the
-      copied files stay). Open a **new** Claude Code session in `~/workspace/hobo/hobobiker-d11`.
+      copied files stay).
+- [ ] Hide the rehearsal's declarations (their reasons describe its solutions, and they would excuse failures
+      the live build has not earned). In hobobiker-copy, not committed:
+
+      ```bash
+      cd ~/workspace/hobo/hobobiker-copy/test/playwright && jq '.entries |= map(select(.target != "drupal11"))' \
+        expected-differences.json > tmp/ed.json && mv tmp/ed.json expected-differences.json   # 21 entries -> 11
+      ```
+
+- [ ] Open a **new** Claude Code session in `~/workspace/hobo/hobobiker-d11`.
+
+**Before switching to the rehearsed result** (minute 40, or any fallback): put the rehearsal's 10 declarations
+back, or the rehearsed site fails on exactly those. Keep whatever Claude declared live first, if it is worth
+keeping:
+
+```bash
+cd ~/workspace/hobo/hobobiker-copy
+git diff test/playwright/expected-differences.json > test/playwright/tmp/live-declarations.diff   # optional
+git checkout test/playwright/expected-differences.json
+```
 - [ ] Slides open: https://rfay.github.io/hobobiker-migration-slides/part3.html
 
 ## Open decisions (owner)
@@ -103,7 +122,7 @@ cd ~/workspace/hobo/hobobiker-copy && ddev exec -d /var/www/html/test/playwright
 | D14 | The 4 users imported, emails `user+N@example.invalid`. |
 | D15 | Validity: every entity through Drupal's `validate()`, orphan checks, Drupal's health (`90-check-integrity.php`). Aliases of deleted nodes (876) and the comment on a deleted node dropped. |
 
-**Declared differences (11, all `"target": "drupal11"`):** node 2307's empty title; the comment on deleted node
+**Declared differences (10, all `"target": "drupal11"`):** node 2307's empty title; the comment on deleted node
 1198; the three stored lines of each rewritten PHP call (`<?php`, `print tripinfo_table(...)`, `?>`); `/tripinfo`
 without dates (a PHP fatal error on the original); `/blog_in_order/1` (a view argument); one image link now an
 image style derivative; two self-links where a path has two aliases.
