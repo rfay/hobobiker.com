@@ -49,3 +49,5 @@ narrowly, with a reason.
 
 Don't look at other branches or tags of this repository or at `hobobiker-copy`'s `PART3-PLAN.md`: those
 are from a rehearsal, and today is a fresh build from scratch.
+
+At each point in the process, stop and summarize status and ask permission to go forward.
