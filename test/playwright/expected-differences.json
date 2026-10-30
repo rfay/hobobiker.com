@@ -81,6 +81,146 @@
       "equals": "/sites/default/files/mexico/trippics/Page0005.html (content differs: 9459 bytes, expected 9479)",
       "target": "static",
       "reason": "As mexico/trippics/Page.html: one own-domain link made relative, nothing else changed."
+    },
+    {
+      "path": "node/3801",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2006-05-01','2006-08-24'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/3802",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2006-08-24','2006-11-15'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/3988",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-01-29','2007-03-06'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4004",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-03-07','2007-03-19'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4010",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-03-21','2007-04-15'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4011",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-04-16','2007-05-07'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4012",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-05-09','2007-05-25'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4013",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-05-28','2007-06-28'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4015",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-06-28','2008-04-14'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4129",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-04-14','2009-06-14'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4196",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-05-25','2008-07-13'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4197",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-04-14','2008-05-25'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4223",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-07-13','2008-07-25'\\);|print tripinfo_table\\('2008-07-25','2008-09-06'\\);|print tripinfo_table\\('2008-09-13','2008-10-10'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's 3 PHP blocks (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4311",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-10-09','2008-10-26'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4312",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-10-26','2009-01-01'\\);)$",
+      "target": "drupal11",
+      "reason": "Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/2307",
+      "kind": "stored-title",
+      "equals": "title \"\" became \"(no title)\"",
+      "target": "drupal11",
+      "reason": "Node 2307 is empty in the source (no type, title, body or date; unpublished). Owner: it moves to another type (page). A Drupal 11 node must have a title to be valid data, so hobobiker-d11/scripts/40-nodes.php gives it \"(no title)\"."
+    },
+    {
+      "path": "node/1198",
+      "kind": "stored-comment",
+      "regex": "^comment 27 on node 1198 by [^\\n]+ is missing$",
+      "target": "drupal11",
+      "reason": "Owner: the comment on a deleted node may be dropped. Comment 27 belongs to node 1198, which no longer exists in the source, so it has nothing to attach to in Drupal 11 (a comment must reference an existing entity). hobobiker-d11/scripts/50-comments.php skips it and counts it as dropped (1)."
+    },
+    {
+      "path": "tripinfo",
+      "kind": "lines",
+      "regex": "^(Fatal error: Uncaught ArgumentCountError: Too few arguments to function tripinfo_list\\(\\), 0 passed in /var/www/html/docroot/includes/menu\\.inc on line 350 and exactly 2 expected in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo\\.module:51|Stack trace:|#0 /var/www/html/docroot/includes/menu\\.inc\\(350\\): tripinfo_list\\(\\)|#1 /var/www/html/docroot/index\\.php\\(17\\): menu_execute_active_handler\\(\\)|#2 \\{main\\}|thrown in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo\\.module on line 51)$",
+      "target": "drupal11",
+      "reason": "On the original, /tripinfo with no dates is a PHP fatal error (tripinfo_list() called without its two arguments); the page prints the error and a stack trace with server file paths. The hobobiker module's route gives the dates defaults, so the page shows the trip table for no dates instead of a crash. Exactly these 6 error lines."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "equals": "sites/default/files/imagecache/600x800/saguaro national park sun through saguaro_0.jpg",
+      "target": "drupal11",
+      "reason": "The one blog photo shown through D6 imagefield's lightbox formatter (node 1313, and the lists that show it in full) links to its 600x800 copy. D6 served image derivatives at sites/default/files/imagecache/PRESET/FILE; Drupal 11 serves the same 600x800 image style at sites/default/files/styles/600x800/public/FILE. Same image, Drupal 11's path for it. The photo itself (180x240, file name compared) and its caption match."
+    },
+    {
+      "path": "tripinfo",
+      "kind": "layout",
+      "equals": "content column could not be located",
+      "target": "drupal11",
+      "reason": "Follows the declared /tripinfo lines difference: on the original this page is a PHP fatal error with no content column; on Drupal 11 it shows the (empty) trip table, so the layout tier has no baseline column to compare."
     }
   ]
 }
