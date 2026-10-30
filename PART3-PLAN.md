@@ -37,7 +37,7 @@ The rule of the series: at each step Claude stops, summarizes, explains the next
 
 | Min | What | How | If it runs long |
 |---|---|---|---|
-| 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar, the approach, "Today" | slides 1-14 | |
+| 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar, the approach, "Today", the opening prompt | slides 1-15 | |
 | 5-15 | **Onboard a fresh Claude**; it explores the Drupal 6 source and the empty target and writes its plan | `PART3-PROMPT.md`, in a new session in hobobiker-d11 on `live-start` | show its plan as it is; the plan's quality is the demo |
 | 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: restore the declarations (below), `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
 | 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | restore the declarations (below), then `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |

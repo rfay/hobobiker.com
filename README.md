@@ -21,6 +21,9 @@ To compare any page across the original, the static archive and the Drupal 11 re
 [PAGE-MAP.md](PAGE-MAP.md): every node and every other page, with a link to each of the three
 (regenerate with `node migration/page-map.mjs`; `--local` for the DDEV URLs).
 
+Part 3 starts a fresh Claude Code session on the empty Drupal 11 site with [PART3-PROMPT.md](PART3-PROMPT.md):
+the owner's decisions, what to read, and a plan as the first deliverable.
+
 The Drupal 6 sites run PHP with the October 2026 PHP2Shell fix ([DDEV's notes](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)).
 
 ## Artifacts for Migration
