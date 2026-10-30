@@ -37,11 +37,11 @@ The rule of the series: at each step Claude stops, summarizes, explains the next
 
 | Min | What | How | If it runs long |
 |---|---|---|---|
-| 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar | slides 1-8 | |
+| 0-5 | Slides: last week, the confessions, DDEV v1.25.5, the target, the bar, the approach, "Today" | slides 1-14 | |
 | 5-15 | **Onboard a fresh Claude**; it explores the Drupal 6 source and the empty target and writes its plan | `PART3-PROMPT.md`, in a new session in hobobiker-d11 on `live-start` | show its plan as it is; the plan's quality is the demo |
 | 15-40 | **Build live, step by step:** the content model and the import, then the stored tier against it | Claude writes `scripts/`; the tests run from hobobiker-copy | after any step: `git switch main` and `scripts/run-all.sh` (40 s) puts the rehearsed site in place; say so on screen |
 | 40-50 | **The rehearsed result:** the full pipeline from nothing, then every tier | `git switch main && scripts/00-reset.sh && scripts/run-all.sh`, then the suite (below) | `ddev snapshot restore s3-rehearsal` and run the suite only |
-| 50-60 | Read the results; the declared differences; what the layout tier caught; questions | slides "Rehearsed this week", "Looks", "Decisions"; `PAGE-MAP.md` for side by side | |
+| 50-60 | Read the results; the declared differences; what the layout tier caught; questions | slides "Looks", "Decisions" (the rehearsal numbers are in the notes of "Today"); `PAGE-MAP.md` for side by side | |
 
 Tag the end state `s3-d11-run` (in hobobiker-d11, on whichever branch the hour ended).
 
