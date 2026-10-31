@@ -221,6 +221,41 @@
       "equals": "content column could not be located",
       "target": "drupal11",
       "reason": "Follows the declared /tripinfo lines difference: on the original this page is a PHP fatal error with no content column; on Drupal 11 it shows the (empty) trip table, so the layout tier has no baseline column to compare."
+    },
+    {
+      "path": "central_america_blog",
+      "kind": "lines",
+      "equals": "Donde Estamos, Julio de 2007",
+      "target": "drupal11",
+      "reason": "Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "blog/rfay?page=13",
+      "kind": "lines",
+      "equals": "Volunteering for Kiva.org - A Major Change of Pace!",
+      "target": "drupal11",
+      "reason": "Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "inuvik_to_ushuaia?page=13",
+      "kind": "lines",
+      "equals": "Nancy's Second Day of Interviews",
+      "target": "drupal11",
+      "reason": "Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "blog?page=20",
+      "kind": "lines",
+      "equals": "Volunteering for Kiva.org - A Major Change of Pace!",
+      "target": "drupal11",
+      "reason": "Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "*",
+      "kind": "assets",
+      "equals": "sites/all/modules/audio/players/1pixelout.swf",
+      "target": "drupal11",
+      "reason": "Deliberate change (the owner's decision): the original's audio pages and teasers embedded the audio module's Flash player (1pixelout.swf, 290x24), which modern browsers cannot run (\"Couldn't load plugin.\"). hobobiker-d11 shows an HTML5 <audio> player of the same size in the same place, playing the mp3 itself. The suite does not check the player, so this entry documents the change."
     }
   ]
 }
