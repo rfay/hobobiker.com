@@ -7,6 +7,10 @@ This is also prepared for an experimental AI demo of migration to other targets,
 The static HTML archive from Part 2 is published permanently at <https://static.hobobiker.com> (GitHub
 Pages, from <https://github.com/rfay/hobobiker-static>).
 
+The Drupal 11 rebuild from Part 3 is at <https://d11.hobobiker.com>, reproducing the original page by page, and
+the same site in a modern, responsive theme is at <https://marlene.hobobiker.com>. Both come from
+<https://github.com/rfay/hobobiker-d11> (branches `main` and `marlene`).
+
 Recaps of the sessions on drupal.org: [Part 1: Road Test](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-16-%E2%80%94-part-1-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-road-test-having-claude) (Oct 16),
 [Part 2: The Last Ride](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-23-%E2%80%94-part-2-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-the-last-ride-sending-a) (Oct 23), and
 [Part 3: The Long Haul](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-30-%E2%80%94-part-3-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-the-long-haul-planning-and) (Oct 30).
