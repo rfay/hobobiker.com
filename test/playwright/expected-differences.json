@@ -1,5 +1,5 @@
 {
-  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. The first three are known limits of the suite itself (all targets). The rest are Part 2's static archive (target static), made by retire/run.sh. The baseline was re-frozen on 2026-10-25 from production after the cleanup (DISCOVERIES.md): Google Analytics, the Google Maps key and the personal-data files are gone from the original itself, so they need no entry; retire/prep/20-disable-google-analytics.sh only guards that Analytics stays off.",
+  "_comment": "Deliberate, reviewed differences between the baseline and a migration target. Anything not listed here fails. Each entry is a human decision with a reason, never a way to silence a failure. The first three are known limits of the suite itself (all targets). The rest are Part 2's static archive (target static), made by retire/run.sh. The baseline was re-frozen on 2026-10-25 from production after the cleanup (DISCOVERIES.md): Google Analytics, the Google Maps key and the personal-data files are gone from the original itself, so they need no entry; retire/prep/20-disable-google-analytics.sh only guards that Analytics stays off. Target marlene is hobobiker-d11's branch marlene, the same Drupal 11 rebuild in a modern theme: it repeats the drupal11 entries and adds the theme's wording changes (run it with MIGRATION_TARGET=marlene).",
   "entries": [
     {
       "path": "*",
@@ -256,6 +256,244 @@
       "equals": "sites/all/modules/audio/players/1pixelout.swf",
       "target": "drupal11",
       "reason": "Deliberate change (the owner's decision): the original's audio pages and teasers embedded the audio module's Flash player (1pixelout.swf, 290x24), which modern browsers cannot run (\"Couldn't load plugin.\"). hobobiker-d11 shows an HTML5 <audio> player of the same size in the same place, playing the mp3 itself. The suite does not check the player, so this entry documents the change."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^By (nancy|rfay|rfaytest|Anonymous) - Posted on (January|February|March|April|May|June|July|August|September|October|November|December) \\d{1,2}(st|nd|rd|th), \\d{4}$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. The byline \"By NAME - Posted on Month Dth, YYYY\" is shown as \"NAME · Month D, YYYY\". The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^Tagged: (Sailboat\\ Trip\\ from\\ Panama\\ to\\ Columbia|South\\ America\\ Artist|art\\ of\\ the\\ hobobiker|Panama\\ to\\ Cartagena|Dardo\\ Rider\\ Ortega|Tips\\ for\\ Travelers|Agua\\ para\\ la\\ Vida|Casa\\ de\\ Ciclistas|Friendship\\ Bridge|Inuvik\\ to\\ Ushuaia|Central\\ America|Triplog\\ Entries|Logged\\-in\\ only|Other\\ Cyclists|Salar\\ De\\ Uyuni|Miscellaneous|New\\ Hampshire|Route\\ Reports|south\\ america|Great\\ Divide|Microfinance|Warm\\ Showers|Nancy's\\ Art|New\\ England|Panama\\ City|Preparation|watercolor|Argentina|Cartagena|Guatemala|Nicaragua|Northwest|OpenToAll|hobobiker|Colombia|Security|Trip\\ Log|painting|Bolivia|Camping|Ecuador|Español|Thanks!|america|florida|sailing|wrap\\ up|Art\\ of|Hotels|Mexico|Panama|Photos|Poetry|Thanks|mexico|Chile|Route|final|route|video|Gear|Kiva|Maps|Peru|Art|FAQ|GPS)$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. A node's terms are a row of tag chips, without the \"Tagged:\" prefix. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^• (Sailboat\\ Trip\\ from\\ Panama\\ to\\ Columbia|South\\ America\\ Artist|art\\ of\\ the\\ hobobiker|Panama\\ to\\ Cartagena|Dardo\\ Rider\\ Ortega|Tips\\ for\\ Travelers|Agua\\ para\\ la\\ Vida|Casa\\ de\\ Ciclistas|Friendship\\ Bridge|Inuvik\\ to\\ Ushuaia|Central\\ America|Triplog\\ Entries|Logged\\-in\\ only|Other\\ Cyclists|Salar\\ De\\ Uyuni|Miscellaneous|New\\ Hampshire|Route\\ Reports|south\\ america|Great\\ Divide|Microfinance|Warm\\ Showers|Nancy's\\ Art|New\\ England|Panama\\ City|Preparation|watercolor|Argentina|Cartagena|Guatemala|Nicaragua|Northwest|OpenToAll|hobobiker|Colombia|Security|Trip\\ Log|painting|Bolivia|Camping|Ecuador|Español|Thanks!|america|florida|sailing|wrap\\ up|Art\\ of|Hotels|Mexico|Panama|Photos|Poetry|Thanks|mexico|Chile|Route|final|route|video|Gear|Kiva|Maps|Peru|Art|FAQ|GPS)$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. A node's terms are a row of tag chips, without the \" • \" separators between them. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^• \\d+ plays$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. An audio node's links (download, downloads, plays) are a list without the \" • \" separators. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^(Date|Start|Destination|Camp or Hotel|Miles|Elevation Gain|trip|vid|WP Date|Flat Tires|bad_dogs|miles_not_ridden):$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. Fields shown with a label (a trip log's, a waypoint's) are a grid of small cards, the label without its trailing colon. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "equals": "read more here... lee mas aquí... »",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. The inline \"read more\" in a teaser reads \"Read more · Lee más →\" instead of \"read more here... lee mas aquí... »\" (the D6 ed_readmore text); same place, same link. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^.+\\sread\\smore\\shere\\.\\.\\.\\slee\\smas\\saquí\\.\\.\\.(\\s»)?$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. A teaser's last paragraph, which ends with the inline \"read more\": that link now reads \"Read more · Lee más →\", so the paragraph's line differs only in its ending (checked on 2026-11-02: every such paragraph's text is on the marlene page). The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "images",
+      "equals": "feed.png",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. The feed link no longer shows the old orange feed.png image. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "*",
+      "kind": "images",
+      "equals": "arrow-desc.png",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-02): the marlene theme (hobobiker-d11 branch marlene, scripts/95-marlene.php) gives the site a modern look and drops the old theme's wording. A sortable table's column shows Drupal 11's sort indicator, not the old arrow-desc.png image. The content is unchanged: this is how the page presents it."
+    },
+    {
+      "path": "node/3801",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2006-05-01','2006-08-24'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/3802",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2006-08-24','2006-11-15'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/3988",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-01-29','2007-03-06'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4004",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-03-07','2007-03-19'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4010",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-03-21','2007-04-15'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4011",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-04-16','2007-05-07'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4012",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-05-09','2007-05-25'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4013",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-05-28','2007-06-28'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4015",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2007-06-28','2008-04-14'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4129",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-04-14','2009-06-14'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4196",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-05-25','2008-07-13'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4197",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-04-14','2008-05-25'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4223",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-07-13','2008-07-25'\\);|print tripinfo_table\\('2008-07-25','2008-09-06'\\);|print tripinfo_table\\('2008-09-13','2008-10-10'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's 3 PHP blocks (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4311",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-10-09','2008-10-26'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/4312",
+      "kind": "stored-body",
+      "regex": "^(<\\?php|\\?>|print tripinfo_table\\('2008-10-26','2009-01-01'\\);)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner's rule: no stored PHP runs on Drupal 11. This body's one PHP block (print tripinfo_table(start, end)) is rewritten by hobobiker-d11/scripts/40-nodes.php to the macro [tripinfo_table:start,end], which the hobobiker module's filter renders as the same table. Only these lines of the stored text differ."
+    },
+    {
+      "path": "node/2307",
+      "kind": "stored-title",
+      "equals": "title \"\" became \"(no title)\"",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Node 2307 is empty in the source (no type, title, body or date; unpublished). Owner: it moves to another type (page). A Drupal 11 node must have a title to be valid data, so hobobiker-d11/scripts/40-nodes.php gives it \"(no title)\"."
+    },
+    {
+      "path": "node/1198",
+      "kind": "stored-comment",
+      "regex": "^comment 27 on node 1198 by [^\\n]+ is missing$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Owner: the comment on a deleted node may be dropped. Comment 27 belongs to node 1198, which no longer exists in the source, so it has nothing to attach to in Drupal 11 (a comment must reference an existing entity). hobobiker-d11/scripts/50-comments.php skips it and counts it as dropped (1)."
+    },
+    {
+      "path": "tripinfo",
+      "kind": "lines",
+      "regex": "^(Fatal error: Uncaught ArgumentCountError: Too few arguments to function tripinfo_list\\(\\), 0 passed in /var/www/html/docroot/includes/menu\\.inc on line 350 and exactly 2 expected in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo\\.module:51|Stack trace:|#0 /var/www/html/docroot/includes/menu\\.inc\\(350\\): tripinfo_list\\(\\)|#1 /var/www/html/docroot/index\\.php\\(17\\): menu_execute_active_handler\\(\\)|#2 \\{main\\}|thrown in /var/www/html/docroot/sites/all/modules/tripinfo/tripinfo\\.module on line 51)$",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): On the original, /tripinfo with no dates is a PHP fatal error (tripinfo_list() called without its two arguments); the page prints the error and a stack trace with server file paths. The hobobiker module's route gives the dates defaults, so the page shows the trip table for no dates instead of a crash. Exactly these 6 error lines."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "equals": "sites/default/files/imagecache/600x800/saguaro national park sun through saguaro_0.jpg",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): The one blog photo shown through D6 imagefield's lightbox formatter (node 1313, and the lists that show it in full) links to its 600x800 copy. D6 served image derivatives at sites/default/files/imagecache/PRESET/FILE; Drupal 11 serves the same 600x800 image style at sites/default/files/styles/600x800/public/FILE. Same image, Drupal 11's path for it. The photo itself (180x240, file name compared) and its caption match."
+    },
+    {
+      "path": "tripinfo",
+      "kind": "layout",
+      "equals": "content column could not be located",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Follows the declared /tripinfo lines difference: on the original this page is a PHP fatal error with no content column; on Drupal 11 it shows the (empty) trip table, so the layout tier has no baseline column to compare."
+    },
+    {
+      "path": "central_america_blog",
+      "kind": "lines",
+      "equals": "Donde Estamos, Julio de 2007",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "blog/rfay?page=13",
+      "kind": "lines",
+      "equals": "Volunteering for Kiva.org - A Major Change of Pace!",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "inuvik_to_ushuaia?page=13",
+      "kind": "lines",
+      "equals": "Nancy's Second Day of Interviews",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "blog?page=20",
+      "kind": "lines",
+      "equals": "Volunteering for Kiva.org - A Major Change of Pace!",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): node 3953's stored teaser ends inside an unclosed HTML comment (\"<!--\" then \"<h3>New Pictures\"). The original printed it as is, so browsers hid everything after it on this listing, up to the page's next \"-->\" (the following posts and the pager). hobobiker-d11's D6 HTML corrector (hobobiker_htmlcorrector) closes the comment at the end of the teaser, so those posts show. The suite does not report text a target adds, so this entry documents the change: it names the first post shown here that the original hid."
+    },
+    {
+      "path": "*",
+      "kind": "assets",
+      "equals": "sites/all/modules/audio/players/1pixelout.swf",
+      "target": "marlene",
+      "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): the original's audio pages and teasers embedded the audio module's Flash player (1pixelout.swf, 290x24), which modern browsers cannot run (\"Couldn't load plugin.\"). hobobiker-d11 shows an HTML5 <audio> player of the same size in the same place, playing the mp3 itself. The suite does not check the player, so this entry documents the change."
     }
   ]
 }
