@@ -494,6 +494,13 @@
       "equals": "sites/all/modules/audio/players/1pixelout.swf",
       "target": "marlene",
       "reason": "As for target drupal11 (marlene is the same Drupal 11 rebuild in a new theme): Deliberate change (the owner's decision): the original's audio pages and teasers embedded the audio module's Flash player (1pixelout.swf, 290x24), which modern browsers cannot run (\"Couldn't load plugin.\"). hobobiker-d11 shows an HTML5 <audio> player of the same size in the same place, playing the mp3 itself. The suite does not check the player, so this entry documents the change."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^https?://(www\\.)?flickr\\.com/photos/(hobobiker|80532963@N00)/\\d{6,}/?$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-06, after marlene broke off from Drupal 6): a link to a Flickr photo page, the photo itself or a text link, now opens the site's own large copy of that photo in the lightbox (hobobiker_photos filter; the copies fetched by hobobiker-d11's scripts/flickr-fetch.php). Every one of these photos has a local copy, so the link points there instead of to Flickr. Links to Flickr albums and slideshows are unchanged."
     }
   ]
 }
