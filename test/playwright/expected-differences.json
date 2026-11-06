@@ -501,6 +501,34 @@
       "regex": "^https?://(www\\.)?flickr\\.com/photos/(hobobiker|80532963@N00)/\\d{6,}/?$",
       "target": "marlene",
       "reason": "Deliberate change (the owner's decision, 2026-11-06, after marlene broke off from Drupal 6): a link to a Flickr photo page, the photo itself or a text link, now opens the site's own large copy of that photo in the lightbox (hobobiker_photos filter; the copies fetched by hobobiker-d11's scripts/flickr-fetch.php). Every one of these photos has a local copy, so the link points there instead of to Flickr. Links to Flickr albums and slideshows are unchanged."
+    },
+    {
+      "path": "*",
+      "kind": "images",
+      "equals": "ciclo_13_espiritu.jpg",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-06): node 3880 (the Ciclonautas' guest post) showed files/ciclonauts/ciclo_13_espiritu.jpg, a truncated JPEG (the bottom of the image is missing). On marlene the photo and its three-caption table are removed (a new revision with a log message) and the file deleted. Its teaser shows on listing pages too."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "equals": "Victoria, Espiritu Santo, Brasil",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-06): node 3880 (the Ciclonautas' guest post) showed files/ciclonauts/ciclo_13_espiritu.jpg, a truncated JPEG (the bottom of the image is missing). On marlene the photo and its three-caption table are removed (a new revision with a log message) and the file deleted. Its teaser shows on listing pages too."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "equals": "Una nueva compañera de viaje \"La Pancha\" en Uruguay",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-06): node 3880 (the Ciclonautas' guest post) showed files/ciclonauts/ciclo_13_espiritu.jpg, a truncated JPEG (the bottom of the image is missing). On marlene the photo and its three-caption table are removed (a new revision with a log message) and the file deleted. Its teaser shows on listing pages too."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "equals": "Los tenis de Andrei murieron en el desierto de Perú",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-06): node 3880 (the Ciclonautas' guest post) showed files/ciclonauts/ciclo_13_espiritu.jpg, a truncated JPEG (the bottom of the image is missing). On marlene the photo and its three-caption table are removed (a new revision with a log message) and the file deleted. Its teaser shows on listing pages too."
     }
   ]
 }
