@@ -571,6 +571,20 @@
       "regex": "^.*(traducción mala|malas traducciones|mala traducción|mala \\(por máquina\\) traducción|traducción malísima|bad translation to English).*$",
       "target": "marlene",
       "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): Babelfish, AltaVista's machine translation, no longer exists. The sentences that offered its bad translation lose that part (\"..., pero hay malas traducciones aquí.\" becomes \"...\"; where a link led to a story, it now leads to the story, \"en inglés\"); the /aplv header's \"¿Hablas español? Hay una traducción malísima de esta página aquí.\" is removed."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^(rfay|nancy|rfaytest)?'s blog$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): the link under every blog post to its author's blog (\"rfay's blog\", \"nancy's blog\"; the D6 blog module's node link) is dropped as useless. The author blog pages remain, and the breadcrumb still links to them."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^/?blog/(rfay|nancy|\\d+)$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): the link under every blog post to its author's blog (\"rfay's blog\", \"nancy's blog\"; the D6 blog module's node link) is dropped as useless. The author blog pages remain, and the breadcrumb still links to them."
     }
   ]
 }
