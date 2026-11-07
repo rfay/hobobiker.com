@@ -529,6 +529,34 @@
       "equals": "Los tenis de Andrei murieron en el desierto de Perú",
       "target": "marlene",
       "reason": "Deliberate change (the owner's decision, 2026-11-06): node 3880 (the Ciclonautas' guest post) showed files/ciclonauts/ciclo_13_espiritu.jpg, a truncated JPEG (the bottom of the image is missing). On marlene the photo and its three-caption table are removed (a new revision with a log message) and the file deleted. Its teaser shows on listing pages too."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^Originally uploaded by refay\\.?$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): Flickr's old \"Blog This\" credit under a photo (\"TITLE / Originally uploaded by refay.\", 34 posts) is gone; the photo's title stays as its caption (hobobiker_photos filter, render-time)."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^https?://www\\.flickr\\.com/people/(hobobiker|80532963@N00)/?$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): the uploader link of the same \"Blog This\" credit (\"Originally uploaded by refay\"), removed with it."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^DSC\\d{5}( .+)?$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): the same credit's photo title, now a plain caption without its leading camera file number (\"DSC03391 batopilas aquaduct\" shows as \"batopilas aquaduct\"); a title that is only a camera number gives way to the photo's own caption."
+    },
+    {
+      "path": "*",
+      "kind": "images",
+      "equals": "297234846.jpg",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): node 4300's [hobophoto:] token named 297234846.jpg, a file that does not exist (a digit short; the photo was broken on the original too). It now names 2972348461_Vicuas.jpg, captioned \"Vicuñas\" (a new revision)."
     }
   ]
 }
