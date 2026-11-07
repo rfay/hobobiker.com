@@ -585,6 +585,55 @@
       "regex": "^/?blog/(rfay|nancy|\\d+)$",
       "target": "marlene",
       "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): the link under every blog post to its author's blog (\"rfay's blog\", \"nancy's blog\"; the D6 blog module's node link) is dropped as useless. The author blog pages remain, and the breadcrumb still links to them."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^subscribe$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): no hobobiker.com as a hostname. Links and files on the old domain are site-relative, text showing the address says \"Hobobiker.com\", e-mail addresses at the domain became the contact page, Google Maps and Google Translate links that loaded the domain point at the site's own pages, and the e-mail list is gone (/subscribe deleted; its invitations removed). hobobiker-d11's scripts/remove-hostname.php and remove-hostname-config.php; new revisions."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^http://maps\\.google\\.com/maps\\?.*hobobiker\\.com.*$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): no hobobiker.com as a hostname. Links and files on the old domain are site-relative, text showing the address says \"Hobobiker.com\", e-mail addresses at the domain became the contact page, Google Maps and Google Translate links that loaded the domain point at the site's own pages, and the e-mail list is gone (/subscribe deleted; its invitations removed). hobobiker-d11's scripts/remove-hostname.php and remove-hostname-config.php; new revisions."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^http://64\\.233\\.179\\.104/translate_c\\?.*$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): no hobobiker.com as a hostname. Links and files on the old domain are site-relative, text showing the address says \"Hobobiker.com\", e-mail addresses at the domain became the contact page, Google Maps and Google Translate links that loaded the domain point at the site's own pages, and the e-mail list is gone (/subscribe deleted; its invitations removed). hobobiker-d11's scripts/remove-hostname.php and remove-hostname-config.php; new revisions."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^(?:.*hobobiker\\.com.*|.*RandyAndNancy \\(at\\).*|\\(Aquí está el mensaje que ya mandamos a la lista de email\\.{6}\\)|Puedes ver una traducción de todo el website por haz click aquí|Nos gustaría mucho recibir una email de ustedes - Mándanos en|GPS Maps: We were unable to find any GPS maps at that time.*|We'd like to ask your help with something:.*|En el norte de Ecuador cruzamos el ecuador.*)$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): no hobobiker.com as a hostname. Links and files on the old domain are site-relative, text showing the address says \"Hobobiker.com\", e-mail addresses at the domain became the contact page, Google Maps and Google Translate links that loaded the domain point at the site's own pages, and the e-mail list is gone (/subscribe deleted; its invitations removed). hobobiker-d11's scripts/remove-hostname.php and remove-hostname-config.php; new revisions."
+    },
+    {
+      "path": "node/206",
+      "kind": "access",
+      "equals": "expected 403, got 404",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07): the e-mail list is obsolete, so its unpublished sign-up page, node 206 (\"Subscribe to the Hobobiker.com Email List\", aliases /subscribe and /subscribe_to_the_hobobiker_com_email_list), was deleted on marlene: 404 where the original answered 403."
+    },
+    {
+      "path": "subscribe",
+      "kind": "access",
+      "equals": "expected 403, got 404",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07): the e-mail list is obsolete, so its unpublished sign-up page, node 206 (\"Subscribe to the Hobobiker.com Email List\", aliases /subscribe and /subscribe_to_the_hobobiker_com_email_list), was deleted on marlene: 404 where the original answered 403."
+    },
+    {
+      "path": "subscribe_to_the_hobobiker_com_email_list",
+      "kind": "access",
+      "equals": "expected 403, got 404",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07): the e-mail list is obsolete, so its unpublished sign-up page, node 206 (\"Subscribe to the Hobobiker.com Email List\", aliases /subscribe and /subscribe_to_the_hobobiker_com_email_list), was deleted on marlene: 404 where the original answered 403."
     }
   ]
 }
