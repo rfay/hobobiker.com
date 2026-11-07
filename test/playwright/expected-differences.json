@@ -557,6 +557,20 @@
       "equals": "297234846.jpg",
       "target": "marlene",
       "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): node 4300's [hobophoto:] token named 297234846.jpg, a file that does not exist (a digit short; the photo was broken on the original too). It now names 2972348461_Vicuas.jpg, captioned \"Vicuñas\" (a new revision)."
+    },
+    {
+      "path": "*",
+      "kind": "links",
+      "regex": "^http://(babelfish\\.(altavista|av)\\.com|66\\.163\\.168\\.225)/babelfish/\\S*$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): Babelfish, AltaVista's machine translation, no longer exists. Its nine links in six posts (hobobiker-d11's scripts/remove-babelfish.php, new revisions) and in the headers of the /aplv and /latest_stories views are gone."
+    },
+    {
+      "path": "*",
+      "kind": "lines",
+      "regex": "^.*(traducción mala|malas traducciones|mala traducción|mala \\(por máquina\\) traducción|traducción malísima|bad translation to English).*$",
+      "target": "marlene",
+      "reason": "Deliberate change (the owner's decision, 2026-11-07, on marlene after its break from Drupal 6): Babelfish, AltaVista's machine translation, no longer exists. The sentences that offered its bad translation lose that part (\"..., pero hay malas traducciones aquí.\" becomes \"...\"; where a link led to a story, it now leads to the story, \"en inglés\"); the /aplv header's \"¿Hablas español? Hay una traducción malísima de esta página aquí.\" is removed."
     }
   ]
 }
